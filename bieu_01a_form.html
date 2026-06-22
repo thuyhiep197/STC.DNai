@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biểu 01a — Nhập liệu</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:    #1E3A5F;
+    --navy-lt: #2B4F7E;
+    --red:     #C8102E;
+    --border:  #D0D7E3;
+    --bg-page: #F4F6FA;
+    --bg-card: #FFFFFF;
+    --bg-sum:  #EEF2F8;
+    --bg-inp:  #FAFBFD;
+    --bg-inp-focus: #FFFFFF;
+    --txt-pri: #111827;
+    --txt-sec: #5A6478;
+    --txt-cal: #3B5A8A;
+    --green:   #0D7A4E;
+    --green-lt:#E6F4EE;
+    --amber:   #B45309;
+    --f0: 700; --f1: 600; --f2: 500; --f3: 400; --f4: 400;
+    --sz-base: 13px;
+  }
+
+  body {
+    font-family: Arial, 'Helvetica Neue', sans-serif;
+    font-size: var(--sz-base);
+    background: var(--bg-page);
+    color: var(--txt-pri);
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  /* ── CARD WRAPPER ── */
+  .card {
+    background: var(--bg-card);
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.04);
+    max-width: 1060px;
+    margin: 0 auto;
+    overflow: hidden;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--navy);
+    padding: 0;
+  }
+
+  /* Dòng 1: Kỳ báo cáo */
+  .header-ky {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    border-bottom: 1px solid rgba(255,255,255,.12);
+    background: var(--navy-lt);
+  }
+  .header-ky label {
+    color: rgba(255,255,255,.75);
+    font-size: 12px;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+  .header-ky select {
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 5px;
+    color: #fff;
+    font-size: 12px;
+    padding: 4px 10px;
+    outline: none;
+    cursor: pointer;
+    min-width: 90px;
+  }
+  .header-ky select option { background: var(--navy); color: #fff; }
+  .sep { color: rgba(255,255,255,.3); font-size: 11px; }
+
+  /* Dòng 2: Tên đơn vị + Tên biểu */
+  .header-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 10px 20px 4px;
+  }
+  .don-vi {
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: lowercase;
+  }
+  .don-vi::first-letter { text-transform: lowercase; }
+  .bieu-ma {
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: lowercase;
+    text-align: right;
+  }
+
+  /* Dòng 3: Tên báo cáo */
+  .header-title {
+    text-align: center;
+    padding: 6px 20px 10px;
+    color: #fff;
+    font-size: 13.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 1.45;
+    letter-spacing: .01em;
+  }
+
+  /* Dòng 4: Đơn vị tính */
+  .header-unit {
+    display: flex;
+    justify-content: flex-end;
+    padding: 4px 20px 8px;
+  }
+  .unit-label {
+    font-size: 11.5px;
+    font-style: italic;
+    color: rgba(255,255,255,.65);
+  }
+
+  /* ── FORM BODY ── */
+  .form-body { padding: 0; }
+
+  /* ── TABLE ── */
+  .tbl-wrap { overflow-x: auto; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+  }
+
+  /* Column widths */
+  col.c-stt  { width: 52px; }
+  col.c-ct   { width: auto; }
+  col.c-sdt  { width: 130px; }
+  col.c-kp   { width: 140px; }
+  col.c-gc   { width: 180px; }
+
+  thead tr th {
+    background: var(--navy);
+    color: #fff;
+    font-weight: 600;
+    font-size: 12px;
+    padding: 9px 10px;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,.15);
+    white-space: nowrap;
+  }
+  thead tr th.th-ct { text-align: left; }
+
+  /* ── DATA ROWS ── */
+  tbody tr { border-bottom: 1px solid var(--border); }
+  tbody tr:last-child { border-bottom: none; }
+
+  td {
+    padding: 0;
+    vertical-align: middle;
+    border-right: 1px solid var(--border);
+  }
+  td:last-child { border-right: none; }
+
+  .td-stt {
+    text-align: center;
+    font-size: 11.5px;
+    color: var(--txt-sec);
+    padding: 6px 8px;
+    white-space: nowrap;
+  }
+  .td-ct {
+    padding: 7px 10px 7px 0;
+    line-height: 1.45;
+    color: var(--txt-pri);
+  }
+
+  /* Indentation levels */
+  .f0  .td-ct { padding-left: 10px; font-weight: 700; background: #E8EEF7; color: var(--navy); font-size: 12.5px; }
+  .f1  .td-ct { padding-left: 20px; font-weight: 700; background: #EEF2F8; color: var(--navy); }
+  .f2  .td-ct { padding-left: 32px; font-weight: 600; background: #F5F7FB; }
+  .f3  .td-ct { padding-left: 46px; font-weight: 400; }
+  .f4  .td-ct { padding-left: 62px; font-weight: 400; color: var(--txt-sec); font-size: 12px; }
+
+  /* Summary rows (computed) */
+  .row-sum td { background: var(--bg-sum); }
+  .f0.row-sum td { background: #DDE5F2; }
+  .f1.row-sum td { background: #E8EEF7; }
+  .f2.row-sum td { background: #EEF2F8; }
+
+  /* Input cells */
+  .td-inp {
+    padding: 0;
+    background: var(--bg-inp);
+  }
+  .td-inp input, .td-inp textarea {
+    width: 100%;
+    height: 100%;
+    min-height: 36px;
+    border: none;
+    background: transparent;
+    font-family: Arial, sans-serif;
+    font-size: 12.5px;
+    color: var(--txt-pri);
+    padding: 6px 10px;
+    outline: none;
+    transition: background .12s;
+    display: block;
+  }
+  .td-inp input { text-align: right; }
+  .td-inp textarea { resize: none; text-align: left; line-height: 1.4; }
+  .td-inp input:focus, .td-inp textarea:focus {
+    background: #EDF4FF;
+    box-shadow: inset 0 0 0 2px var(--navy);
+  }
+  .td-inp input:hover:not(:focus), .td-inp textarea:hover:not(:focus) {
+    background: #F0F4FA;
+  }
+
+  /* Computed / readonly */
+  .td-calc {
+    text-align: right;
+    padding: 7px 10px;
+    color: var(--txt-cal);
+    font-weight: 500;
+    background: var(--bg-sum);
+    font-size: 12.5px;
+  }
+  .td-calc.zero { color: var(--txt-sec); font-weight: 400; }
+
+  /* Disabled (non-applicable input for summary rows) */
+  .td-disabled {
+    background: #F0F2F5;
+    padding: 7px 10px;
+  }
+
+  /* Note cell */
+  .td-note { background: #FAFBFD; }
+  .td-note textarea {
+    color: var(--txt-sec);
+    font-size: 12px;
+  }
+
+  /* ── FOOTER / CTA ── */
+  .footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 20px;
+    border-top: 1px solid var(--border);
+    background: #F8F9FC;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all .15s;
+    white-space: nowrap;
+  }
+  .btn-preview {
+    background: #fff;
+    border: 1px solid var(--border);
+    color: var(--navy);
+  }
+  .btn-preview:hover { background: #EEF2F8; border-color: var(--navy); }
+  .btn-save {
+    background: var(--navy);
+    color: #fff;
+  }
+  .btn-save:hover { background: var(--navy-lt); }
+  .btn-cancel {
+    background: transparent;
+    color: var(--txt-sec);
+    border: 1px solid transparent;
+  }
+  .btn-cancel:hover { color: #C8102E; border-color: #C8102E; background: #FFF5F6; }
+
+  /* Toast */
+  #toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--green);
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 500;
+    box-shadow: 0 4px 16px rgba(0,0,0,.18);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: all .25s;
+    pointer-events: none;
+    z-index: 99;
+  }
+  #toast.show { opacity: 1; transform: translateY(0); }
+
+  /* Validation */
+  .td-inp input.invalid { box-shadow: inset 0 0 0 2px #C8102E; background: #FFF5F6; }
+
+  /* Responsive */
+  @media (max-width: 700px) {
+    body { padding: 8px; }
+    .header-title { font-size: 12px; }
+    col.c-gc { width: 100px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+
+  <!-- ══ HEADER ══ -->
+  <div class="header">
+
+    <!-- Dòng 1: Kỳ báo cáo -->
+    <div class="header-ky">
+      <label>Kỳ báo cáo:</label>
+      <select id="sel-nam">
+        <option value="2025" selected>2025</option>
+        <option value="2026">2026</option>
+      </select>
+      <select id="sel-thang">
+        <option value="1">Tháng 1</option>
+        <option value="2">Tháng 2</option>
+        <option value="3">Tháng 3</option>
+        <option value="4">Tháng 4</option>
+        <option value="5">Tháng 5</option>
+        <option value="6">Tháng 6</option>
+        <option value="7">Tháng 7</option>
+        <option value="8">Tháng 8</option>
+        <option value="9">Tháng 9</option>
+        <option value="10">Tháng 10</option>
+        <option value="11">Tháng 11</option>
+        <option value="12" selected>Tháng 12</option>
+      </select>
+      <span class="sep">|</span>
+      <label style="color:rgba(255,255,255,.5);font-size:11px;" id="ky-label">Kỳ II năm học 2024–2025</label>
+    </div>
+
+    <!-- Dòng 2: Tên đơn vị + Tên biểu -->
+    <div class="header-meta">
+      <div class="don-vi">Đơn vị: xã / phường / sở ngành / trường ĐH-CĐ/…</div>
+      <div class="bieu-ma">Phụ lục số 01a</div>
+    </div>
+
+    <!-- Dòng 3: Tên báo cáo -->
+    <div class="header-title" style="color:#FF6B6B;">
+      Tổng hợp kinh phí thực hiện hỗ trợ chi phí học tập và cấp bù học phí<br>theo Nghị định số 238/2025/NĐ-CP năm 2025
+    </div>
+
+    <!-- Dòng 4: Đơn vị tính -->
+    <div class="header-unit">
+      <span class="unit-label">Đơn vị: Triệu đồng</span>
+    </div>
+
+  </div><!-- /header -->
+
+  <!-- ══ FORM TABLE ══ -->
+  <div class="form-body">
+  <div class="tbl-wrap">
+  <table>
+    <colgroup>
+      <col class="c-stt">
+      <col class="c-ct">
+      <col class="c-sdt">
+      <col class="c-kp">
+      <col class="c-gc">
+    </colgroup>
+    <thead>
+      <tr>
+        <th>STT</th>
+        <th class="th-ct">Chỉ tiêu</th>
+        <th>Số đối tượng</th>
+        <th>Kinh phí</th>
+        <th>Ghi chú</th>
+      </tr>
+    </thead>
+    <tbody id="tbl-body">
+
+      <!-- ══ F0 — Dòng gốc (Row 9) ══ -->
+      <tr class="f0 row-sum" data-id="r9">
+        <td class="td-stt"></td>
+        <td class="td-ct">Hỗ trợ chi phí học tập và miễn giảm học phí theo quy định tại Nghị định số 238/2025/NĐ-CP</td>
+        <td class="td-calc" id="sum-r9-sdt">—</td>
+        <td class="td-calc" id="sum-r9-kp">—</td>
+        <td class="td-disabled"></td>
+      </tr>
+
+      <!-- ══ F1 — A: Hỗ trợ chi phí học tập (Row 10) ══ -->
+      <tr class="f1 row-sum" data-id="r10">
+        <td class="td-stt">A</td>
+        <td class="td-ct">Hỗ trợ chi phí học tập</td>
+        <td class="td-calc" id="sum-r10-sdt">—</td>
+        <td class="td-calc" id="sum-r10-kp">—</td>
+        <td class="td-disabled"></td>
+      </tr>
+
+      <!-- ══ F2 — Hỗ trợ chi phí học tập (Row 11) — LÁ NHẬP ══ -->
+      <tr class="f2" data-id="r11">
+        <td class="td-stt"></td>
+        <td class="td-ct">Hỗ trợ chi phí học tập</td>
+        <td class="td-inp">
+          <input type="text" id="r11-sdt" placeholder="0" inputmode="decimal"
+                 oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0">
+        </td>
+        <td class="td-inp">
+          <input type="text" id="r11-kp" placeholder="0,000" inputmode="decimal"
+                 oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0">
+        </td>
+        <td class="td-inp td-note">
+          <textarea id="r11-gc" rows="1" placeholder="Ghi chú…" oninput="autoResize(this)"></textarea>
+        </td>
+      </tr>
+
+      <!-- ══ F1 — B: Miễn học phí, giảm học phí (Row 12) ══ -->
+      <tr class="f1 row-sum" data-id="r12">
+        <td class="td-stt">B</td>
+        <td class="td-ct">Miễn học phí, giảm học phí</td>
+        <td class="td-calc" id="sum-r12-sdt">—</td>
+        <td class="td-calc" id="sum-r12-kp">—</td>
+        <td class="td-disabled"></td>
+      </tr>
+
+      <!-- ══ F2 — I: Miễn học phí (Row 13) ══ -->
+      <tr class="f2 row-sum" data-id="r13">
+        <td class="td-stt">I</td>
+        <td class="td-ct">Miễn học phí</td>
+        <td class="td-calc" id="sum-r13-sdt">—</td>
+        <td class="td-calc" id="sum-r13-kp">—</td>
+        <td class="td-disabled"></td>
+      </tr>
+
+      <!-- ══ F3 — Các dòng lá thuộc Miễn học phí (Rows 14–23) ══ -->
+      <tr class="f3" data-id="r14">
+        <td class="td-stt">1</td>
+        <td class="td-ct">Người tốt nghiệp THCS học tiếp lên trình độ trung cấp</td>
+        <td class="td-inp"><input type="text" id="r14-sdt" placeholder="0" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-inp"><input type="text" id="r14-kp"  placeholder="0,000" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-inp td-note"><textarea id="r14-gc" rows="1" placeholder="Ghi chú…" oninput="autoResize(this)"></textarea></td>
+      </tr>
+      <tr class="f3" data-id="r15">
+        <td class="td-stt">2</td>
+        <td class="td-ct">Các đối tượng theo quy định tại Pháp lệnh Ưu đãi người có công với cách mạng nếu đang theo học tại các cơ sở giáo dục thuộc hệ thống giáo dục quốc dân</td>
+        <td class="td-inp"><input type="text" id="r15-sdt" placeholder="0" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-inp"><input type="text" id="r15-kp"  placeholder="0,000" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-inp td-note"><textarea id="r15-gc" rows="1" placeholder="Ghi chú…" oninput="autoResize(this)"></textarea></td>
+      </tr>
+      <tr class="f3" data-id="r16">
+        <td class="td-stt">3</td>
+        <td class="td-ct">Học sinh, sinh viên mồ côi cả cha lẫn mẹ</td>
+        <td class="td-inp"><input type="text" id="r16-sdt" placeholder="0" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-inp"><input type="text" id="r16-kp"  placeholder="0,000" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-inp td-note"><textarea id="r16-gc" rows="1" placeholder="Ghi chú…" oninput="autoResize(this)"></textarea></td>
+      </tr>
+      <tr class="f3" data-id="r17">
+        <td class="td-stt">4</td>
+        <td class="td-ct">Học sinh, sinh viên là người dân tộc thiểu số thuộc hộ nghèo hoặc cận nghèo theo quy định của Chính phủ</td>
+        <td class="td-inp"><input type="text" id="r17-sdt" placeholder="0" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-inp"><input type="text" id="r17-kp"  placeholder="0,000" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-inp td-note"><textarea id="r17-gc" rows="1" placeholder="Ghi chú…" oninput="autoResize(this)"></textarea></td>
+      </tr>
+      <tr class="f3" data-id="r18">
+        <td class="td-stt">5</td>
+        <td class="td-ct">Học sinh, sinh viên khuyết tật</td>
+        <td class="td-inp"><input type="text" id="r18-sdt" placeholder="0" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-inp"><input type="text" id="r18-kp"  placeholder="0,000" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-inp td-note"><textarea id="r18-gc" rows="1" placeholder="Ghi chú…" oninput="autoResize(this)"></textarea></td>
+      </tr>
+      <tr class="f3" data-id="r19">
+        <td class="td-stt">7</td>
+        <td class="td-ct">Miễn học phí chính quy</td>
+        <td class="td-inp"><input type="text" id="r19-sdt" placeholder="0" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-inp"><input type="text" id="r19-kp"  placeholder="0,000" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-inp td-note"><textarea id="r19-gc" rows="1" placeholder="Ghi chú…" oninput="autoResize(this)"></textarea></td>
+      </tr>
+      <tr class="f3" data-id="r20">
+        <td class="td-stt">8</td>
+        <td class="td-ct">Đối tượng thuộc Sở GD&amp;ĐT</td>
+        <td class="td-inp"><input type="text" id="r20-sdt" placeholder="0" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-inp"><input type="text" id="r20-kp"  placeholder="0,000" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-inp td-note"><textarea id="r20-gc" rows="1" placeholder="Ghi chú…" oninput="autoResize(this)"></textarea></td>
+      </tr>
+      <tr class="f3" data-id="r21">
+        <td class="td-stt">9</td>
+        <td class="td-ct">Đối tượng thuộc các xã, phường</td>
+        <td class="td-inp"><input type="text" id="r21-sdt" placeholder="0" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-inp"><input type="text" id="r21-kp"  placeholder="0,000" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-inp td-note"><textarea id="r21-gc" rows="1" placeholder="Ghi chú…" oninput="autoResize(this)"></textarea></td>
+      </tr>
+      <tr class="f3" data-id="r22">
+        <td class="td-stt">10</td>
+        <td class="td-ct">Hỗ trợ đóng học phí cho học sinh ngoài công lập khối trực thuộc Sở GD</td>
+        <td class="td-inp"><input type="text" id="r22-sdt" placeholder="0" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-inp"><input type="text" id="r22-kp"  placeholder="0,000" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-inp td-note"><textarea id="r22-gc" rows="1" placeholder="Ghi chú…" oninput="autoResize(this)"></textarea></td>
+      </tr>
+      <tr class="f3" data-id="r23">
+        <td class="td-stt">11</td>
+        <td class="td-ct">Hỗ trợ đóng học phí cho học sinh ngoài công lập khối trực thuộc xã, phường</td>
+        <td class="td-inp"><input type="text" id="r23-sdt" placeholder="0" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-inp"><input type="text" id="r23-kp"  placeholder="0,000" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-inp td-note"><textarea id="r23-gc" rows="1" placeholder="Ghi chú…" oninput="autoResize(this)"></textarea></td>
+      </tr>
+
+      <!-- ══ F2 — II: Giảm học phí (Row 24) ══ -->
+      <tr class="f2 row-sum" data-id="r24">
+        <td class="td-stt">II</td>
+        <td class="td-ct">Giảm học phí</td>
+        <td class="td-calc" id="sum-r24-sdt">—</td>
+        <td class="td-calc" id="sum-r24-kp">—</td>
+        <td class="td-disabled"></td>
+      </tr>
+
+      <!-- ══ F3 — 1: Giảm 70% học phí (Row 25) ══ -->
+      <tr class="f3 row-sum" data-id="r25">
+        <td class="td-stt">1</td>
+        <td class="td-ct">- Giảm 70% học phí</td>
+        <td class="td-calc" id="sum-r25-sdt">—</td>
+        <td class="td-calc" id="sum-r25-kp">—</td>
+        <td class="td-disabled"></td>
+      </tr>
+
+      <!-- ══ F4 — Rows 26-28 (thuộc Giảm 70%) ══ -->
+      <tr class="f4" data-id="r26">
+        <td class="td-stt">-</td>
+        <td class="td-ct">Học sinh, sinh viên học một số nghề nặng nhọc, độc hại, nguy hiểm đối với giáo dục nghề nghiệp</td>
+        <td class="td-inp"><input type="text" id="r26-sdt" placeholder="0" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-inp"><input type="text" id="r26-kp"  placeholder="0,000" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-inp td-note"><textarea id="r26-gc" rows="1" placeholder="Ghi chú…" oninput="autoResize(this)"></textarea></td>
+      </tr>
+      <tr class="f4" data-id="r27">
+        <td class="td-stt">-</td>
+        <td class="td-ct">Học sinh, sinh viên học các ngành nghệ thuật truyền thống và đặc thù (nhạc công kịch hát dân tộc, đờn ca tài tử Nam Bộ, diễn viên sân khấu kịch hát, nghệ thuật ca trù, bài chòi…)</td>
+        <td class="td-inp"><input type="text" id="r27-sdt" placeholder="0" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-inp"><input type="text" id="r27-kp"  placeholder="0,000" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-inp td-note"><textarea id="r27-gc" rows="1" placeholder="Ghi chú…" oninput="autoResize(this)"></textarea></td>
+      </tr>
+      <tr class="f4" data-id="r28">
+        <td class="td-stt">-</td>
+        <td class="td-ct">Trẻ em học mẫu giáo và HS, SV là người dân tộc thiểu số (ngoài DTTS rất ít người) ở thôn/bản đặc biệt khó khăn, xã khu vực III vùng dân tộc và miền núi, xã ĐBKK vùng bãi ngang ven biển hải đảo</td>
+        <td class="td-inp"><input type="text" id="r28-sdt" placeholder="0" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-inp"><input type="text" id="r28-kp"  placeholder="0,000" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-inp td-note"><textarea id="r28-gc" rows="1" placeholder="Ghi chú…" oninput="autoResize(this)"></textarea></td>
+      </tr>
+
+      <!-- ══ F3 — 2: Giảm 50% học phí (Row 29) ══ -->
+      <tr class="f3 row-sum" data-id="r29">
+        <td class="td-stt">2</td>
+        <td class="td-ct">- Giảm 50% học phí</td>
+        <td class="td-calc" id="sum-r29-sdt">—</td>
+        <td class="td-calc" id="sum-r29-kp">—</td>
+        <td class="td-disabled"></td>
+      </tr>
+
+      <!-- ══ F4 — Rows 30-31 (thuộc Giảm 50%) ══ -->
+      <tr class="f4" data-id="r30">
+        <td class="td-stt">-</td>
+        <td class="td-ct">Trẻ em học mẫu giáo và HS, SV là con cán bộ, công chức, viên chức, công nhân mà cha hoặc mẹ bị tai nạn lao động hoặc mắc bệnh nghề nghiệp được hưởng trợ cấp thường xuyên</td>
+        <td class="td-inp"><input type="text" id="r30-sdt" placeholder="0" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-inp"><input type="text" id="r30-kp"  placeholder="0,000" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-inp td-note"><textarea id="r30-gc" rows="1" placeholder="Ghi chú…" oninput="autoResize(this)"></textarea></td>
+      </tr>
+      <tr class="f4" data-id="r31">
+        <td class="td-stt">-</td>
+        <td class="td-ct">Trẻ em học mẫu giáo và HS phổ thông, học viên tại cơ sở giáo dục thường xuyên theo chương trình GDPT có cha, mẹ hoặc ông bà (trong trường hợp ở với ông bà) thuộc diện hộ cận nghèo theo quy định của Thủ tướng Chính phủ</td>
+        <td class="td-inp"><input type="text" id="r31-sdt" placeholder="0" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-inp"><input type="text" id="r31-kp"  placeholder="0,000" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-inp td-note"><textarea id="r31-gc" rows="1" placeholder="Ghi chú…" oninput="autoResize(this)"></textarea></td>
+      </tr>
+
+      <!-- ══ TỔNG KINH PHÍ ══ -->
+      <tr style="border-top:2px solid var(--navy);">
+        <td class="td-stt" style="background:var(--bg-sum);"></td>
+        <td class="td-ct"  style="background:var(--bg-sum);font-weight:700;color:var(--navy);">Tổng kinh phí</td>
+        <td class="td-disabled" style="background:var(--bg-sum);"></td>
+        <td class="td-calc" id="grand-kp"  style="font-size:13px;font-weight:700;color:var(--navy);background:var(--bg-sum);">—</td>
+        <td class="td-disabled" style="background:var(--bg-sum);"></td>
+      </tr>
+
+    </tbody>
+  </table>
+  </div><!-- /tbl-wrap -->
+  </div><!-- /form-body -->
+
+  <!-- ══ FOOTER CTA ══ -->
+  <div class="footer">
+    <button class="btn btn-cancel" onclick="doCancel()">Huỷ</button>
+    <button class="btn btn-preview" onclick="doPreview()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      Xem trước
+    </button>
+    <button class="btn btn-save" onclick="doSave()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      Lưu
+    </button>
+  </div>
+
+</div><!-- /card -->
+
+<div id="toast">✓ Đã lưu thành công</div>
+
+<script>
+// ── Kỳ học label ──
+const KY_MAP = {
+  1:'Kỳ II năm học 2024–2025', 2:'Kỳ II năm học 2024–2025',
+  3:'Kỳ II năm học 2024–2025', 4:'Kỳ II năm học 2024–2025',
+  5:'Kỳ II năm học 2024–2025',
+  6:'Hè (ngoài kỳ học)', 7:'Hè (ngoài kỳ học)', 8:'Hè (ngoài kỳ học)',
+  9:'Kỳ I năm học 2025–2026', 10:'Kỳ I năm học 2025–2026',
+  11:'Kỳ I năm học 2025–2026', 12:'Kỳ I năm học 2025–2026'
+};
+function updateKyLabel(){
+  const t = parseInt(document.getElementById('sel-thang').value);
+  document.getElementById('ky-label').textContent = KY_MAP[t] || '';
+}
+document.getElementById('sel-thang').addEventListener('change', updateKyLabel);
+updateKyLabel();
+
+// ── Leaf rows and aggregation tree ──
+// [nodeId, [children ids], isLeaf]
+const LEAF_IDS = ['r11','r14','r15','r16','r17','r18','r19','r20','r21','r22','r23',
+                  'r26','r27','r28','r30','r31'];
+
+// Sum children → parent
+const TREE = {
+  'r13': ['r14','r15','r16','r17','r18','r19','r20','r21','r22','r23'],
+  'r25': ['r26','r27','r28'],
+  'r29': ['r30','r31'],
+  'r24': ['r13','r25','r29'],
+  'r12': ['r13','r24'],
+  'r10': ['r11'],
+  'r9':  ['r10','r12'],
+};
+
+function getRaw(id, field){
+  const el = document.getElementById(`${id}-${field}`);
+  if(!el) return 0;
+  return parseFloat(el.dataset.raw) || 0;
+}
+
+function sumChildren(nodeId, field){
+  const children = TREE[nodeId];
+  if(!children) return getRaw(nodeId, field);
+  let total = 0;
+  children.forEach(c => { total += sumChildren(c, field); });
+  return total;
+}
+
+function updateAll(){
+  Object.keys(TREE).forEach(nodeId => {
+    ['sdt','kp'].forEach(field => {
+      const val = sumChildren(nodeId, field);
+      const el = document.getElementById(`sum-${nodeId}-${field}`);
+      if(el){
+        if(val === 0){
+          el.textContent = '—';
+          el.classList.add('zero');
+        } else {
+          el.textContent = field === 'kp' ? fmtKP(val) : fmtSDT(val);
+          el.classList.remove('zero');
+        }
+      }
+    });
+  });
+
+  // Dòng Tổng kinh phí = tổng cột Kinh phí toàn bộ chỉ tiêu
+  const grandKP = sumChildren('r9', 'kp');
+  const elGrand = document.getElementById('grand-kp');
+  if(elGrand){
+    elGrand.textContent = grandKP === 0 ? '—' : fmtKP(grandKP);
+    elGrand.classList.toggle('zero', grandKP === 0);
+  }
+}
+
+// ── Number formatting ──
+function parseNum(str){
+  if(!str || str.trim() === '') return 0;
+  return parseFloat(str.replace(/\./g,'').replace(',','.')) || 0;
+}
+function fmtSDT(n){
+  if(n === 0) return '0';
+  return Math.round(n).toLocaleString('vi-VN');
+}
+function fmtKP(n){
+  if(n === 0) return '0';
+  return n.toLocaleString('vi-VN', {minimumFractionDigits:0, maximumFractionDigits:3});
+}
+
+function onNum(el){
+  // Allow only digits, commas, dots
+  el.value = el.value.replace(/[^0-9.,]/g,'');
+  const raw = parseNum(el.value);
+  el.dataset.raw = raw;
+  updateAll();
+}
+function fmtNum(el){
+  const raw = parseFloat(el.dataset.raw) || 0;
+  el.value = raw === 0 ? '' : (el.id.includes('-kp') ? fmtKP(raw) : fmtSDT(raw));
+}
+
+// ── Textarea auto-resize ──
+function autoResize(el){
+  el.style.height = 'auto';
+  el.style.height = Math.max(36, el.scrollHeight) + 'px';
+}
+
+// ── CTA ──
+function doSave(){
+  const data = {};
+  LEAF_IDS.forEach(id => {
+    data[id] = {
+      sdt: parseFloat(document.getElementById(`${id}-sdt`)?.dataset.raw) || 0,
+      kp:  parseFloat(document.getElementById(`${id}-kp`)?.dataset.raw)  || 0,
+      gc:  document.getElementById(`${id}-gc`)?.value || ''
+    };
+  });
+  data._meta = {
+    thang: document.getElementById('sel-thang').value,
+    nam:   document.getElementById('sel-nam').value
+  };
+  console.log('SAVE payload:', JSON.stringify(data, null, 2));
+  showToast('✓ Đã lưu thành công');
+}
+
+function doPreview(){
+  const rows = [];
+  LEAF_IDS.forEach(id => {
+    const sdt = parseFloat(document.getElementById(`${id}-sdt`)?.dataset.raw)||0;
+    const kp  = parseFloat(document.getElementById(`${id}-kp`)?.dataset.raw)||0;
+    if(sdt || kp){
+      const label = document.querySelector(`[data-id="${id}"] .td-ct`)?.textContent?.trim() || id;
+      rows.push(`${label}: ${fmtSDT(sdt)} ĐT | ${fmtKP(kp)} triệu`);
+    }
+  });
+  const ky = document.getElementById('ky-label').textContent;
+  const thang = document.getElementById('sel-thang').value;
+  const nam = document.getElementById('sel-nam').value;
+  alert(`XEM TRƯỚC — Tháng ${thang}/${nam} (${ky})\n\n${rows.length ? rows.join('\n') : 'Chưa có dữ liệu nào được nhập.'}\n\nTổng KP: ${fmtKP(sumChildren('r9','kp'))} triệu đồng`);
+}
+
+function doCancel(){
+  if(confirm('Huỷ nhập liệu? Dữ liệu chưa lưu sẽ bị mất.')){
+    LEAF_IDS.forEach(id => {
+      const sdt = document.getElementById(`${id}-sdt`);
+      const kp  = document.getElementById(`${id}-kp`);
+      const gc  = document.getElementById(`${id}-gc`);
+      if(sdt){ sdt.value=''; sdt.dataset.raw='0'; }
+      if(kp){  kp.value='';  kp.dataset.raw='0'; }
+      if(gc){  gc.value=''; gc.style.height=''; }
+    });
+    updateAll();
+  }
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2800);
+}
+
+// Init
+updateAll();
+</script>
+</body>
+</html>
