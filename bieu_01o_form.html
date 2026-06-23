@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biểu 01o — Nhập liệu</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy:#1E3A5F; --navy-lt:#2B4F7E; --border:#D0D7E3;
+  --bg-page:#F4F6FA; --bg-card:#FFFFFF; --bg-sum:#EEF2F8; --bg-inp:#FAFBFD;
+  --bg-fix:#FDF6E3; --txt-pri:#111827; --txt-sec:#5A6478;
+  --txt-cal:#3B5A8A; --txt-fix:#7A5C1E;
+}
+body { font-family:Arial,'Helvetica Neue',sans-serif; font-size:13px; background:var(--bg-page); color:var(--txt-pri); min-height:100vh; padding:20px; }
+.card { background:var(--bg-card); border-radius:8px; box-shadow:0 1px 4px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.04); max-width:1200px; margin:0 auto; overflow:hidden; }
+.header { background:var(--navy); }
+.header-ky { display:flex; align-items:center; gap:10px; padding:10px 20px; border-bottom:1px solid rgba(255,255,255,.12); background:var(--navy-lt); }
+.header-ky label { color:rgba(255,255,255,.75); font-size:12px; font-weight:500; white-space:nowrap; }
+.header-ky select { background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.25); border-radius:5px; color:#fff; font-size:12px; padding:4px 10px; outline:none; cursor:pointer; }
+.header-ky select option { background:var(--navy); color:#fff; }
+.sep { color:rgba(255,255,255,.3); }
+#ky-label { color:rgba(255,255,255,.5); font-size:11px; }
+.header-meta { display:flex; justify-content:space-between; padding:10px 20px 4px; }
+.don-vi { color:#fff; font-size:13px; font-weight:700; }
+.bieu-ma { color:#fff; font-size:13px; font-weight:700; }
+.header-title { text-align:center; padding:6px 20px 10px; color:#FF6B6B; font-size:13.5px; font-weight:700; text-transform:uppercase; line-height:1.45; }
+.header-unit { display:flex; justify-content:flex-end; padding:4px 20px 8px; }
+.unit-label { font-size:11.5px; font-style:italic; color:rgba(255,255,255,.65); }
+.tbl-wrap { overflow-x:auto; }
+table { width:100%; border-collapse:collapse; font-size:11.5px; min-width:1000px; }
+col.c-stt{width:40px;} col.c-ct{width:auto;} col.c-ho{width:88px;}
+col.c-m1{width:90px;} col.c-t1{width:96px;}
+col.c-m2{width:90px;} col.c-t2{width:96px;}
+col.c-kp{width:118px;} col.c-gc{width:130px;}
+thead tr.hd1 th { background:var(--navy); color:#fff; font-weight:600; font-size:11px; padding:7px 7px; text-align:center; border:1px solid rgba(255,255,255,.15); line-height:1.35; }
+thead tr.hd1 th.th-ct { text-align:left; }
+tbody tr { border-bottom:1px solid var(--border); }
+tbody tr:last-child { border-bottom:none; }
+td { vertical-align:middle; border-right:1px solid var(--border); padding:0; }
+td:last-child { border-right:none; }
+.td-stt { text-align:center; font-size:11px; color:var(--txt-sec); padding:7px 5px; white-space:nowrap; vertical-align:top; }
+.td-ct { padding:7px 10px; line-height:1.4; font-size:11.5px; }
+.td-fix { text-align:center; padding:7px 7px; background:var(--bg-fix); color:var(--txt-fix); font-size:11.5px; font-weight:700; font-style:italic; }
+.td-inp { padding:0; }
+.td-inp input { width:100%; min-height:36px; border:none; background:var(--bg-inp); font-family:Arial,sans-serif; font-size:11.5px; color:var(--txt-pri); padding:5px 8px; outline:none; display:block; text-align:right; transition:background .12s; }
+.td-inp input:focus { background:#EDF4FF; box-shadow:inset 0 0 0 2px var(--navy); }
+.td-inp input:hover:not(:focus) { background:#F0F4FA; }
+.td-calc { text-align:right; padding:7px 8px; background:var(--bg-sum); color:var(--txt-cal); font-weight:600; font-size:11.5px; }
+.td-calc.zero { color:#BBC5D5; font-weight:400; }
+.td-gc { padding:0; }
+.td-gc textarea { width:100%; min-height:36px; border:none; background:var(--bg-inp); resize:none; font-family:Arial,sans-serif; font-size:11px; color:var(--txt-sec); padding:5px 8px; outline:none; display:block; line-height:1.4; transition:background .12s; }
+.td-gc textarea:focus { background:#EDF4FF; box-shadow:inset 0 0 0 2px var(--navy); }
+.footer { display:flex; justify-content:flex-end; align-items:center; gap:10px; padding:14px 20px; border-top:1px solid var(--border); background:#F8F9FC; }
+.btn { display:inline-flex; align-items:center; gap:6px; padding:8px 20px; border-radius:6px; font-family:Arial,sans-serif; font-size:13px; font-weight:600; cursor:pointer; border:none; transition:all .15s; white-space:nowrap; }
+.btn-preview { background:#fff; border:1px solid var(--border); color:var(--navy); }
+.btn-preview:hover { background:#EEF2F8; border-color:var(--navy); }
+.btn-save { background:var(--navy); color:#fff; }
+.btn-save:hover { background:var(--navy-lt); }
+.btn-cancel { background:transparent; color:var(--txt-sec); border:1px solid transparent; }
+.btn-cancel:hover { color:#C8102E; border-color:#C8102E; background:#FFF5F6; }
+#toast { position:fixed; bottom:24px; right:24px; background:#0D7A4E; color:#fff; padding:10px 18px; border-radius:7px; font-size:13px; font-weight:500; box-shadow:0 4px 16px rgba(0,0,0,.18); opacity:0; transform:translateY(8px); transition:all .25s; pointer-events:none; z-index:99; }
+#toast.show { opacity:1; transform:translateY(0); }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-ky">
+      <label>Kỳ báo cáo:</label>
+      <select id="sel-nam"><option value="2025" selected>2025</option><option value="2026">2026</option></select>
+      <select id="sel-thang">
+        <option value="1">Tháng 1</option><option value="2">Tháng 2</option><option value="3">Tháng 3</option>
+        <option value="4">Tháng 4</option><option value="5">Tháng 5</option><option value="6">Tháng 6</option>
+        <option value="7">Tháng 7</option><option value="8">Tháng 8</option><option value="9">Tháng 9</option>
+        <option value="10">Tháng 10</option><option value="11">Tháng 11</option><option value="12" selected>Tháng 12</option>
+      </select>
+      <span class="sep">|</span><span id="ky-label"></span>
+    </div>
+    <div class="header-meta">
+      <div class="don-vi">Đơn vị (Xã/ phường/ Sở ngành/ Trường ĐH-CĐĐ/…)</div>
+      <div class="bieu-ma">Phụ lục số 01o</div>
+    </div>
+    <div class="header-title">
+      Tổng hợp kinh phí thực hiện chính sách hỗ trợ tiền điện<br>
+      cho hộ nghèo và hộ chính sách xã hội năm 2025
+    </div>
+    <div class="header-unit"><span class="unit-label">Đơn vị: Triệu đồng</span></div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="tbl-wrap">
+  <table>
+    <colgroup>
+      <col class="c-stt"><col class="c-ct"><col class="c-ho">
+      <col class="c-m1"><col class="c-t1">
+      <col class="c-m2"><col class="c-t2">
+      <col class="c-kp"><col class="c-gc">
+    </colgroup>
+    <thead>
+      <tr class="hd1">
+        <th rowspan="2">STT</th>
+        <th class="th-ct" rowspan="2">Chỉ tiêu</th>
+        <th rowspan="2">Số hộ</th>
+        <th>Mức hỗ trợ<br>61.333 đồng<br><span style="font-size:9px;font-weight:400;opacity:.7;">(triệu đồng)</span></th>
+        <th>Số tháng HT<br>theo mức<br>61.333 đồng</th>
+        <th>Mức hỗ trợ<br>64.282 đồng<br><span style="font-size:9px;font-weight:400;opacity:.7;">(triệu đồng)</span></th>
+        <th>Số tháng HT<br>theo mức<br>64.282 đồng</th>
+        <th rowspan="2">Kinh phí</th>
+        <th rowspan="2">Ghi chú</th>
+      </tr>
+      <tr class="hd1" style="border-top:1px solid rgba(255,255,255,.1);">
+        <th style="background:#253F62;font-size:11px;font-weight:700;font-style:italic;color:#FDF6E3;">0,06133</th>
+        <th style="background:#253F62;font-size:10px;font-weight:400;color:rgba(255,255,255,.7);">nhập số tháng</th>
+        <th style="background:#253F62;font-size:11px;font-weight:700;font-style:italic;color:#FDF6E3;">0,06428</th>
+        <th style="background:#253F62;font-size:10px;font-weight:400;color:rgba(255,255,255,.7);">nhập số tháng</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <!-- Dòng 1: Số hộ nghèo -->
+      <tr>
+        <td class="td-stt">1</td>
+        <td class="td-ct">Số hộ nghèo</td>
+        <td class="td-inp"><input type="text" id="r1-ho" placeholder="0" inputmode="decimal" oninput="onNum(this)" onblur="fmtInt(this)" data-raw="0"></td>
+        <td class="td-fix">0,06133</td>
+        <td class="td-inp"><input type="text" id="r1-t1" placeholder="0" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-fix">0,06428</td>
+        <td class="td-inp"><input type="text" id="r1-t2" placeholder="0" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-calc zero" id="r1-kp">—</td>
+        <td class="td-gc"><textarea id="r1-gc" rows="1" placeholder="Ghi chú…" oninput="autoResize(this)"></textarea></td>
+      </tr>
+
+      <!-- Dòng 2: Hộ có thành viên hưởng TCXH hàng tháng (≤50kWh) -->
+      <tr>
+        <td class="td-stt">2</td>
+        <td class="td-ct">Hộ có thành viên đang hưởng trợ cấp xã hội hằng tháng không thuộc diện hộ nghèo theo quy định của pháp luật và có lượng điện sử dụng cho mục đích sinh hoạt trong tháng không quá 50 KWh ở vùng có điện lưới</td>
+        <td class="td-inp"><input type="text" id="r2-ho" placeholder="0" inputmode="decimal" oninput="onNum(this)" onblur="fmtInt(this)" data-raw="0"></td>
+        <td class="td-fix">0,06133</td>
+        <td class="td-inp"><input type="text" id="r2-t1" placeholder="0" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-fix">0,06428</td>
+        <td class="td-inp"><input type="text" id="r2-t2" placeholder="0" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-calc zero" id="r2-kp">—</td>
+        <td class="td-gc"><textarea id="r2-gc" rows="1" placeholder="Ghi chú…" oninput="autoResize(this)"></textarea></td>
+      </tr>
+
+      <!-- Dòng 3: Hộ TCXH + DTTS vùng chưa có điện lưới -->
+      <tr>
+        <td class="td-stt">3</td>
+        <td class="td-ct">Hộ có thành viên đang hưởng trợ cấp xã hội theo quy định của pháp luật; hộ dân tộc thiểu số sống ở vùng chưa có điện lưới</td>
+        <td class="td-inp"><input type="text" id="r3-ho" placeholder="0" inputmode="decimal" oninput="onNum(this)" onblur="fmtInt(this)" data-raw="0"></td>
+        <td class="td-fix">0,06133</td>
+        <td class="td-inp"><input type="text" id="r3-t1" placeholder="0" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-fix">0,06428</td>
+        <td class="td-inp"><input type="text" id="r3-t2" placeholder="0" inputmode="decimal" oninput="onNum(this)" onblur="fmtNum(this)" data-raw="0"></td>
+        <td class="td-calc zero" id="r3-kp">—</td>
+        <td class="td-gc"><textarea id="r3-gc" rows="1" placeholder="Ghi chú…" oninput="autoResize(this)"></textarea></td>
+      </tr>
+
+      <!-- Tổng kinh phí thực hiện -->
+      <tr style="border-top:2px solid var(--navy);">
+        <td class="td-stt" style="background:var(--bg-sum);"></td>
+        <td class="td-ct" style="background:var(--bg-sum);font-weight:700;color:var(--navy);">Tổng kinh phí thực hiện</td>
+        <td style="background:var(--bg-sum);border-right:1px solid var(--border);"></td>
+        <td style="background:var(--bg-sum);border-right:1px solid var(--border);"></td>
+        <td style="background:var(--bg-sum);border-right:1px solid var(--border);"></td>
+        <td style="background:var(--bg-sum);border-right:1px solid var(--border);"></td>
+        <td style="background:var(--bg-sum);border-right:1px solid var(--border);"></td>
+        <td class="td-calc zero" id="grand-kp" style="font-size:13px;font-weight:700;color:var(--navy);background:var(--bg-sum);">—</td>
+        <td style="background:var(--bg-sum);"></td>
+      </tr>
+
+    </tbody>
+  </table>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <button class="btn btn-cancel" onclick="doCancel()">Huỷ</button>
+    <button class="btn btn-preview" onclick="doPreview()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      Xem trước
+    </button>
+    <button class="btn btn-save" onclick="doSave()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      Lưu
+    </button>
+  </div>
+</div>
+<div id="toast"></div>
+
+<script>
+const KY_MAP = {
+  1:'Kỳ II năm học 2024–2025',2:'Kỳ II năm học 2024–2025',3:'Kỳ II năm học 2024–2025',
+  4:'Kỳ II năm học 2024–2025',5:'Kỳ II năm học 2024–2025',
+  6:'Hè (ngoài kỳ học)',7:'Hè (ngoài kỳ học)',8:'Hè (ngoài kỳ học)',
+  9:'Kỳ I năm học 2025–2026',10:'Kỳ I năm học 2025–2026',
+  11:'Kỳ I năm học 2025–2026',12:'Kỳ I năm học 2025–2026'
+};
+function updateKy(){ const t=parseInt(document.getElementById('sel-thang').value); document.getElementById('ky-label').textContent=KY_MAP[t]||''; }
+document.getElementById('sel-thang').addEventListener('change',updateKy);
+updateKy();
+
+const M1 = 0.06133;  // triệu đồng
+const M2 = 0.06428;
+const ROWS = ['r1','r2','r3'];
+
+function parseNum(s){ if(!s||!s.trim()) return 0; return parseFloat(s.replace(/\./g,'').replace(',','.'))||0; }
+function raw(id){ return parseFloat(document.getElementById(id)?.dataset.raw)||0; }
+function fmtInt(el){ const v=Math.round(parseFloat(el.dataset.raw)||0); el.value=v===0?'':v.toLocaleString('vi-VN'); }
+function fmtNum(el){ const v=parseFloat(el.dataset.raw)||0; el.value=v===0?'':v.toLocaleString('vi-VN',{minimumFractionDigits:0,maximumFractionDigits:2}); }
+function dispKP(v){ return !v?'—':v.toLocaleString('vi-VN',{minimumFractionDigits:0,maximumFractionDigits:3}); }
+
+function onNum(el){ el.value=el.value.replace(/[^0-9.,]/g,''); el.dataset.raw=parseNum(el.value); recalc(); }
+function autoResize(el){ el.style.height='auto'; el.style.height=Math.max(36,el.scrollHeight)+'px'; }
+
+function calcRowKP(r){
+  // KP = (Số hộ × M1 × T1) + (Số hộ × M2 × T2)
+  const ho = raw(`${r}-ho`);
+  const t1 = raw(`${r}-t1`);
+  const t2 = raw(`${r}-t2`);
+  return Math.round((ho*M1*t1 + ho*M2*t2)*1000)/1000;
+}
+
+function recalc(){
+  let grand = 0;
+  ROWS.forEach(r => {
+    const kp = calcRowKP(r);
+    const el = document.getElementById(`${r}-kp`);
+    el.textContent = dispKP(kp);
+    el.classList.toggle('zero', !kp);
+    grand += kp;
+  });
+  grand = Math.round(grand*1000)/1000;
+  const elG = document.getElementById('grand-kp');
+  elG.textContent = dispKP(grand);
+  elG.classList.toggle('zero', !grand);
+}
+
+function doSave(){
+  const rows = {};
+  ROWS.forEach(r => { rows[r]={ ho:raw(`${r}-ho`), t1:raw(`${r}-t1`), t2:raw(`${r}-t2`), kp:calcRowKP(r), gc:document.getElementById(`${r}-gc`).value }; });
+  console.log('SAVE 01o:', JSON.stringify({bieu:'01o',thang:document.getElementById('sel-thang').value,nam:document.getElementById('sel-nam').value,rows},null,2));
+  showToast('✓ Đã lưu thành công');
+}
+function doPreview(){
+  const ky=document.getElementById('ky-label').textContent;
+  const thang=document.getElementById('sel-thang').value;
+  const nam=document.getElementById('sel-nam').value;
+  const lines=[
+    ['Hộ nghèo','r1'],
+    ['Hộ TCXH (≤50kWh)','r2'],
+    ['Hộ TCXH + DTTS chưa có điện lưới','r3'],
+  ].map(([label,r])=>`${label}: ${dispKP(calcRowKP(r))} triệu`).join('\n');
+  const grand=Math.round(ROWS.reduce((s,r)=>s+calcRowKP(r),0)*1000)/1000;
+  alert(`XEM TRƯỚC — Tháng ${thang}/${nam} (${ky})\n\n${lines}\n────────────────────────────────\nTổng kinh phí thực hiện: ${dispKP(grand)} triệu`);
+}
+function doCancel(){
+  if(!confirm('Huỷ nhập liệu? Dữ liệu chưa lưu sẽ bị mất.')) return;
+  ROWS.forEach(r=>{
+    ['ho','t1','t2'].forEach(f=>{ const el=document.getElementById(`${r}-${f}`); if(el){el.value='';el.dataset.raw='0';} });
+    const gc=document.getElementById(`${r}-gc`); if(gc){gc.value='';gc.style.height='';}
+  });
+  recalc();
+}
+function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2800); }
+recalc();
+</script>
+</body>
+</html>

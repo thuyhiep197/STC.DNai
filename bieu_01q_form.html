@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biểu 01q — Nhập liệu</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --navy:#1E3A5F; --navy-lt:#2B4F7E; --border:#D0D7E3;
+  --bg-page:#F4F6FA; --bg-card:#FFFFFF; --bg-sum:#EEF2F8; --bg-inp:#FAFBFD;
+  --bg-f0:#DDE5F2; --bg-f1:#E8EEF7; --bg-f2:#F5F7FB;
+  --bg-fix:#FDF6E3; --txt-pri:#111827; --txt-sec:#5A6478;
+  --txt-cal:#3B5A8A; --txt-fix:#7A5C1E;
+}
+body { font-family:Arial,'Helvetica Neue',sans-serif; font-size:13px; background:var(--bg-page); color:var(--txt-pri); min-height:100vh; padding:20px; }
+.card { background:var(--bg-card); border-radius:8px; box-shadow:0 1px 4px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.04); max-width:1060px; margin:0 auto; overflow:hidden; }
+.header { background:var(--navy); }
+.header-ky { display:flex; align-items:center; gap:10px; padding:10px 20px; border-bottom:1px solid rgba(255,255,255,.12); background:var(--navy-lt); }
+.header-ky label { color:rgba(255,255,255,.75); font-size:12px; font-weight:500; white-space:nowrap; }
+.header-ky select { background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.25); border-radius:5px; color:#fff; font-size:12px; padding:4px 10px; outline:none; cursor:pointer; }
+.header-ky select option { background:var(--navy); color:#fff; }
+.sep { color:rgba(255,255,255,.3); }
+#ky-label { color:rgba(255,255,255,.5); font-size:11px; }
+.header-meta { display:flex; justify-content:space-between; padding:10px 20px 4px; }
+.don-vi { color:#fff; font-size:13px; font-weight:700; }
+.bieu-ma { color:#fff; font-size:13px; font-weight:700; }
+.header-title { text-align:center; padding:6px 20px 10px; color:#FF6B6B; font-size:13.5px; font-weight:700; text-transform:uppercase; line-height:1.45; }
+.header-unit { display:flex; justify-content:flex-end; padding:4px 20px 8px; }
+.unit-label { font-size:11.5px; font-style:italic; color:rgba(255,255,255,.65); }
+.tbl-wrap { overflow-x:auto; }
+table { width:100%; border-collapse:collapse; font-size:12px; }
+col.c-stt{width:44px;} col.c-ct{width:auto;} col.c-muc{width:100px;} col.c-sdt{width:120px;} col.c-kp{width:130px;} col.c-gc{width:150px;}
+thead th { background:var(--navy); color:#fff; font-weight:600; font-size:12px; padding:9px 10px; text-align:center; border:1px solid rgba(255,255,255,.15); white-space:nowrap; }
+thead th.th-ct { text-align:left; }
+tbody tr { border-bottom:1px solid var(--border); }
+tbody tr:last-child { border-bottom:none; }
+td { vertical-align:middle; border-right:1px solid var(--border); padding:0; }
+td:last-child { border-right:none; }
+.td-stt { text-align:center; font-size:11.5px; color:var(--txt-sec); padding:8px 5px; white-space:nowrap; }
+.td-ct  { padding:8px 12px; line-height:1.4; font-size:12px; }
+/* Nhóm cha A, B */
+.row-group td { background:var(--bg-f0); }
+.row-group .td-ct { font-weight:700; color:var(--navy); }
+.row-group .td-stt { font-weight:700; color:var(--navy); }
+/* Dòng con: lùi đầu dòng */
+.row-leaf .td-ct { padding-left:24px; }
+/* Mức cố định */
+.td-fix { text-align:center; padding:8px 8px; background:var(--bg-fix); color:var(--txt-fix); font-size:12px; font-weight:700; font-style:italic; }
+.row-group .td-fix { background:#EDE9D5; }
+/* Input */
+.td-inp { padding:0; }
+.td-inp input { width:100%; min-height:38px; border:none; background:var(--bg-inp); font-family:Arial,sans-serif; font-size:12px; color:var(--txt-pri); padding:6px 9px; outline:none; display:block; text-align:right; transition:background .12s; }
+.td-inp input:focus { background:#EDF4FF; box-shadow:inset 0 0 0 2px var(--navy); }
+.td-inp input:hover:not(:focus) { background:#F0F4FA; }
+/* Disabled */
+.td-dis { background:#F0F2F5; }
+.row-group .td-dis { background:#D5DDEC; }
+/* Computed */
+.td-calc { text-align:right; padding:8px 9px; background:var(--bg-sum); color:var(--txt-cal); font-weight:600; font-size:12px; }
+.td-calc.zero { color:#BBC5D5; font-weight:400; }
+.row-group .td-calc { background:var(--bg-f0); font-weight:700; color:var(--navy); }
+/* Ghi chú */
+.td-gc { padding:0; }
+.td-gc textarea { width:100%; min-height:38px; border:none; background:var(--bg-inp); resize:none; font-family:Arial,sans-serif; font-size:11.5px; color:var(--txt-sec); padding:6px 9px; outline:none; display:block; line-height:1.4; transition:background .12s; }
+.td-gc textarea:focus { background:#EDF4FF; box-shadow:inset 0 0 0 2px var(--navy); }
+.footer { display:flex; justify-content:flex-end; align-items:center; gap:10px; padding:14px 20px; border-top:1px solid var(--border); background:#F8F9FC; }
+.btn { display:inline-flex; align-items:center; gap:6px; padding:8px 20px; border-radius:6px; font-family:Arial,sans-serif; font-size:13px; font-weight:600; cursor:pointer; border:none; transition:all .15s; white-space:nowrap; }
+.btn-preview { background:#fff; border:1px solid var(--border); color:var(--navy); }
+.btn-preview:hover { background:#EEF2F8; border-color:var(--navy); }
+.btn-save { background:var(--navy); color:#fff; }
+.btn-save:hover { background:var(--navy-lt); }
+.btn-cancel { background:transparent; color:var(--txt-sec); border:1px solid transparent; }
+.btn-cancel:hover { color:#C8102E; border-color:#C8102E; background:#FFF5F6; }
+#toast { position:fixed; bottom:24px; right:24px; background:#0D7A4E; color:#fff; padding:10px 18px; border-radius:7px; font-size:13px; font-weight:500; box-shadow:0 4px 16px rgba(0,0,0,.18); opacity:0; transform:translateY(8px); transition:all .25s; pointer-events:none; z-index:99; }
+#toast.show { opacity:1; transform:translateY(0); }
+</style>
+</head>
+<body>
+<div class="card">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-ky">
+      <label>Kỳ báo cáo:</label>
+      <select id="sel-nam"><option value="2025" selected>2025</option><option value="2026">2026</option></select>
+      <select id="sel-thang">
+        <option value="1">Tháng 1</option><option value="2">Tháng 2</option><option value="3">Tháng 3</option>
+        <option value="4">Tháng 4</option><option value="5">Tháng 5</option><option value="6">Tháng 6</option>
+        <option value="7">Tháng 7</option><option value="8">Tháng 8</option><option value="9">Tháng 9</option>
+        <option value="10">Tháng 10</option><option value="11">Tháng 11</option><option value="12" selected>Tháng 12</option>
+      </select>
+      <span class="sep">|</span><span id="ky-label"></span>
+    </div>
+    <div class="header-meta">
+      <div class="don-vi">Đơn vị (Xã/ phường/ Sở ngành/ Trường ĐH-CĐĐ/…)</div>
+      <div class="bieu-ma">Phụ lục số 01q</div>
+    </div>
+    <div class="header-title">
+      Tổng hợp kinh phí NSNN thực hiện chính sách đối với người có uy tín<br>
+      trong đồng bào dân tộc thiểu số theo Quyết định số 12/2018/QĐ-TTg<br>
+      và số 28/2023/QĐ-TTg của Thủ tướng Chính phủ năm 2025
+    </div>
+    <div class="header-unit"><span class="unit-label">Đơn vị: Triệu đồng</span></div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="tbl-wrap">
+  <table>
+    <colgroup>
+      <col class="c-stt"><col class="c-ct"><col class="c-muc"><col class="c-sdt"><col class="c-kp"><col class="c-gc">
+    </colgroup>
+    <thead>
+      <tr>
+        <th>STT</th>
+        <th class="th-ct">Chỉ tiêu</th>
+        <th>Mức</th>
+        <th>Số đối tượng</th>
+        <th>Kinh phí thực hiện</th>
+        <th>Ghi chú</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <!-- ══ A. Chế độ cung cấp thông tin ══ -->
+      <tr class="row-group">
+        <td class="td-stt">A</td>
+        <td class="td-ct">Chế độ cung cấp thông tin</td>
+        <td class="td-dis"></td>
+        <td class="td-dis"></td>
+        <td class="td-calc zero" id="A-kp">—</td>
+        <td class="td-dis"></td>
+      </tr>
+
+      <!-- A.1: Chế độ cung cấp thông tin — Mức nhập, KP = Mức × ĐT -->
+      <tr class="row-leaf">
+        <td class="td-stt">1</td>
+        <td class="td-ct">Chế độ cung cấp thông tin</td>
+        <td class="td-inp">
+          <input type="text" id="A1-muc" placeholder="0,000"
+                 inputmode="decimal" oninput="onNum(this)" onblur="fmtKP(this)" data-raw="0">
+        </td>
+        <td class="td-inp">
+          <input type="text" id="A1-sdt" placeholder="0"
+                 inputmode="decimal" oninput="onNum(this)" onblur="fmtInt(this)" data-raw="0">
+        </td>
+        <td class="td-calc zero" id="A1-kp">—</td>
+        <td class="td-gc"><textarea id="A1-gc" rows="1" placeholder="Ghi chú…" oninput="autoResize(this)"></textarea></td>
+      </tr>
+
+      <!-- ══ B. Hỗ trợ vật chất, động viên tinh thần ══ -->
+      <tr class="row-group">
+        <td class="td-stt">B</td>
+        <td class="td-ct">Hỗ trợ vật chất, động viên tinh thần</td>
+        <td class="td-dis"></td>
+        <td class="td-dis"></td>
+        <td class="td-calc zero" id="B-kp">—</td>
+        <td class="td-dis"></td>
+      </tr>
+
+      <!-- B.1: Tết — Mức cố định 0,5 — KP = 0,5 × ĐT × 2 -->
+      <tr class="row-leaf">
+        <td class="td-stt">1</td>
+        <td class="td-ct">Thăm hỏi, tặng quà dịp Tết Nguyên đán, Tết hoặc Lễ hội truyền thống</td>
+        <td class="td-fix" title="Mức cố định theo QĐ: 0,5 triệu × 2 lần/năm">0,5</td>
+        <td class="td-inp">
+          <input type="text" id="B1-sdt" placeholder="0"
+                 inputmode="decimal" oninput="onNum(this)" onblur="fmtInt(this)" data-raw="0">
+        </td>
+        <td class="td-calc zero" id="B1-kp">—</td>
+        <td class="td-gc"><textarea id="B1-gc" rows="1" placeholder="Ghi chú…" oninput="autoResize(this)"></textarea></td>
+      </tr>
+
+      <!-- B.2: Ốm đau — Mức cố định 1,5 — KP = 1,5 × ĐT -->
+      <tr class="row-leaf">
+        <td class="td-stt">2</td>
+        <td class="td-ct">Thăm hỏi, hỗ trợ người có uy tín ốm đau đi điều trị bệnh</td>
+        <td class="td-fix" title="Mức cố định theo QĐ: 1,5 triệu">1,5</td>
+        <td class="td-inp">
+          <input type="text" id="B2-sdt" placeholder="0"
+                 inputmode="decimal" oninput="onNum(this)" onblur="fmtInt(this)" data-raw="0">
+        </td>
+        <td class="td-calc zero" id="B2-kp">—</td>
+        <td class="td-gc"><textarea id="B2-gc" rows="1" placeholder="Ghi chú…" oninput="autoResize(this)"></textarea></td>
+      </tr>
+
+      <!-- B.3: Khó khăn — Mức cố định 2,0 — KP = 2,0 × ĐT -->
+      <tr class="row-leaf">
+        <td class="td-stt">3</td>
+        <td class="td-ct">Hỗ trợ gia đình người có uy tín gặp khó khăn (thiên tai, hỏa hoạn)</td>
+        <td class="td-fix" title="Mức cố định theo QĐ: 2,0 triệu">2,0</td>
+        <td class="td-inp">
+          <input type="text" id="B3-sdt" placeholder="0"
+                 inputmode="decimal" oninput="onNum(this)" onblur="fmtInt(this)" data-raw="0">
+        </td>
+        <td class="td-calc zero" id="B3-kp">—</td>
+        <td class="td-gc"><textarea id="B3-gc" rows="1" placeholder="Ghi chú…" oninput="autoResize(this)"></textarea></td>
+      </tr>
+
+      <!-- B.4: Qua đời — Mức cố định 1,0 — KP = 1,0 × ĐT -->
+      <tr class="row-leaf">
+        <td class="td-stt">4</td>
+        <td class="td-ct">Thăm viếng, động viên khi người có uy tín qua đời</td>
+        <td class="td-fix" title="Mức cố định theo QĐ: 1,0 triệu">1,0</td>
+        <td class="td-inp">
+          <input type="text" id="B4-sdt" placeholder="0"
+                 inputmode="decimal" oninput="onNum(this)" onblur="fmtInt(this)" data-raw="0">
+        </td>
+        <td class="td-calc zero" id="B4-kp">—</td>
+        <td class="td-gc"><textarea id="B4-gc" rows="1" placeholder="Ghi chú…" oninput="autoResize(this)"></textarea></td>
+      </tr>
+
+      <!-- Tổng kinh phí thực hiện = A + B -->
+      <tr style="border-top:2px solid var(--navy);">
+        <td class="td-stt" style="background:var(--bg-sum);"></td>
+        <td class="td-ct" style="background:var(--bg-sum);font-weight:700;color:var(--navy);">Tổng kinh phí thực hiện</td>
+        <td style="background:var(--bg-sum);border-right:1px solid var(--border);"></td>
+        <td style="background:var(--bg-sum);border-right:1px solid var(--border);"></td>
+        <td class="td-calc zero" id="grand-kp" style="font-size:13px;font-weight:700;color:var(--navy);background:var(--bg-sum);">—</td>
+        <td style="background:var(--bg-sum);"></td>
+      </tr>
+
+    </tbody>
+  </table>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <button class="btn btn-cancel" onclick="doCancel()">Huỷ</button>
+    <button class="btn btn-preview" onclick="doPreview()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      Xem trước
+    </button>
+    <button class="btn btn-save" onclick="doSave()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      Lưu
+    </button>
+  </div>
+</div>
+<div id="toast"></div>
+
+<script>
+const KY_MAP = {
+  1:'Kỳ II năm học 2024–2025',2:'Kỳ II năm học 2024–2025',3:'Kỳ II năm học 2024–2025',
+  4:'Kỳ II năm học 2024–2025',5:'Kỳ II năm học 2024–2025',
+  6:'Hè (ngoài kỳ học)',7:'Hè (ngoài kỳ học)',8:'Hè (ngoài kỳ học)',
+  9:'Kỳ I năm học 2025–2026',10:'Kỳ I năm học 2025–2026',
+  11:'Kỳ I năm học 2025–2026',12:'Kỳ I năm học 2025–2026'
+};
+function updateKy(){ const t=parseInt(document.getElementById('sel-thang').value); document.getElementById('ky-label').textContent=KY_MAP[t]||''; }
+document.getElementById('sel-thang').addEventListener('change',updateKy);
+updateKy();
+
+// Mức cố định nhóm B (triệu đồng)
+const MUC_B1 = 0.5;   // × ĐT × 2 lần
+const MUC_B2 = 1.5;   // × ĐT
+const MUC_B3 = 2.0;   // × ĐT
+const MUC_B4 = 1.0;   // × ĐT
+
+function parseNum(s){ if(!s||!s.trim()) return 0; return parseFloat(s.replace(/\./g,'').replace(',','.'))||0; }
+function raw(id){ return parseFloat(document.getElementById(id)?.dataset.raw)||0; }
+function fmtInt(el){ const v=Math.round(parseFloat(el.dataset.raw)||0); el.value=v===0?'':v.toLocaleString('vi-VN'); }
+function fmtKP(el){ const v=parseFloat(el.dataset.raw)||0; el.value=v===0?'':v.toLocaleString('vi-VN',{minimumFractionDigits:0,maximumFractionDigits:3}); }
+function dispKP(v){ return !v?'—':v.toLocaleString('vi-VN',{minimumFractionDigits:0,maximumFractionDigits:3}); }
+function setCalc(id,v){ const el=document.getElementById(id); if(!el) return; el.textContent=dispKP(v); el.classList.toggle('zero',!v); }
+
+function onNum(el){ el.value=el.value.replace(/[^0-9.,]/g,''); el.dataset.raw=parseNum(el.value); recalc(); }
+function autoResize(el){ el.style.height='auto'; el.style.height=Math.max(38,el.scrollHeight)+'px'; }
+
+function recalc(){
+  // A.1: KP = Mức × ĐT
+  const kp_A1 = Math.round(raw('A1-muc') * raw('A1-sdt') * 1000) / 1000;
+  setCalc('A1-kp', kp_A1);
+  setCalc('A-kp',  kp_A1);   // A = A.1
+
+  // B.1: KP = 0,5 × ĐT × 2
+  const kp_B1 = Math.round(MUC_B1 * raw('B1-sdt') * 2 * 1000) / 1000;
+  // B.2: KP = 1,5 × ĐT
+  const kp_B2 = Math.round(MUC_B2 * raw('B2-sdt') * 1000) / 1000;
+  // B.3: KP = 2,0 × ĐT
+  const kp_B3 = Math.round(MUC_B3 * raw('B3-sdt') * 1000) / 1000;
+  // B.4: KP = 1,0 × ĐT
+  const kp_B4 = Math.round(MUC_B4 * raw('B4-sdt') * 1000) / 1000;
+
+  setCalc('B1-kp', kp_B1);
+  setCalc('B2-kp', kp_B2);
+  setCalc('B3-kp', kp_B3);
+  setCalc('B4-kp', kp_B4);
+
+  const kp_B = Math.round((kp_B1+kp_B2+kp_B3+kp_B4)*1000)/1000;
+  setCalc('B-kp', kp_B);
+
+  // Tổng = A + B
+  const grand = Math.round((kp_A1+kp_B)*1000)/1000;
+  setCalc('grand-kp', grand);
+}
+
+function doSave(){
+  const payload = {
+    bieu:'01q',
+    thang: document.getElementById('sel-thang').value,
+    nam:   document.getElementById('sel-nam').value,
+    A1: { muc:raw('A1-muc'), sdt:raw('A1-sdt'), gc:document.getElementById('A1-gc').value },
+    B1: { sdt:raw('B1-sdt'), gc:document.getElementById('B1-gc').value },
+    B2: { sdt:raw('B2-sdt'), gc:document.getElementById('B2-gc').value },
+    B3: { sdt:raw('B3-sdt'), gc:document.getElementById('B3-gc').value },
+    B4: { sdt:raw('B4-sdt'), gc:document.getElementById('B4-gc').value }
+  };
+  console.log('SAVE 01q:', JSON.stringify(payload, null, 2));
+  showToast('✓ Đã lưu thành công');
+}
+function doPreview(){
+  const ky=document.getElementById('ky-label').textContent;
+  const thang=document.getElementById('sel-thang').value;
+  const nam=document.getElementById('sel-nam').value;
+  const kp_A1 = Math.round(raw('A1-muc')*raw('A1-sdt')*1000)/1000;
+  const kp_B1 = Math.round(MUC_B1*raw('B1-sdt')*2*1000)/1000;
+  const kp_B2 = Math.round(MUC_B2*raw('B2-sdt')*1000)/1000;
+  const kp_B3 = Math.round(MUC_B3*raw('B3-sdt')*1000)/1000;
+  const kp_B4 = Math.round(MUC_B4*raw('B4-sdt')*1000)/1000;
+  const grand = Math.round((kp_A1+kp_B1+kp_B2+kp_B3+kp_B4)*1000)/1000;
+  alert(
+    `XEM TRƯỚC — Tháng ${thang}/${nam} (${ky})\n\n`+
+    `A.1 Cung cấp thông tin:     ${dispKP(kp_A1)} triệu\n`+
+    `B.1 Thăm hỏi Tết (×2):     ${dispKP(kp_B1)} triệu\n`+
+    `B.2 Ốm đau:                 ${dispKP(kp_B2)} triệu\n`+
+    `B.3 Khó khăn (thiên tai…): ${dispKP(kp_B3)} triệu\n`+
+    `B.4 Qua đời:                ${dispKP(kp_B4)} triệu\n`+
+    `────────────────────────────────\n`+
+    `Tổng kinh phí thực hiện: ${dispKP(grand)} triệu`
+  );
+}
+function doCancel(){
+  if(!confirm('Huỷ nhập liệu? Dữ liệu chưa lưu sẽ bị mất.')) return;
+  ['A1-muc','A1-sdt','B1-sdt','B2-sdt','B3-sdt','B4-sdt'].forEach(id=>{ const el=document.getElementById(id); if(el){el.value='';el.dataset.raw='0';} });
+  ['A1-gc','B1-gc','B2-gc','B3-gc','B4-gc'].forEach(id=>{ const el=document.getElementById(id); if(el){el.value='';el.style.height='';} });
+  recalc();
+}
+function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2800); }
+recalc();
+</script>
+</body>
+</html>
