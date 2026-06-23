@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mẫu STC 01 — Tổng hợp ASXH năm 2025</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 12px;
+    background: #e8e8e8;
+    color: #111;
+  }
+
+  /* ── Toolbar ── */
+  .toolbar {
+    position: sticky; top: 0; z-index: 100;
+    background: #1a3a5c;
+    display: flex; align-items: center; gap: 12px;
+    padding: 8px 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.35);
+  }
+  .toolbar-title { color:#fff; font-family:Arial,sans-serif; font-size:13px; font-weight:600; flex:1; }
+  .toolbar-badge { background:#2ecc71; color:#fff; font-family:Arial,sans-serif; font-size:10px; font-weight:700; padding:2px 8px; border-radius:10px; letter-spacing:.5px; }
+  .btn-print { background:#e8f0fe; color:#1a3a5c; border:none; padding:6px 16px; border-radius:4px; font-family:Arial,sans-serif; font-size:12px; font-weight:600; cursor:pointer; }
+  .btn-print:hover { background:#c5d8f7; }
+
+  /* ── Page ── */
+  .page-wrap { max-width:1060px; margin:24px auto; background:#fff; box-shadow:0 4px 24px rgba(0,0,0,.18); padding:28px 32px 40px; }
+
+  /* ── Header ── */
+  .doc-header { text-align:center; margin-bottom:12px; }
+  .doc-unit { font-size:11px; font-style:italic; margin-bottom:2px; }
+  .doc-title { font-size:13px; font-weight:bold; text-transform:uppercase; line-height:1.5; }
+  .doc-unit-measure { text-align:right; font-size:11px; font-style:italic; margin-bottom:6px; }
+
+  /* ── Table ── */
+  table { width:100%; border-collapse:collapse; table-layout:fixed; }
+
+  col.c-stt  { width:44px; }
+  col.c-label{ width:auto; }
+  col.c-sdt  { width:88px; }
+  col.c-kp   { width:88px; }
+  col.c-lk   { width:68px; }
+  col.c-mtm  { width:108px; }
+  col.c-gc   { width:110px; }
+
+  th, td { border:1px solid #999; padding:3px 5px; vertical-align:middle; }
+
+  .th-main { background:#dce6f1; font-weight:bold; text-align:center; font-size:11px; line-height:1.4; }
+  .th-sub  { background:#eaf0fa; font-weight:bold; text-align:center; font-size:10.5px; }
+  .th-idx  { background:#dce6f1; font-weight:bold; text-align:center; font-size:11px; }
+
+  /* Data rows — background only, NO padding-left here */
+  tr.lvl-0 td { background:#1a3a5c; color:#fff; font-weight:bold; font-size:12px; }
+  tr.lvl-1 td { background:#dce6f1; font-weight:bold; font-size:11.5px; }
+  tr.lvl-2 td { background:#f0f5fb; font-size:11.5px; }
+  tr.lvl-3 td { background:#fafcff; font-size:11px; }
+  tr.lvl-4 td { background:#fff; font-size:11px; }
+
+  /* Indent chỉ dùng data-indent, không CSS class để tránh xung đột */
+  .col-stt  { text-align:center; white-space:nowrap; }
+  .col-num  { text-align:right; white-space:nowrap; font-variant-numeric:tabular-nums; }
+  .col-code { text-align:center; font-size:10.5px; white-space:normal; word-break:break-word; line-height:1.4; }
+  td { white-space:normal; word-wrap:break-word; }
+  .zero { color:#ccc; }
+
+  /* ── Footer ── */
+  .doc-footer { margin-top:20px; display:flex; justify-content:space-between; align-items:flex-start; font-size:11px; }
+  .footer-note { max-width:55%; font-style:italic; color:#555; line-height:1.6; }
+  .footer-sign { text-align:center; min-width:200px; }
+  .footer-sign .date { margin-bottom:4px; }
+  .footer-sign .title { font-weight:bold; }
+  .footer-sign .subtitle { font-style:italic; font-size:10.5px; margin-bottom:36px; }
+
+  @media print {
+    body { background:#fff; }
+    .toolbar { display:none; }
+    .page-wrap { box-shadow:none; margin:0; padding:12mm 15mm; max-width:100%; }
+    tr.lvl-0 td, tr.lvl-1 td, tr.lvl-2 td { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <span class="toolbar-title">Mẫu STC 01 — Tổng hợp kết quả thực hiện các chính sách, chế độ ASXH</span>
+  <span class="toolbar-badge">READ ONLY</span>
+  <button class="btn-print" onclick="window.print()">🖨 In / Xuất PDF</button>
+</div>
+
+<div class="page-wrap">
+  <div class="doc-header">
+    <div class="doc-unit" id="donViText"></div>
+    <div class="doc-title">
+      TỔNG HỢP KẾT QUẢ THỰC HIỆN CÁC CHÍNH SÁCH, CHẾ ĐỘ AN SINH XÃ HỘI<br>NĂM 2025
+    </div>
+  </div>
+  <div class="doc-unit-measure">Đơn vị tính: Triệu đồng</div>
+
+  <table id="mainTable">
+    <colgroup>
+      <col class="c-stt">
+      <col class="c-label">
+      <col class="c-sdt">
+      <col class="c-kp">
+      <col class="c-lk">
+      <col class="c-mtm">
+      <col class="c-gc">
+    </colgroup>
+    <thead>
+      <tr>
+        <th class="th-main" rowspan="2">STT</th>
+        <th class="th-main" rowspan="2">Chính sách, chế độ</th>
+        <th class="th-main" colspan="2">Kết quả thực hiện năm 2025</th>
+        <th class="th-main" colspan="2">Đối chiếu theo mục lục NSNN</th>
+        <th class="th-main" rowspan="2">Ghi chú</th>
+      </tr>
+      <tr>
+        <th class="th-sub">Số đối tượng<br>(người)</th>
+        <th class="th-sub">Kinh phí NSNN<br>(triệu đồng)</th>
+        <th class="th-sub">Loại - Khoản</th>
+        <th class="th-sub">Mục - Tiểu mục</th>
+      </tr>
+      <tr>
+        <th class="th-idx">(A)</th>
+        <th class="th-idx">(B)</th>
+        <th class="th-idx">1</th>
+        <th class="th-idx">2</th>
+        <th class="th-idx">3</th>
+        <th class="th-idx">4</th>
+        <th class="th-idx">11</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+
+  <div class="doc-footer">
+    <div class="footer-note">
+      <strong>Ghi chú:</strong><br>
+      (*) Số đối tượng sử dụng hàm MAX khi phụ lục tách theo kỳ học/kỳ chi.<br>
+      Kinh phí là tổng cộng của tất cả các kỳ trong năm.
+    </div>
+    <div class="footer-sign">
+      <div class="date" id="footerDate"></div>
+      <div class="title">XÁC NHẬN KBNN</div>
+      <div class="subtitle">(Ký tên, đóng dấu)</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+//  ENGINE TÍNH TOÁN
+// ═══════════════════════════════════════════
+function computeSheet01(data) {
+  const s = (sheet, cell) => { const k=`sheet_${sheet}`; if(!data[k])return 0; return Number(data[k][cell])||0; };
+  const mx = (...a) => Math.max(...a.map(v=>Number(v)||0));
+  const r0 = v => Math.round(Number(v)||0);
+
+  // 1.1
+  const c13=mx(s('1a','D13'),s('1a','F13')), d13=s('1a','E13')+s('1a','G13');
+  const c14=mx(s('1a','D25'),s('1a','F25')), d14=s('1a','E25')+s('1a','G25');
+  const c15=mx(s('1a','D29'),s('1a','F29')), d15=s('1a','E29')+s('1a','G29');
+  const c12=c13+c14+c15, d12=d13+d14+d15;
+  const c16=mx(s('1a','D10'),s('1a','F10')), d16=s('1a','E10')+s('1a','G10');
+  const c11=c12+c16, d11=d12+d16;
+  // 1.2
+  const c18=mx(s('1b','C9'),s('1b','G9')), d18=s('1b','J9')+s('1b','F9');
+  const c19=s('1b','K9'), d19=s('1b','L9');
+  const c20=s('1c','C9'), d20=s('1c','F9');
+  const c17=c18+c19+c20, d17=d18+d19+d20;
+  // 1.3
+  const c22=s('1d','H9'), d22=s('1d','F9')+s('1d','K9');
+  const c23=s('1d','H9'), d23=s('1d','G9')+s('1d','L9');
+  const c21=c22+c23, d21=d22+d23;
+  // 1.4
+  const c26=mx(s('1e','D11'),s('1e','O11')), d26=s('1e','H11')+s('1e','S11');
+  const c27=mx(s('1e','E11'),s('1e','P11')), d27=s('1e','J11')+s('1e','U11');
+  const c28=0, d28=s('1e','V11');
+  const c29=0, d29=s('1e','L11')+s('1e','Z11');
+  const c25=c26+c27+c28+c29, d25=d26+d27+d28+d29;
+  const c31=mx(s('1e','F11'),s('1e','Q11')), d31=s('1e','I11')+s('1e','T11');
+  const c32=0, d32=s('1e','AA11');
+  const c30=c31+c32, d30=d31+d32;
+  const c24=c25+c30, d24=d25+d30;
+  // 1.5
+  const c33=mx(s('1f','C9'),s('1f','E9')), d33=s('1f','G9');
+  // 1.6
+  const c36=mx(s('1g','F11'),s('1g','I11')), d36=s('1g','H11')+s('1g','K11');
+  const c37=mx(s('1g','F14'),s('1g','I14')), d37=s('1g','H14')+s('1g','K14');
+  const c38=mx(s('1g','F17'),s('1g','I17')), d38=s('1g','H17')+s('1g','K17');
+  const c35=c36+c37+c38, d35=d36+d37+d38;
+  const c39=s('1g','L10')+s('1g','M10')+s('1g','N10')+s('1g','O10'), d39=s('1g','P10');
+  const c34=c35+c39, d34=d35+d39;
+  // 1.7
+  const c40=mx(s('1h','C10'),s('1h','E10')), d40=s('1h','G10');
+  // 1.8
+  const c41=mx(s('1i','C10'),s('1i','G10'));
+  const c42=mx(s('1i','C11'),s('1i','G11')), d42=s('1i','K11');
+  const c43=mx(s('1i','C12'),s('1i','G12')), d43=s('1i','K12');
+  const c44=mx(s('1i','C13'),s('1i','G13')), d44=s('1i','K13')||0;
+  const c45=mx(s('1i','C10'),s('1i','G10')), d45=Math.max(0,s('1i','K10')-d42-d43-d44);
+  const d41=d42+d43+d44+d45;
+  // 1.9
+  const c47=s('1j','C10'), d47=s('1j','G10');
+  const c48=s('1j','C10'), d48=s('1j','H10');
+  const c46=c47+c48, d46=d47+d48;
+  // 1.10
+  const c50=mx(s('1k','D10'),s('1k','K10')), d50=s('1k','H10')+s('1k','O10');
+  const c51=mx(s('1k','D10'),s('1k','K10')), d51=s('1k','P10')+s('1k','I10');
+  const c52=mx(s('1k','C10'),s('1k','J10')), d52=s('1k','N10')+s('1k','G10');
+  const c53=s('1k','Q10'), d53=s('1k','R10');
+  const c49=c50+c51+c52+c53, d49=d50+d51+d52+d53;
+  // Tổng nhóm 1
+  const c10=c11+c17+c21+c24+c33+c34+c40+c41+c46+c49;
+  const d10=d11+d17+d21+d24+d33+d34+d40+d41+d46+d49;
+  // Nhóm 2 BHYT
+  const c55=s('1l','C12'),d55=s('1l','D12'); const c56=s('1l','C17'),d56=s('1l','D17');
+  const c57=s('1l','C13'),d57=s('1l','D13'); const c58=s('1l','C32'),d58=s('1l','D32');
+  const c59=s('1l','C16'),d59=s('1l','D16');
+  const c62=s('1l','C30'),d62=s('1l','D30'); const c63=s('1l','C31'),d63=s('1l','D31');
+  const c61=c62+c63,d61=d62+d63;
+  const c64=s('1l','C33'),d64=s('1l','D33'); const c60=c61+c64,d60=d61+d64;
+  const c65=s('1l','C18'),d65=s('1l','D18'); const c66=s('1l','C19'),d66=s('1l','D19');
+  const c67=s('1l','C20'),d67=s('1l','D20'); const c68=s('1l','C21'),d68=s('1l','D21');
+  const c69=s('1l','C22'),d69=s('1l','D22'); const c70=s('1l','C23'),d70=s('1l','D23');
+  const c71=s('1l','C34'),d71=s('1l','D34'); const c72=s('1l','C35'),d72=s('1l','D35');
+  const c73=s('1l','C36'),d73=s('1l','D36'); const c74=s('1l','C37'),d74=s('1l','D37');
+  const c75=s('1l','C38'),d75=s('1l','D38'); const c76=s('1l','C39'),d76=s('1l','D39');
+  const c54=c55+c56+c57+c58+c59+c60+c65+c66+c67+c68+c69+c70+c71+c72+c73+c74+c75+c76;
+  const d54=d55+d56+d57+d58+d59+d60+d65+d66+d67+d68+d69+d70+d71+d72+d73+d74+d75+d76;
+  // Nhóm 3
+  const c79=mx(s('1m','F11'),s('1m','H11')), d79=s('1m','J11');
+  const c80=s('1n','F9'), d80=s('1n','H9');
+  const c82=s('1o','D8'), d82=r0(s('1o','M8'));
+  const c83=s('1o','F8'), d83=r0(s('1o','F9')*s('1o','H9')*s('1o','I9')+s('1o','F9')*s('1o','J9')*s('1o','K9'));
+  const c84=s('1o','G8'), d84=r0(-d83+s('1o','N9'))-1;
+  const c81=c82+c83+c84, d81=d82+d83+d84;
+  const c86=mx(s('1p','C11'),s('1p','E11')),d86=s('1p','D11')+s('1p','F11');
+  const c87=mx(s('1p','C12'),s('1p','E12')),d87=s('1p','D12')+s('1p','F12');
+  const c88=mx(s('1p','C13'),s('1p','E13')),d88=s('1p','D13')+s('1p','F13');
+  const c89=mx(s('1p','C14'),s('1p','E14')),d89=s('1p','D14')+s('1p','F14');
+  const c85=c86+c87+c88+c89, d85=d86+d87+d88+d89;
+  const c90=mx(s('1q','C10'),s('1q','F10'),s('1q','I10'),s('1q','L10'),s('1q','O10'));
+  const d90=r0(s('1q','Q10')+s('1q','N10')+s('1q','K10')+s('1q','H10')+s('1q','E10'));
+  const c78=c79+c80+c81+c85+c90, d78=d79+d80+d81+d85+d90;
+  // Nhóm 4
+  const c92=s('1r','I10'), d92=s('1r','S10');
+  const c93=0, d93=r0(s('1s','I10'));
+  const c91=c92+c93, d91=d92+d93;
+  // Tổng
+  const c9=c10+c54+c78+c91, d9=d10+d54+d78+d91;
+
+  // indent: 0=none, 1=16px, 2=28px
+  return [
+    {stt:'',    label:'TỔNG SỐ',                                                                                           c:c9,  d:d9,  e:'',            f:'',                   lv:0, ind:0},
+    {stt:'1',   label:'Các chính sách thuộc sự nghiệp giáo dục - đào tạo và dạy nghề',                                    c:c10, d:d10, e:'070',         f:'',                   lv:1, ind:0},
+    {stt:'1.1', label:'Hỗ trợ chi phí học tập và cấp bù học phí theo Nghị Định số 238/2025/NĐ-CP',                        c:c11, d:d11, e:'070 - 071, 072, 073, 074',            f:'',                   lv:2, ind:0},
+    {stt:'-',   label:'Cấp bù miễn, giảm học phí',                                                                        c:c12, d:d12, e:'',            f:'',                   lv:3, ind:1},
+    {stt:'',    label:'+ Miễn học phí',                                                                                    c:c13, d:d13, e:'070-071…', f:'6157',               lv:4, ind:2},
+    {stt:'',    label:'+ Hỗ trợ 70% học phí',                                                                             c:c14, d:d14, e:'',            f:'',                   lv:4, ind:2},
+    {stt:'',    label:'+ Hỗ trợ 50% học phí',                                                                             c:c15, d:d15, e:'',            f:'',                   lv:4, ind:2},
+    {stt:'-',   label:'Hỗ trợ chi phí học tập',                                                                           c:c16, d:d16, e:'',            f:'',                   lv:3, ind:1},
+    {stt:'1.2', label:'Chính sách phát triển giáo dục mầm non Nghị định 105/2020/NĐ-CP',                                  c:c17, d:d17, e:'070 - 071',            f:'',                   lv:2, ind:0},
+    {stt:'-',   label:'Hỗ trợ tiền ăn trưa trẻ em 3-5 tuổi',                                                             c:c18, d:d18, e:'',            f:'',                   lv:3, ind:1},
+    {stt:'-',   label:'Hỗ trợ nấu ăn',                                                                                    c:c19, d:d19, e:'',            f:'',                   lv:3, ind:1},
+    {stt:'-',   label:'Hỗ trợ giáo viên dạy lớp ghép',                                                                   c:c20, d:d20, e:'',            f:'',                   lv:3, ind:1},
+    {stt:'1.3', label:'Học bổng, chi phí học tập cho học sinh khuyết tật theo TT liên tịch 42/2013',                      c:c21, d:d21, e:'070 - 071, 072, 073, 074',            f:'',                   lv:2, ind:0},
+    {stt:'-',   label:'Hỗ trợ học bổng 80% mức lương cơ sở',                                                             c:c22, d:d22, e:'',            f:'',                   lv:3, ind:1},
+    {stt:'-',   label:'Hỗ trợ mua phương tiện, đồ dùng học tập 01 trđ/người/năm học',                                    c:c23, d:d23, e:'',            f:'',                   lv:3, ind:1},
+    {stt:'1.4', label:'Kinh phí hỗ trợ học sinh PTTH vùng ĐBKK theo NĐ số 116/2016 và 66/2025/NĐ-CP',                   c:c24, d:d24, e:'070 - 071, 072, 073, 074',            f:'',                   lv:2, ind:0},
+    {stt:'-',   label:'Học sinh bán trú, dân tộc nội trú và học sinh dự bị đại học',                                      c:c25, d:d25, e:'',            f:'',                   lv:3, ind:1},
+    {stt:'',    label:'- Hỗ trợ tiền ăn',                                                                                 c:c26, d:d26, e:'',            f:'',                   lv:4, ind:2},
+    {stt:'',    label:'- Hỗ trợ tiền nhà ở',                                                                              c:c27, d:d27, e:'',            f:'',                   lv:4, ind:2},
+    {stt:'',    label:'- Hỗ trợ trường PTDT bán trú mua sắm dụng cụ, tủ thuốc dùng chung',                               c:c28, d:d28, e:'',            f:'',                   lv:4, ind:2},
+    {stt:'',    label:'- Hỗ trợ kinh phí tổ chức nấu ăn cho trường',                                                     c:c29, d:d29, e:'',            f:'',                   lv:4, ind:2},
+    {stt:'-',   label:'Trẻ em nhà trẻ bán trú',                                                                           c:c30, d:d30, e:'',            f:'',                   lv:3, ind:1},
+    {stt:'',    label:'- Hỗ trợ tiền ăn',                                                                                 c:c31, d:d31, e:'',            f:'',                   lv:4, ind:2},
+    {stt:'',    label:'- Hỗ trợ tiền mua đồ dùng cá nhân cho cơ sở giáo dục mầm non',                                    c:c32, d:d32, e:'',            f:'',                   lv:4, ind:2},
+    {stt:'1.5', label:'KP hỗ trợ chi phí học tập đối với sinh viên là người DTTS theo QĐ 66/2013/QĐ-TTg',                c:c33, d:d33, e:'070 - 081, 093',            f:'',                   lv:2, ind:0},
+    {stt:'1.6', label:'KP hỗ trợ chính sách nội trú đối với HS, SV học CĐ, TC theo QĐ 53/2015/QĐ-TTg',                  c:c34, d:d34, e:'070 - 092, 093',            f:'',                   lv:2, ind:0},
+    {stt:'-',   label:'Hỗ trợ học bổng chính sách:',                                                                      c:c35, d:d35, e:'',            f:'',                   lv:3, ind:1},
+    {stt:'',    label:'- 100% lương cơ sở/tháng',                                                                         c:c36, d:d36, e:'',            f:'',                   lv:4, ind:2},
+    {stt:'',    label:'- 80% lương cơ sở/tháng',                                                                          c:c37, d:d37, e:'',            f:'',                   lv:4, ind:2},
+    {stt:'',    label:'- 60% lương cơ sở/tháng',                                                                          c:c38, d:d38, e:'',            f:'',                   lv:4, ind:2},
+    {stt:'-',   label:'Hỗ trợ 1 lần (mua đồ dùng cá nhân; tiền đi lại; ở lại Tết)',                                      c:c39, d:d39, e:'',            f:'',                   lv:3, ind:1},
+    {stt:'1.7', label:'KP hỗ trợ học bổng học sinh dân tộc nội trú theo NĐ 84/2020/NĐ-CP',                               c:c40, d:d40, e:'070 - 072, 073, 074',            f:'',                   lv:2, ind:0},
+    {stt:'1.8', label:'KP hỗ trợ ưu tiên tuyển sinh và học tập đối với trẻ MG, HS, SV DTTS rất ít người theo NĐ 57/2017',c:c41, d:d41, e:'070 - 071, 072, 073, 074, 081, 093',            f:'',                   lv:2, ind:0},
+    {stt:'-',   label:'Trẻ mẫu giáo DTTS rất ít người',                                                                   c:c42, d:d42, e:'',            f:'',                   lv:3, ind:1},
+    {stt:'-',   label:'HS DTTS rất ít người trường tiểu học, THCS, THPT',                                                 c:c43, d:d43, e:'',            f:'',                   lv:3, ind:1},
+    {stt:'-',   label:'HS DTTS rất ít người trường PT dân tộc bán trú hoặc trường PT công lập có HS bán trú',             c:c44, d:d44, e:'',            f:'',                   lv:3, ind:1},
+    {stt:'-',   label:'HS DTTS rất ít người trường PT dân tộc nội trú, dự bị ĐH, CSGD đại học, CSGD nghề nghiệp',        c:c45, d:d45, e:'',            f:'',                   lv:3, ind:1},
+    {stt:'1.9', label:'KP hỗ trợ sinh hoạt phí và học phí cho sinh viên sư phạm theo NĐ 116/2020 và 60/2025/NĐ-CP',      c:c46, d:d46, e:'070 - 081, 093',            f:'',                   lv:2, ind:0},
+    {stt:'-',   label:'Hỗ trợ học phí',                                                                                   c:c47, d:d47, e:'',            f:'',                   lv:3, ind:1},
+    {stt:'-',   label:'Hỗ trợ sinh hoạt phí',                                                                             c:c48, d:d48, e:'',            f:'',                   lv:3, ind:1},
+    {stt:'1.10',label:'KP phổ cập giáo dục mầm non theo Nghị định số 277/2025/NĐ-CP',                                     c:c49, d:d49, e:'070 - 071',            f:'',                   lv:2, ind:0},
+    {stt:'-',   label:'Hỗ trợ ăn trưa',                                                                                   c:c50, d:d50, e:'',            f:'',                   lv:3, ind:1},
+    {stt:'-',   label:'Hỗ trợ chi phí học tập',                                                                           c:c51, d:d51, e:'',            f:'',                   lv:3, ind:1},
+    {stt:'-',   label:'Hỗ trợ phổ cập giáo dục',                                                                          c:c52, d:d52, e:'',            f:'',                   lv:3, ind:1},
+    {stt:'-',   label:'Hỗ trợ tuyển dụng một lần',                                                                        c:c53, d:d53, e:'',            f:'',                   lv:3, ind:1},
+    // NHÓM 2
+    {stt:'2',   label:'Các chính sách hỗ trợ BHYT theo quy định tại Luật BHYT và NĐ 146/2018, 75/2023/NĐ-CP',             c:c54, d:d54, e:'130', f:'6302-7155-7251-7451', lv:1, ind:0},
+    {stt:'2.1', label:'Hộ gia đình nghèo; người DTTS tại vùng KT-XH khó khăn, ĐBKK, xã đảo, huyện đảo; người DTTS thuộc hộ cận nghèo tại xã, thôn vùng DTTS miền núi', c:c55, d:d55, e:'130 - 133', f:'', lv:2, ind:0},
+    {stt:'2.2', label:'Đối tượng BTXH, người đang hưởng trợ cấp nuôi dưỡng/tuất hằng tháng thuộc đối tượng hưởng TCXH',  c:c56, d:d56, e:'130 - 133',            f:'',                   lv:2, ind:0},
+    {stt:'2.3', label:'BHYT cho trẻ em dưới 06 tuổi',                                                                     c:c57, d:d57, e:'130 - 133',            f:'',                   lv:2, ind:0},
+    {stt:'2.4', label:'BHYT đối với học sinh, sinh viên',                                                                  c:c58, d:d58, e:'130 - 133',            f:'',                   lv:2, ind:0},
+    {stt:'2.5', label:'BHYT đối với cựu chiến binh, thanh niên xung phong, dân công hỏa tuyến',                           c:c59, d:d59, e:'130 - 133',            f:'',                   lv:2, ind:0},
+    {stt:'2.6', label:'BHYT cho người thuộc hộ cận nghèo, hộ làm nông - lâm - ngư - diêm nghiệp có mức sống trung bình', c:c60, d:d60, e:'130 - 133',            f:'',                   lv:2, ind:0},
+    {stt:'-',   label:'Cận nghèo',                                                                                         c:c61, d:d61, e:'',            f:'',                   lv:3, ind:1},
+    {stt:'',    label:'- Cận nghèo 100%',                                                                                  c:c62, d:d62, e:'',            f:'',                   lv:4, ind:2},
+    {stt:'',    label:'- Cận nghèo 70%',                                                                                   c:c63, d:d63, e:'',            f:'',                   lv:4, ind:2},
+    {stt:'-',   label:'Hộ nông lâm ngư nghiệp',                                                                            c:c64, d:d64, e:'',            f:'',                   lv:3, ind:1},
+    {stt:'2.7', label:'BHYT cho người hiến tạng',                                                                          c:c65, d:d65, e:'130 - 133',            f:'',                   lv:2, ind:0},
+    {stt:'2.8', label:'Người 75 tuổi trở lên đang hưởng trợ cấp tuất; người từ 70-75 tuổi thuộc hộ cận nghèo hưởng trợ cấp tuất', c:c66, d:d66, e:'130 - 133', f:'', lv:2, ind:0},
+    {stt:'2.9', label:'BHYT cho người dân các xã ATK, vùng ATK cách mạng',                                                c:c67, d:d67, e:'130 - 133',            f:'',                   lv:2, ind:0},
+    {stt:'2.10',label:'Người đang hưởng trợ cấp nuôi dưỡng/tuất hằng tháng thuộc đối tượng hưởng TCXH',                  c:c68, d:d68, e:'130 - 133',            f:'',                   lv:2, ind:0},
+    {stt:'2.11',label:'Người đang hưởng trợ cấp hưu trí xã hội hằng tháng',                                               c:c69, d:d69, e:'130 - 133',            f:'',                   lv:2, ind:0},
+    {stt:'2.12',label:'Người lao động không đủ điều kiện hưởng lương hưu và chưa đủ tuổi hưởng trợ cấp hưu trí XH đang hưởng trợ cấp hằng tháng', c:c70, d:d70, e:'130 - 133', f:'', lv:2, ind:0},
+    {stt:'2.13',label:'Người DTTS đang sinh sống tại các xã khu vực II, III, thôn ĐBKK vùng DTTS miền núi giai đoạn 2016-2020', c:c71, d:d71, e:'130 - 133', f:'', lv:2, ind:0},
+    {stt:'2.14',label:'Người DTTS đang sinh sống tại các xã không còn thuộc vùng KT-XH khó khăn, ĐBKK (tối đa 36 tháng)',c:c72, d:d72, e:'130 - 133',            f:'',                   lv:2, ind:0},
+    {stt:'2.15',label:'Người tham gia lực lượng bảo vệ an ninh, trật tự cơ sở',                                           c:c73, d:d73, e:'130 - 133',            f:'',                   lv:2, ind:0},
+    {stt:'2.16',label:'Nhân viên y tế thôn, bản; cô đỡ thôn, bản',                                                        c:c74, d:d74, e:'130 - 133',            f:'',                   lv:2, ind:0},
+    {stt:'2.17',label:'Người hoạt động không chuyên trách ở thôn, tổ dân phố',                                             c:c75, d:d75, e:'130 - 133',            f:'',                   lv:2, ind:0},
+    {stt:'2.18',label:'Nạn nhân theo quy định của Luật Phòng, chống mua bán người',                                        c:c76, d:d76, e:'130 - 133',            f:'',                   lv:2, ind:0},
+    // NHÓM 3
+    {stt:'3',   label:'Các chính sách thuộc sự nghiệp đảm bảo xã hội',                                                    c:c78, d:d78, e:'370',         f:'7453-7455-7456-7457-7499…', lv:1, ind:0},
+    {stt:'3.1', label:'Chính sách hỗ trợ đối tượng bảo trợ xã hội theo NĐ 20/2021 và NĐ 76/2024/NĐ-CP',                  c:c79, d:d79, e:'370 - 398',            f:'',                   lv:2, ind:0},
+    {stt:'3.2', label:'Trợ cấp hưu trí xã hội theo Nghị Định số 176/2025/NĐ-CP',                                          c:c80, d:d80, e:'370 - 398',            f:'',                   lv:2, ind:0},
+    {stt:'3.3', label:'Chính sách hỗ trợ tiền điện cho hộ nghèo, hộ chính sách XH theo QĐ 28/2014/QĐ-TTg',               c:c81, d:d81, e:'370 - 398',            f:'',                   lv:2, ind:0},
+    {stt:'-',   label:'Hộ nghèo',                                                                                          c:c82, d:d82, e:'',            f:'',                   lv:3, ind:1},
+    {stt:'-',   label:'Hộ chính sách xã hội',                                                                              c:c83, d:d83, e:'',            f:'',                   lv:3, ind:1},
+    {stt:'-',   label:'Hộ đồng bào DTTS sống ở vùng chưa có điện lưới (không thuộc hộ nghèo)',                            c:c84, d:d84, e:'',            f:'',                   lv:3, ind:1},
+    {stt:'3.4', label:'Chính sách hỗ trợ người đóng BHXH tự nguyện theo NĐ 134/2015 và NĐ 159/2025/NĐ-CP',               c:c85, d:d85, e:'370 - 398',            f:'',                   lv:2, ind:0},
+    {stt:'-',   label:'Hộ nghèo (50%)',                                                                                    c:c86, d:d86, e:'',            f:'',                   lv:3, ind:1},
+    {stt:'-',   label:'Hộ cận nghèo (40%)',                                                                                c:c87, d:d87, e:'',            f:'',                   lv:3, ind:1},
+    {stt:'-',   label:'Người dân tộc thiểu số (30%)',                                                                      c:c88, d:d88, e:'',            f:'',                   lv:3, ind:1},
+    {stt:'-',   label:'Các đối tượng khác (20%)',                                                                          c:c89, d:d89, e:'',            f:'',                   lv:3, ind:1},
+    {stt:'3.5', label:'Chính sách đối với người có uy tín trong đồng bào DTTS theo QĐ 12/2018 và QĐ 28/2023/QĐ-TTg',     c:c90, d:d90, e:'370 - 398',            f:'',                   lv:2, ind:0},
+    // NHÓM 4
+    {stt:'4',   label:'Các chính sách thuộc sự nghiệp kinh tế',                                                            c:c91, d:d91, e:'280',            f:'',                   lv:1, ind:0},
+    {stt:'4.1', label:'KP hỗ trợ khai thác, nuôi trồng hải sản và dịch vụ khai thác hải sản trên vùng biển xa theo QĐ 48/QĐ-TTg', c:c92, d:d92, e:'280 - 284', f:'', lv:2, ind:0},
+    {stt:'4.2', label:'KP hỗ trợ đất trồng lúa theo Nghị định số 112/2024/NĐ-CP',                                         c:c93, d:d93, e:'280 - 281',            f:'',                   lv:2, ind:0},
+  ];
+}
+
+// ═══════════════════════════════════════════
+//  RENDER
+// ═══════════════════════════════════════════
+const INDENT = [0, 0, 0, 16, 28]; // px theo ind level 0-2
+
+const fmt = v => {
+  if (v === null || v === undefined || v === '') return '';
+  const n = Number(v);
+  if (isNaN(n)) return String(v);
+  if (n === 0) return '<span class="zero">—</span>';
+  return n.toLocaleString('vi-VN');
+};
+
+function render(data) {
+  document.getElementById('donViText').textContent = `ĐƠN VỊ: ${(data.don_vi||'').toUpperCase()}`;
+  const now = new Date();
+  document.getElementById('footerDate').textContent =
+    `Đồng Nai, ngày ${now.getDate()} tháng ${now.getMonth()+1} năm ${now.getFullYear()}`;
+
+  const rows = computeSheet01(data);
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = '';
+
+  rows.forEach(r => {
+    const tr = document.createElement('tr');
+    tr.className = `lvl-${r.lv}`;
+    const pad = (r.ind === 1 ? 16 : r.ind === 2 ? 28 : 5);
+    tr.innerHTML =
+      `<td class="col-stt">${r.stt}</td>` +
+      `<td style="padding-left:${pad}px">${r.label}</td>` +
+      `<td class="col-num">${fmt(r.c)}</td>` +
+      `<td class="col-num">${fmt(r.d)}</td>` +
+      `<td class="col-code">${r.e||''}</td>` +
+      `<td class="col-code">${r.f||''}</td>` +
+      `<td style="font-size:10.5px;font-style:italic;color:#555">${r.g||''}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+// ═══════════════════════════════════════════
+//  DỮ LIỆU MẪU
+// ═══════════════════════════════════════════
+const SAMPLE_DATA = {"don_vi":"Sở Tài chính tỉnh Đồng Nai","nam":2025,"sheet_1a":{"D10":11999.0,"E10":13853.0,"F10":14846.0,"G10":11898.0,"D13":46287.0,"E13":70408.0,"F13":65895.0,"G13":72815.0,"D25":4989.0,"E25":15106.0,"F25":3569.0,"G25":12433.0,"D29":1651.0,"E29":351.0,"F29":1256.0,"G29":208.0},"sheet_1b":{"C9":12010.0,"F9":7676.0,"G9":13362.0,"J9":6414.0,"K9":55.0,"L9":182.0},"sheet_1c":{"C9":861.0,"F9":4192.0},"sheet_1d":{"F9":1017.0,"G9":94.0,"H9":275.0,"K9":1022.0,"L9":92.0},"sheet_1e":{"D11":1218.0,"E11":619.0,"F11":60.0,"H11":5526.0,"I11":92.0,"J11":1167.0,"L11":226.0,"O11":1090.0,"P11":619.0,"Q11":0.0,"S11":3362.0,"T11":0.0,"U11":777.0,"V11":424.0,"Z11":0.0,"AA11":0.0},"sheet_1f":{"C9":765.0,"E9":485.0,"G9":15789.0},"sheet_1g":{"F11":2.0,"H11":23.0,"I11":8.0,"K11":75.0,"F14":17.0,"H14":215.0,"I14":27.0,"K14":303.0,"F17":1.0,"H17":11.0,"I17":2.0,"K17":17.0,"L10":10.0,"M10":0.0,"N10":0.0,"O10":0.0,"P10":10.0},"sheet_1h":{"C10":4112.0,"E10":4110.0,"G10":86340.0},"sheet_1i":{"C10":2.0,"G10":2.0,"C11":0,"G11":0,"K11":0.0,"C12":0,"G12":0,"K12":0.0,"C13":0,"G13":0,"K13":0.0,"K10":94.232},"sheet_1j":{"C10":6450.0,"G10":42553.0,"H10":13274.0},"sheet_1k":{"C10":0.0,"D10":250.0,"J10":0.0,"K10":0.0,"G10":0.0,"H10":191.0,"I10":37.0,"N10":0.0,"O10":0.0,"P10":0.0,"Q10":0.0,"R10":0.0},"sheet_1l":{"C12":41437.0,"D12":47174.0,"C13":338283.0,"D13":458118.0,"C16":25897.0,"D16":33028.0,"C17":48179.0,"D17":85656.0,"C18":161.0,"D18":192.0,"C19":1180.0,"D19":1376.0,"C20":57324.0,"D20":58391.0,"C21":0.0,"D21":0.0,"C22":63737.0,"D22":35779.0,"C23":0.0,"D23":0.0,"C30":15673.0,"D30":19864.0,"C31":1921.0,"D31":1838.0,"C32":726200.0,"D32":283033.0,"C33":147833.0,"D33":136862.0,"C34":59453.0,"D34":72827.0,"C35":0.0,"D35":0.0,"C36":4685.0,"D36":4135.0,"C37":0.0,"D37":0.0,"C38":1373.0,"D38":374.0,"C39":0,"D39":0.0},"sheet_1m":{"F11":109979.0,"H11":71527.0,"J11":760974.0},"sheet_1n":{"F9":75649.0,"H9":209377.0},"sheet_1o":{"D8":2900.0,"F8":1148.0,"G8":775.0,"M8":2202.79824,"F9":1148.0,"G9":775.0,"H9":0.061333,"I9":4.0,"J9":0.064282,"K9":8.0,"N9":1460.683109},"sheet_1p":{"C11":18.0,"D11":8.0,"E11":18.0,"F11":16.0,"C12":40.0,"D12":19.0,"E12":28.0,"F12":29.0,"C13":0.0,"D13":0.0,"E13":542.0,"F13":429.0,"C14":28402.0,"D14":10997.0,"E14":28771.0,"F14":15005.0},"sheet_1q":{"C10":833.0,"E10":833.0,"F10":43.0,"H10":41.5,"I10":0.0,"K10":0.0,"L10":5.0,"N10":3.5,"O10":2535.0,"Q10":2988.6},"sheet_1r":{"I10":0.0,"S10":0.0},"sheet_1s":{"I10":41089.98}};
+
+render(SAMPLE_DATA);
+</script>
+</body>
+</html>
