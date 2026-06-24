@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Báo cáo Tổng hợp ASXH — STC Đồng Nai</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--navy:#1E3A5F;--navy-lt:#2B4F7E;--border:#D0D7E3;--bg:#F4F6FA;--txt:#111827;--txt2:#5A6478}
+html,body{height:100%;font-family:Arial,sans-serif;font-size:13px;background:var(--bg);color:var(--txt)}
+.layout{display:flex;height:100vh;overflow:hidden}
+.sidebar{width:235px;flex-shrink:0;background:var(--navy);display:flex;flex-direction:column;overflow-y:auto}
+.sb-head{padding:14px 16px 8px;color:rgba(255,255,255,.5);font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase}
+.nav{display:block;padding:7px 16px;font-size:12px;color:rgba(255,255,255,.65);cursor:pointer;border-left:3px solid transparent;line-height:1.35}
+.nav:hover{background:rgba(255,255,255,.08);color:#fff}
+.nav.active{background:rgba(255,255,255,.13);color:#fff;border-left-color:#fff}
+.nav small{display:block;font-size:10px;color:rgba(255,255,255,.4);margin-top:1px}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.bar{display:flex;align-items:center;gap:10px;padding:10px 20px;background:#fff;border-bottom:1px solid var(--border);flex-shrink:0}
+.bar-title{font-size:13px;font-weight:700;color:var(--navy);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:5px;font-family:Arial,sans-serif;font-size:12px;font-weight:600;cursor:pointer;border:none;white-space:nowrap}
+.btn-x{background:var(--navy);color:#fff}.btn-x:hover{background:var(--navy-lt)}
+.btn-p{background:#fff;border:1px solid var(--border);color:var(--navy)}.btn-p:hover{background:#EEF2F8}
+.content{flex:1;overflow-y:auto;padding:16px 20px}
+.panel{display:none}.panel.active{display:block}
+.fhdr{background:#fff;border-radius:7px;box-shadow:0 1px 4px rgba(0,0,0,.07);overflow:hidden;margin-bottom:14px}
+.ky-row{display:flex;align-items:center;gap:10px;padding:7px 14px;background:var(--navy-lt)}
+.ky-row label{color:rgba(255,255,255,.75);font-size:11.5px;font-weight:500;white-space:nowrap}
+.ky-row select{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:4px;color:#fff;font-size:11.5px;padding:3px 7px;outline:none}
+.ky-row select option{background:var(--navy)}
+.sep{color:rgba(255,255,255,.3)}
+#ky-lbl{color:rgba(255,255,255,.45);font-size:11px;font-style:italic}
+.meta-row{display:flex;justify-content:space-between;align-items:flex-start;padding:7px 14px 2px;background:var(--navy)}
+.dv-txt{color:#fff;font-size:12.5px;font-weight:700;display:flex;align-items:center;gap:6px}
+.dv-txt input{background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,.35);color:#fff;font-weight:700;font-size:12px;width:190px;outline:none;padding:0 2px}
+.bm-txt{color:#fff;font-size:12.5px;font-weight:700}
+.title-row{text-align:center;padding:4px 14px 7px;background:var(--navy);color:#FF6B6B;font-size:12.5px;font-weight:700;text-transform:uppercase;line-height:1.4;letter-spacing:.02em}
+.unit-row{display:flex;justify-content:flex-end;padding:2px 14px 5px;background:var(--navy)}
+.unit-row span{font-size:11px;font-style:italic;color:rgba(255,255,255,.6)}
+.tw{overflow-x:auto;border-radius:6px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+table{width:100%;border-collapse:collapse;font-size:11px;background:#fff}
+th,td{border:1px solid #aaa;padding:4px 5px;text-align:center;vertical-align:middle;line-height:1.35;background:#fff;color:var(--txt)}
+th{font-weight:600;font-size:10.5px;background:#fff}
+.th-l,.td-l{text-align:left}
+.inp{padding:0}
+.inp input{width:100%;border:none;background:transparent;font-family:Arial,sans-serif;font-size:11px;padding:3px 4px;outline:none;text-align:right;min-height:28px;color:var(--txt)}
+.inp input:focus{background:#EDF4FF;box-shadow:inset 0 0 0 2px var(--navy);border-radius:2px}
+.row-bold td{font-weight:700}
+.row-italic td{font-style:italic;font-size:10px;color:var(--txt2)}
+@media print{.sidebar,.bar{display:none!important}.content{padding:0}.fhdr,.tw{border-radius:0;box-shadow:none}}</style>
+</head>
+<body>
+<div class="layout">
+<nav class="sidebar"><div class="sb-head">Biểu mẫu ASXH</div>
+<span class="nav active" onclick="show('p01',this)">Biểu 01<small>Tổng hợp kết quả ASXH</small></span>
+<span class="nav" onclick="show('p1a',this)">Phụ lục 01a<small>Hỗ trợ CPHT & cấp bù HP</small></span>
+<span class="nav" onclick="show('p1b',this)">Phụ lục 01b<small>Phát triển GD mầm non</small></span>
+<span class="nav" onclick="show('p1c',this)">Phụ lục 01c<small>Chế độ GV mầm non</small></span>
+<span class="nav" onclick="show('p1d',this)">Phụ lục 01d<small>HS khuyết tật</small></span>
+<span class="nav" onclick="show('p1e',this)">Phụ lục 01e<small>HS PTDT bán trú</small></span>
+<span class="nav" onclick="show('p1f',this)">Phụ lục 01f<small>SV DTTS</small></span>
+<span class="nav" onclick="show('p1g',this)">Phụ lục 01g<small>HS nội trú CĐ/TC</small></span>
+<span class="nav" onclick="show('p1h',this)">Phụ lục 01h<small>HB HS dân tộc nội trú</small></span>
+<span class="nav" onclick="show('p1i',this)">Phụ lục 01i<small>DTTS rất ít người</small></span>
+<span class="nav" onclick="show('p1j',this)">Phụ lục 01j<small>SV sư phạm</small></span>
+<span class="nav" onclick="show('p1k',this)">Phụ lục 01k<small>Phổ cập GD mầm non</small></span>
+<span class="nav" onclick="show('p1l',this)">Phụ lục 01l<small>BHYT các đối tượng</small></span>
+<span class="nav" onclick="show('p1m',this)">Phụ lục 01m<small>Bảo trợ xã hội</small></span>
+<span class="nav" onclick="show('p1n',this)">Phụ lục 01n<small>Hưu trí xã hội</small></span>
+<span class="nav" onclick="show('p1o',this)">Phụ lục 01o<small>Hỗ trợ tiền điện</small></span>
+<span class="nav" onclick="show('p1p',this)">Phụ lục 01p<small>BHXH tự nguyện</small></span>
+<span class="nav" onclick="show('p1q',this)">Phụ lục 01q<small>Người có uy tín DTTS</small></span>
+<span class="nav" onclick="show('p1r',this)">Phụ lục 01r<small>Khai thác hải sản</small></span>
+<span class="nav" onclick="show('p1s',this)">Phụ lục 01s<small>Hỗ trợ đất trồng lúa</small></span>
+</nav>
+<div class="main">
+  <div class="bar">
+    <div class="bar-title" id="bar-ti">Biểu 01 — Tổng hợp kết quả ASXH năm 2025</div>
+    <button class="btn btn-p" onclick="window.print()">🖨 In</button>
+    <button class="btn btn-x" onclick="exportExcel()">↧ Xuất Excel</button>
+  </div>
+  <div class="content">
+    <div class="fhdr">
+      <div class="ky-row">
+        <label>Kỳ báo cáo:</label>
+        <select id="sn"><option value="2025" selected>2025</option><option value="2026">2026</option></select>
+        <select id="st">
+          <option value="1">Tháng 1</option><option value="2">Tháng 2</option><option value="3">Tháng 3</option>
+          <option value="4">Tháng 4</option><option value="5">Tháng 5</option><option value="6">Tháng 6</option>
+          <option value="7">Tháng 7</option><option value="8">Tháng 8</option><option value="9">Tháng 9</option>
+          <option value="10">Tháng 10</option><option value="11">Tháng 11</option><option value="12" selected>Tháng 12</option>
+        </select>
+        <span class="sep">|</span><span id="ky-lbl"></span>
+      </div>
+      <div class="meta-row">
+        <div class="dv-txt">Ủy ban nhân dân tỉnh/thành phố:&nbsp;<input id="inp-dv" placeholder="tên tỉnh/thành phố…"></div>
+        <div class="bm-txt" id="hdr-bm">Biểu 01</div>
+      </div>
+      <div class="title-row" id="hdr-ti">TỔNG HỢP KẾT QUẢ THỰC HIỆN CÁC CHÍNH SÁCH, CHẾ ĐỘ ASXH NĂM 2025</div>
+      <div class="unit-row"><span>Đơn vị: Triệu đồng</span></div>
+    </div>
+    <div id="p01" class="panel active">
+<div class="tw"><table id="tbl-01"><thead>
+<tr>
+  <th rowspan="2">STT</th><th rowspan="2" class="th-l">Chính sách, chế độ</th>
+  <th>Số đối tượng (1)</th>
+  <th>KP NSNN thực hiện chính sách theo chế độ, chính sách (2)</th>
+  <th>KP địa phương đề nghị</th>
+  <th>KP rà soát lại</th>
+  <th>KP NSNN đã bố trí trong DT NSĐP năm 2025 (3)</th>
+  <th>KP NSNN đã bố trí trong DT NSĐP năm 2024 còn dư chuyển nguồn sang năm 2025 (4)</th>
+  <th>KP NSNN phát sinh tăng thêm (5=2-3-4)</th>
+  <th>Tỷ lệ HT theo QĐ 127/QĐ-TTg (6)</th>
+  <th>KP NSTW HT theo QĐ 127/QĐ-TTg (7=5×6)</th>
+  <th>Nguồn CCTL còn dư (8)</th>
+  <th>KP NSTW đã bổ sung theo QĐ 1500/QĐ-TT ngày 30/11/2024 và số 2670/QĐ-TTg ngày 08/12/2025 (9)</th>
+  <th>KP NSTW đã HT thừa/thiếu (10)</th>
+  <th rowspan="2">Ghi chú</th>
+</tr>
+
+</thead><tbody>
+<tr class="row-bold"><td></td><td class="td-l">Tổng số</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr class="row-bold"><td>1</td><td class="td-l">Các chính sách thuộc sự nghiệp giáo dục - đào tạo và dạy nghề</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>1.1</td><td class="td-l">Chính sách hỗ trợ chi phí học tập và miễn giảm học phí theo Nghị định số 238/2025/NĐ-CP</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="td-l" style="font-size:10px">Chi tiết theo phụ lục số 01a<td class="inp"><input></td></td></tr>
+<tr><td>-</td><td class="td-l" style="padding-left:14px">Cấp bù miễn, giảm học phí</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:24px">+ Miễn học phí</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:24px">+ Hỗ trợ 70% học phí</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:24px">+ Hỗ trợ 50% học phí</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>-</td><td class="td-l" style="padding-left:14px">Hỗ trợ chi phí học tập</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>1.2</td><td class="td-l">Chính sách phát triển giáo dục mầm non Nghị định 105/2020/NĐ-CP ngày 08/09/2020 của Chính phủ</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="td-l" style="font-size:10px">Chi tiết theo phụ lục số 01b, 01c<td class="inp"><input></td></td></tr>
+<tr><td>-</td><td class="td-l" style="padding-left:14px">Hỗ trợ tiền ăn trưa trẻ em 3-5 tuổi</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>-</td><td class="td-l" style="padding-left:14px">Hỗ trợ nấu ăn</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>-</td><td class="td-l" style="padding-left:14px">Hỗ trợ giáo viên dạy lớp ghép</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>1.3</td><td class="td-l">Học bổng, chi phí học tập cho học sinh khuyết tật theo Thông tư liên tịch số 42/2013/TTLT-BGDĐT-BLĐTBXH-BTC ngày 31/12/2013</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="td-l" style="font-size:10px">Chi tiết theo phụ lục số 01d<td class="inp"><input></td></td></tr>
+<tr><td>-</td><td class="td-l" style="padding-left:14px">Hỗ trợ học bổng 80% mức lương cơ sở</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>-</td><td class="td-l" style="padding-left:14px">Hỗ trợ mua phương tiện đồ dùng học tập 01 trđ/người/năm học</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>1.4</td><td class="td-l">Kinh phí hỗ trợ học sinh PTTH vùng ĐBKK theo Nghị định số 66/2025/NĐ-CP ngày 12/3/2025</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="td-l" style="font-size:10px">Chi tiết theo phụ lục số 01e<td class="inp"><input></td></td></tr>
+<tr><td>-</td><td class="td-l" style="padding-left:14px">Hỗ trợ tiền ăn</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>-</td><td class="td-l" style="padding-left:14px">Hỗ trợ tiền nhà ở</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>-</td><td class="td-l" style="padding-left:14px">Hỗ trợ Trường PTDT bán trú mua sắm dụng cụ, tủ thuốc dùng chung</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>-</td><td class="td-l" style="padding-left:14px">Hỗ trợ kinh phí tổ chức nấu ăn cho trường</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>1.5</td><td class="td-l">KP hỗ trợ chi phí học tập đối với sinh viên là người DTTS theo Quyết định số 66/2013/QĐ-TTg ngày 11/11/2013 của Thủ tướng Chính phủ</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="td-l" style="font-size:10px">Chi tiết theo phụ lục số 01f<td class="inp"><input></td></td></tr>
+<tr><td>1.6</td><td class="td-l">KP hỗ trợ chính sách nội trú đối với HS, SV học cao đẳng, trung cấp theo Quyết định số 53/2015/QĐ-TTg ngày 20/10/2015 của Thủ tướng Chính phủ</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="td-l" style="font-size:10px">Chi tiết theo phụ lục số 01g<td class="inp"><input></td></td></tr>
+<tr><td>-</td><td class="td-l" style="padding-left:14px">Hỗ trợ học bổng chính sách:</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:24px">- 100% lương cơ sở/tháng</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:24px">- 80% lương cơ sở/tháng</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:24px">- 60% lương cơ sở/tháng</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>-</td><td class="td-l" style="padding-left:14px">Hỗ trợ 1 lần (1 triệu đồng/khóa mua đồ dùng cá nhân; tiền đi lại 200 nghìn, ĐBKK 300 nghìn/năm; 150 nghìn nếu Tết ở lại)</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>1.7</td><td class="td-l">KP hỗ trợ học bổng học sinh dân tộc nội trú theo Nghị định số 84/2020/NĐ-CP ngày 17/7/2020 của Chính phủ</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="td-l" style="font-size:10px">Chi tiết theo phụ lục số 01h<td class="inp"><input></td></td></tr>
+<tr><td>1.8</td><td class="td-l">KP hỗ trợ ưu tiên tuyển sinh và hỗ trợ học tập đối với trẻ mẫu giáo, HS, SV dân tộc thiểu số rất ít người theo Nghị định số 57/2017/NĐ-CP ngày 05/5/2017</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="td-l" style="font-size:10px">Chi tiết theo phụ lục số 01i<td class="inp"><input></td></td></tr>
+<tr><td>-</td><td class="td-l" style="padding-left:14px">Trẻ mẫu giáo DTTS rất ít người</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>-</td><td class="td-l" style="padding-left:14px">Học sinh DTTS rất ít người trường tiểu học, THCS, THPT</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>-</td><td class="td-l" style="padding-left:14px">Học sinh DTTS rất ít người trường phổ thông dân tộc bán trú</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>-</td><td class="td-l" style="padding-left:14px">Học sinh DTTS rất ít người trường phổ thông dân tộc nội trú, ĐH, CĐ, GDNN</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>1.9</td><td class="td-l">KP hỗ trợ sinh hoạt phí và học phí cho sinh viên sư phạm theo Nghị định số 116/2020/NĐ-CP và số 60/2025/NĐ-CP ngày 03/3/2025</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="td-l" style="font-size:10px">Chi tiết theo phụ lục số 01j<td class="inp"><input></td></td></tr>
+<tr><td>-</td><td class="td-l" style="padding-left:14px">Hỗ trợ học phí</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>-</td><td class="td-l" style="padding-left:14px">Hỗ trợ sinh hoạt phí</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>1.10</td><td class="td-l">KP phổ cập giáo dục mầm non theo Nghị định số 277/2025/NĐ-CP</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="td-l" style="font-size:10px">Chi tiết theo phụ lục số 01k (*)<td class="inp"><input></td></td></tr>
+<tr><td>-</td><td class="td-l" style="padding-left:14px">Hỗ trợ ăn trưa</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>-</td><td class="td-l" style="padding-left:14px">Hỗ trợ chi phí học tập</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>-</td><td class="td-l" style="padding-left:14px">Hỗ trợ phổ cập giáo dục</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>-</td><td class="td-l" style="padding-left:14px">Hỗ trợ tuyển dụng một lần</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr class="row-bold"><td>2</td><td class="td-l">Các chính sách hỗ trợ BHYT theo quy định tại Luật BHYT và Nghị định số 146/2018/NĐ-CP ngày 17/10/2018 của Chính phủ</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="td-l" style="font-size:10px">Chi tiết theo phụ lục số 01l<td class="inp"><input></td></td></tr>
+<tr><td>2.1</td><td class="td-l">BHYT cho người nghèo, DTTS vùng khó khăn; người sinh sống tại vùng ĐBKK, xã đảo, huyện đảo</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>2.2</td><td class="td-l">BHYT cho đối tượng BTXH</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>2.3</td><td class="td-l">BHYT cho trẻ em dưới 06 tuổi</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>2.4</td><td class="td-l">BHYT đối với học sinh, sinh viên</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>2.5</td><td class="td-l">BHYT đối với cựu chiến binh, thanh niên xung phong, dân công hỏa tuyến</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>2.6</td><td class="td-l">BHYT cho người thuộc hộ cận nghèo, hộ làm nông - lâm - ngư - diêm nghiệp có mức sống trung bình</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>-</td><td class="td-l" style="padding-left:14px">Cận nghèo</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:24px">- Cận nghèo 100%</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:24px">- Cận nghèo 70%</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>-</td><td class="td-l" style="padding-left:14px">Hộ nông lâm ngư nghiệp</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>2.7</td><td class="td-l">BHYT cho người hiến tạng</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr class="row-bold"><td>3</td><td class="td-l">Các chính sách thuộc sự nghiệp đảm bảo xã hội</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>3.1</td><td class="td-l">Chính sách hỗ trợ đối tượng bảo trợ xã hội theo quy định tại Nghị định số 20/2021/NĐ-CP ngày 15/03/2021 và Nghị định số 76/2024/NĐ-CP ngày 01/7/2024</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="td-l" style="font-size:10px">Chi tiết theo phụ lục số 01m<td class="inp"><input></td></td></tr>
+<tr><td>3.2</td><td class="td-l">Trợ cấp hưu trí xã hội</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="td-l" style="font-size:10px">Chi tiết theo phụ lục số 01n<td class="inp"><input></td></td></tr>
+<tr><td>3.3</td><td class="td-l">Chính sách hỗ trợ tiền điện cho hộ nghèo, hộ chính sách xã hội theo quy định tại Quyết định số 28/2014/QĐ-TTg ngày 07/4/2014</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="td-l" style="font-size:10px">Chi tiết theo phụ lục số 01o<td class="inp"><input></td></td></tr>
+<tr><td>-</td><td class="td-l" style="padding-left:14px">Hộ nghèo</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>-</td><td class="td-l" style="padding-left:14px">Hộ CSXH</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>-</td><td class="td-l" style="padding-left:14px">Hộ đồng bào DTTS sống ở vùng chưa có điện lưới (không thuộc hộ nghèo)</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td>3.4</td><td class="td-l">Chính sách hỗ trợ người đóng bảo hiểm xã hội tự nguyện theo Nghị định số 134/2015/NĐ-CP ngày 29/12/2015</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="td-l" style="font-size:10px">Chi tiết theo phụ lục số 01p<td class="inp"><input></td></td></tr>
+<tr><td>3.5</td><td class="td-l">Chính sách đối với người có uy tín trong đồng bào DTTS theo quy định tại Quyết định số 12/2018/QĐ-TTg và Quyết định số 28/2023/QĐ-TTg</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="td-l" style="font-size:10px">Chi tiết theo phụ lục số 01q<td class="inp"><input></td></td></tr>
+<tr class="row-bold"><td>4</td><td class="td-l">Các chính sách thuộc sự nghiệp kinh tế</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td><td class="inp"><input></td></td></tr>
+<tr><td></td><td class="td-l">KP thực hiện một số chính sách khuyến khích, hỗ trợ khai thác, nuôi trồng hải sản và dịch vụ khai thác hải sản trên các vùng biển xa theo Quyết định số 48/QĐ-TTg ngày 13/7/2010</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="td-l" style="font-size:10px">Chi tiết theo phụ lục số 01r<td class="inp"><input></td></td></tr>
+<tr><td></td><td class="td-l">KP hỗ trợ đất trồng lúa theo Nghị định số 112/2024/NĐ-CP</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="td-l" style="font-size:10px">Chi tiết theo phụ lục số 01s<td class="inp"><input></td></td></tr>
+<tr class="row-italic"><td colspan="15">(*) Ngân sách Trung ương hỗ trợ đối với các địa phương chưa tự cân đối được ngân sách</td></tr>
+</tbody></table></div>
+</div>
+<div id="p1a" class="panel">
+<div class="tw"><table id="tbl-1a"><thead>
+<tr><th rowspan="3">STT</th><th rowspan="3" class="th-l">Chỉ tiêu</th>
+<th rowspan="3">Tổng KP thực hiện chính sách (1=3+5)</th>
+<th colspan="2">Kết quả thực hiện Kỳ II năm học 2024-2025</th>
+<th colspan="2">Kết quả thực hiện Kỳ I năm học 2025-2026</th>
+<th rowspan="3">KP đã bố trí trong DT chi cân đối NSĐP năm … (6)</th>
+<th rowspan="3">KP còn thừa/thiếu (7=1-6)</th></tr>
+<tr><th>Số đối tượng (2)</th><th>Kinh phí (3)</th><th>Số đối tượng (4)</th><th>Kinh phí (5)</th></tr>
+
+</thead><tbody><tr><td></td><td class="td-l">Hỗ trợ chi phí học tập và miễn giảm học phí theo quy định tại Nghị định số 238/2025/NĐ-CP</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="row-bold"><td>A</td><td class="td-l">Hỗ trợ chi phí học tập</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">…</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr class="row-bold"><td>B</td><td class="td-l">Miễn học phí, giảm học phí</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr class="row-bold"><td>I</td><td class="td-l" style="padding-left:14px">Miễn học phí</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:28px">…</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr class="row-bold"><td>II</td><td class="td-l" style="padding-left:14px">Giảm học phí</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:28px">- Giảm 70% học phí</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:40px">…</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:28px">- Giảm 50% học phí</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:40px">…</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:28px">- …</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+</tbody></table></div>
+</div>
+<div id="p1b" class="panel">
+<div class="tw"><table id="tbl-1b"><thead>
+<tr><th rowspan="3">TT</th><th rowspan="3" class="th-l">Tên huyện, thành phố</th>
+<th colspan="8">Hỗ trợ tiền ăn trưa</th>
+<th colspan="2">Hỗ trợ nấu ăn</th>
+<th rowspan="3">Hỗ trợ GV lớp ghép (Chi tiết theo PL 01c) (11)</th>
+<th rowspan="3">Tổng KP thực hiện chính sách (12=4+8+10+11)</th>
+<th rowspan="3">KP đã bố trí trong DT NSĐP năm … (13)</th>
+<th rowspan="3">KP còn thừa/thiếu (14=12-13)</th></tr>
+<tr><th colspan="4">Kết quả thực hiện Kỳ II năm học 2024-2025</th>
+<th colspan="4">Kết quả thực hiện Kỳ I năm học 2025-2026</th>
+<th rowspan="2">Số định suất nấu ăn (9)</th>
+<th rowspan="2">KP (2,4trđ/45TE/tháng)(*) (10)</th></tr>
+<tr><th>Đối tượng (1)</th><th>Mức hỗ trợ (2)</th><th>TG hỗ trợ (3)</th><th>KP (4=1*2*3)</th>
+<th>Đối tượng (5)</th><th>Mức hỗ trợ (6)</th><th>TG hỗ trợ (7)</th><th>KP (8=5*6*7)</th></tr>
+
+</thead><tbody><tr class="row-bold"><td></td><td class="td-l">Tổng cộng</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr class="row-bold"><td>I.</td><td class="td-l">Khối tỉnh</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">Sở Giáo dục và Đào tạo</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">…</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="row-bold"><td>II.</td><td class="td-l">Khối Xã/Phường/Đặc khu</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>1</td><td class="td-l" style="padding-left:14px">Xã, Phường, Đặc khu A</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">…</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>2</td><td class="td-l" style="padding-left:14px">Xã, Phường, Đặc khu B</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">…</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="row-italic"><td colspan="16">(*) 2,4 triệu đồng/01 tháng/45 trẻ em, dư trên 20 trẻ em được thêm 01 lần, không quá 5 lần/tháng, không quá 9 tháng/năm</td></tr>
+</tbody></table></div>
+</div>
+<div id="p1c" class="panel">
+<div class="tw"><table id="tbl-1c"><thead>
+<tr><th rowspan="2">STT</th><th rowspan="2" class="th-l">Đơn vị</th>
+<th rowspan="2">Số giáo viên hưởng chính sách (1)</th>
+<th colspan="3">Tổng kinh phí thực hiện chính sách</th></tr>
+<tr><th>Mức hỗ trợ (2)</th><th>Thời gian hưởng (3)</th><th>KP (4=1*2*3)</th></tr>
+
+</thead><tbody><tr class="row-bold"><td></td><td class="td-l">Tổng cộng</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr class="row-bold"><td>I.</td><td class="td-l">Khối tỉnh</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">Sở Giáo dục và Đào tạo</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">…</td><td></td><td></td><td></td><td></td></tr>
+<tr class="row-bold"><td>II.</td><td class="td-l">Khối Xã/Phường/Đặc khu</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>1</td><td class="td-l" style="padding-left:14px">Xã, Phường, Đặc khu A</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">…</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>2</td><td class="td-l" style="padding-left:14px">Xã, Phường, Đặc khu B</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">…</td><td></td><td></td><td></td><td></td></tr>
+</tbody></table></div>
+</div>
+<div id="p1d" class="panel">
+<div class="tw"><table id="tbl-1d"><thead>
+<tr><th rowspan="3">TT</th><th rowspan="3" class="th-l">Đơn vị thực hiện</th>
+<th colspan="5">Kết quả thực hiện Kỳ II năm học 2024-2025</th>
+<th colspan="5">Kết quả thực hiện Kỳ I năm học 2025-2026</th>
+<th rowspan="3">Tổng KP thực hiện chính sách (11=3+8)</th>
+<th rowspan="3">KP đã bố trí trong DT NSĐP năm … (12)</th>
+<th rowspan="3">KP còn thừa/thiếu (13=11-12)</th></tr>
+<tr><th rowspan="2">Số ĐT (1)</th><th rowspan="2">Số tháng HT (2)</th>
+<th colspan="3">Kinh phí</th>
+<th rowspan="2">Số ĐT (6)</th><th rowspan="2">Số tháng HT (7)</th>
+<th colspan="3">Kinh phí</th></tr>
+<tr><th>Tổng cộng (3=4+5)</th><th>Học bổng (*) (4)</th><th>Mua sắm PT đồ dùng HT (**) (5)</th>
+<th>Tổng cộng (8=9+10)</th><th>Học bổng (9)</th><th>Mua sắm PT đồ dùng HT (10)</th></tr>
+
+</thead><tbody><tr class="row-bold"><td></td><td class="td-l">Tổng cộng</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr class="row-bold"><td>I.</td><td class="td-l">Khối tỉnh</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">Sở Giáo dục và Đào tạo</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">…</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="row-bold"><td>II.</td><td class="td-l">Khối Xã/Phường/Đặc khu</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>1</td><td class="td-l" style="padding-left:14px">Xã, Phường, Đặc khu A</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">…</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>2</td><td class="td-l" style="padding-left:14px">Xã, Phường, Đặc khu B</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">…</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="row-italic"><td colspan="15">(*) ĐH, TCCN: 10 tháng/năm học; MN, PT, TT GDTX, trường chuyên biệt, TT hỗ trợ phát triển GD hòa nhập: 9 tháng/năm học</td></tr>
+<tr class="row-italic"><td colspan="15">(**) Hỗ trợ 1 triệu/năm học và vào đầu năm học</td></tr>
+</tbody></table></div>
+</div>
+<div id="p1e" class="panel">
+<div class="tw"><table id="tbl-1e"><thead>
+<tr>
+  <th rowspan="6">STT</th>
+  <th rowspan="6" class="th-l">Đơn vị thực hiện</th>
+  <th colspan="11">Kết quả thực hiện Kỳ II năm học 2024-2025</th>
+  <th colspan="15">Kết quả thực hiện Kỳ I năm học 2025-2026</th>
+  <th rowspan="6">Tổng KP thực hiện chính sách (27=11+26)</th>
+  <th rowspan="6">KP đã bố trí trong DT NSĐP năm … (28)</th>
+</tr>
+<tr>
+  <th colspan="9">Hỗ trợ tiền ăn và nhà ở</th>
+  <th rowspan="5">Phục vụ nấu ăn cho HS (*) (9)</th>
+  <th rowspan="5">Tổng cộng KP (11=5+10)</th>
+  <th colspan="7">Hỗ trợ tiền ăn và nhà ở</th>
+  <th colspan="4">HT HS bán trú tại trường PTDTBT và trường PT có tổ chức nấu ăn</th>
+  <th rowspan="5">Phục vụ nấu ăn cho HS (23)</th>
+  <th rowspan="5">HT tiền mua đồ dùng cá nhân cho trẻ em nhà trẻ bán trú (24)</th>
+  <th rowspan="5">Tổng cộng KP (26=16+20+24+25)</th>
+  <th rowspan="5">Tổng KP (27=11+26)</th>
+</tr>
+<tr>
+  <th colspan="4">Đối tượng</th>
+  <th colspan="3">Kinh phí</th>
+  <th rowspan="4">Định mức nấu ăn (*)</th>
+  <th rowspan="4">KP nấu ăn (10)</th>
+  <th colspan="4">Đối tượng</th>
+  <th colspan="3">KP tiền ăn</th>
+  <th rowspan="4">Mua sắm DC VH, TDTT (21)</th>
+  <th rowspan="4">Lập tủ thuốc dùng chung (22)</th>
+  <th rowspan="4">KP (20=21+22)</th>
+  <th rowspan="4">KP (25)</th>
+</tr>
+<tr>
+  <th rowspan="3">Tổng số (1)</th>
+  <th colspan="2">Trong đó</th>
+  <th rowspan="3">Trẻ em nhà trẻ (4)</th>
+  <th rowspan="3">KP tiền ăn HS bán trú (6)</th>
+  <th rowspan="3">KP tiền ăn trẻ NT (7)</th>
+  <th rowspan="3">KP nhà ở HS bán trú (8)</th>
+  <th rowspan="3">Tổng số (12)</th>
+  <th colspan="2">Trong đó</th>
+  <th rowspan="3">Trẻ em nhà trẻ (15)</th>
+  <th rowspan="3">KP tiền ăn HS bán trú (17)</th>
+  <th rowspan="3">KP tiền ăn trẻ NT (18)</th>
+  <th rowspan="3">KP nhà ở HS bán trú (19)</th>
+</tr>
+<tr>
+  <th rowspan="2">HS bán trú (2)</th>
+  <th rowspan="2">HS được HT thêm tiền nghỉ trọ (3)</th>
+  <th rowspan="2">HS bán trú (13)</th>
+  <th rowspan="2">HS được HT thêm tiền trọ (14)</th>
+</tr>
+<tr></tr>
+</thead><tbody><tr class="row-bold"><td></td><td class="td-l">Tổng cộng</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr class="row-bold"><td>I.</td><td class="td-l">Khối tỉnh</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">Sở Giáo dục và Đào tạo</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">…</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="row-bold"><td>II.</td><td class="td-l">Khối Xã/Phường/Đặc khu</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>1</td><td class="td-l" style="padding-left:14px">Xã, Phường, Đặc khu A</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>2</td><td class="td-l" style="padding-left:14px">Xã, Phường, Đặc khu B</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr class="row-italic"><td colspan="30">(*) 4,7385 triệu đồng/01 tháng/45 trẻ em, dư trên 20 trẻ em được thêm 01 lần, không quá 9 tháng/năm</td></tr>
+</tbody></table></div>
+</div>
+<div id="p1f" class="panel">
+<div class="tw"><table id="tbl-1f"><thead>
+<tr><th rowspan="2">TT</th><th rowspan="2" class="th-l">Đơn vị thực hiện</th>
+<th colspan="2">Kết quả thực hiện Kỳ II năm học 2024-2025</th>
+<th colspan="2">Kết quả thực hiện Kỳ I năm học 2025-2026</th>
+<th rowspan="2">Tổng KP thực hiện chính sách (5=2+4)</th>
+<th rowspan="2">KP đã bố trí trong DT NSĐP năm … (6)</th>
+<th rowspan="2">KP còn thừa/thiếu (7=5-6)</th></tr>
+<tr><th>Số đối tượng (1)</th><th>KP hỗ trợ CPHT (2)</th>
+<th>Số đối tượng (3)</th><th>KP hỗ trợ CPHT (4)</th></tr>
+
+</thead><tbody><tr class="row-bold"><td></td><td class="td-l">Tổng cộng</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr class="row-bold"><td>I.</td><td class="td-l">Khối tỉnh</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">Sở Giáo dục và Đào tạo</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">…</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="row-bold"><td>II.</td><td class="td-l">Khối Xã/Phường/Đặc khu</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>1</td><td class="td-l" style="padding-left:14px">Xã, Phường, Đặc khu A</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">…</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>2</td><td class="td-l" style="padding-left:14px">Xã, Phường, Đặc khu B</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">…</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="row-italic"><td colspan="9">(*) Không quá 10 tháng/năm học/sinh viên</td></tr>
+</tbody></table></div>
+</div>
+<div id="p1g" class="panel">
+<div class="tw"><table id="tbl-1g"><thead>
+<tr>
+  <th rowspan="4">STT</th>
+  <th rowspan="4" class="th-l">Đối tượng</th>
+  <th rowspan="4">Mức HT học bổng (1)</th>
+  <th rowspan="4">HT mua đồ dùng cá nhân (2)</th>
+  <th rowspan="4">HT ở lại trường dịp Tết (3)</th>
+  <th colspan="6">Hỗ trợ học bổng chính sách</th>
+  <th colspan="5">Hỗ trợ khác</th>
+  <th rowspan="4">Tổng KP thực hiện chính sách (16=6+9+15)</th>
+  <th rowspan="4">KP đã bố trí trong DT NSĐP năm … (17)</th>
+  <th rowspan="4">KP còn thừa/thiếu (18=16-17)</th>
+</tr>
+<tr>
+  <th colspan="3">Kết quả thực hiện Kỳ II năm học 2024-2025</th>
+  <th colspan="3">Kết quả thực hiện Kỳ I năm học 2025-2026</th>
+  <th rowspan="3">HT mua đồ dùng cá nhân (10)</th>
+  <th colspan="2">HT tiền đi lại</th>
+  <th rowspan="3">HT ở lại trường dịp Tết (13)</th>
+  <th rowspan="3">Kinh phí thực hiện (15=10+11+12+13+14)</th>
+</tr>
+<tr>
+  <th rowspan="2">ĐT HT học bổng (4)</th>
+  <th rowspan="2">Thời gian HT (5)</th>
+  <th rowspan="2">KP thực hiện (6)</th>
+  <th rowspan="2">ĐT HT học bổng (7)</th>
+  <th rowspan="2">Thời gian HT (8)</th>
+  <th rowspan="2">KP thực hiện (9)</th>
+  <th>Mức 0,2 (11)</th>
+  <th>Mức 0,3 (12)</th>
+</tr>
+<tr></tr>
+</thead><tbody>
+<tr class="row-bold"><td></td><td class="td-l">Tổng số</td><td></td><td></td><td></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr class="row-bold"><td>I</td><td class="td-l">Học sinh, sinh viên người dân tộc thiểu số thuộc hộ nghèo, hộ cận nghèo, người khuyết tật</td><td>1</td><td>1</td><td>0,15</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>1</td><td class="td-l" style="padding-left:14px">Trường A…</td><td>1</td><td>1</td><td>0,15</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">…</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="row-bold"><td>II</td><td class="td-l">Học sinh, sinh viên tốt nghiệp trường PT dân tộc nội trú; HS, SV người Kinh là người khuyết tật có HK vùng ĐBKK, vùng DTTS, biên giới, hải đảo</td><td>0,8</td><td>1</td><td>0,15</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>1</td><td class="td-l" style="padding-left:14px">Trường A…</td><td>0,8</td><td>1</td><td>0,15</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">…</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="row-bold"><td>III</td><td class="td-l">Học sinh, sinh viên người dân tộc Kinh thuộc hộ nghèo, cận nghèo có HK vùng ĐBKK, vùng DTTS, biên giới, hải đảo</td><td>0,6</td><td>1</td><td>0,15</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>1</td><td class="td-l" style="padding-left:14px">Trường A…</td><td>0,6</td><td>1</td><td>0,15</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">…</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="row-italic"><td colspan="19">(*) Hỗ trợ học bổng chính sách tối đa 12 tháng/năm học</td></tr>
+</tbody></table></div>
+</div>
+<div id="p1h" class="panel">
+<div class="tw"><table id="tbl-1h"><thead>
+<tr><th rowspan="2">STT</th><th rowspan="2" class="th-l">Đơn vị tuyển sinh</th>
+<th colspan="2">Kết quả thực hiện Kỳ II năm học 2024-2025</th>
+<th colspan="2">Kết quả thực hiện Kỳ I năm học 2025-2026</th>
+<th rowspan="2">Tổng KP thực hiện chính sách (5=2+4)</th>
+<th rowspan="2">KP đã bố trí trong DT NSĐP năm … (6)</th>
+<th rowspan="2">KP còn thừa/thiếu (7=5-6)</th></tr>
+<tr><th>Đối tượng (1)</th><th>KP thực hiện (2)</th>
+<th>Đối tượng (3)</th><th>KP thực hiện (4)</th></tr>
+
+</thead><tbody><tr class="row-bold"><td></td><td class="td-l">Hỗ trợ 80% học bổng</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr class="row-bold"><td></td><td class="td-l">Tổng cộng</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr class="row-bold"><td>I.</td><td class="td-l">Khối tỉnh</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">Sở Giáo dục và Đào tạo</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">…</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="row-bold"><td>II.</td><td class="td-l">Khối Xã/Phường/Đặc khu</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>1</td><td class="td-l" style="padding-left:14px">Xã, Phường, Đặc khu A</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">…</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>2</td><td class="td-l" style="padding-left:14px">Xã, Phường, Đặc khu B</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">…</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="row-italic"><td colspan="9">(*) Học bổng chính sách được cấp đủ 12 tháng/năm</td></tr>
+</tbody></table></div>
+</div>
+<div id="p1i" class="panel">
+<div class="tw"><table id="tbl-1i"><thead>
+<tr><th rowspan="2">STT</th><th rowspan="2" class="th-l">Đơn vị tuyển sinh</th>
+<th colspan="4">Kết quả thực hiện Kỳ II năm học 2024-2025</th>
+<th colspan="4">Kết quả thực hiện Kỳ I năm học 2025-2026</th>
+<th rowspan="2">Tổng KP thực hiện chính sách (9=4+8)</th>
+<th rowspan="2">KP đã bố trí trong DT NSĐP năm … (10)</th>
+<th rowspan="2">KP còn thừa/thiếu (11=9-10)</th></tr>
+<tr><th>Số đối tượng (1)</th><th>Mức hỗ trợ (2)</th><th>Số tháng hỗ trợ (3)</th><th>KP thực hiện (4=1*2*3)</th>
+<th>Số đối tượng (5)</th><th>Mức hỗ trợ (6)</th><th>Số tháng hỗ trợ (7)</th><th>KP thực hiện (8=5*6*7)</th></tr>
+
+</thead><tbody><tr class="row-bold"><td></td><td class="td-l">Tổng cộng</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>-</td><td class="td-l">Trẻ mẫu giáo DTTS rất ít người</td><td class="inp"><input></td><td>30%</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td>30%</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>-</td><td class="td-l">Học sinh DTTS rất ít người trường tiểu học, THCS, THPT</td><td class="inp"><input></td><td>40%</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td>40%</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>-</td><td class="td-l">Học sinh DTTS rất ít người trường phổ thông dân tộc bán trú hoặc học sinh bán trú học tại trường phổ thông công lập có học sinh bán trú</td><td class="inp"><input></td><td>60%</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td>60%</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>-</td><td class="td-l">Học sinh DTTS rất ít người trường phổ thông dân tộc nội trú</td><td class="inp"><input></td><td>100%</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td>100%</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>-</td><td class="td-l">Học sinh sinh viên DTTS rất ít người tại các trường, khoa dự bị đại học, các cơ sở giáo dục đại học, cơ sở giáo dục nghề nghiệp</td><td class="inp"><input></td><td>100%</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td>100%</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr class="row-bold"><td>I</td><td class="td-l">Khối tỉnh</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">Sở Giáo dục và Đào tạo</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">…</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="row-bold"><td>II</td><td class="td-l">Khối Xã/Phường/Đặc khu</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>1</td><td class="td-l" style="padding-left:14px">Xã, Phường, Đặc khu A</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>2</td><td class="td-l" style="padding-left:14px">Xã, Phường, Đặc khu B</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+</tbody></table></div>
+</div>
+<div id="p1j" class="panel">
+<div class="tw"><table id="tbl-1j"><thead>
+<tr><th rowspan="2">STT</th><th rowspan="2" class="th-l">Đơn vị tuyển sinh</th>
+<th colspan="6">Năm học 2025 (KỳII 2024-2025 và KỳI 2025-2026)</th>
+<th rowspan="2">KP đã bố trí trong DT NSĐP năm … (8)</th>
+<th rowspan="2">KP còn thừa/thiếu (9=4-8)</th></tr>
+<tr><th>Đối tượng (1)</th><th>Mức thu học phí (2)</th><th>Số tháng hỗ trợ (*) (3)</th>
+<th>KP thực hiện (4=5+6)</th><th>Hỗ trợ học phí (5)</th><th>Hỗ trợ sinh hoạt phí (6)</th></tr>
+
+</thead><tbody><tr class="row-bold"><td></td><td class="td-l">Tổng số</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr class="row-bold"><td>I</td><td class="td-l">Đối tượng sinh viên sư phạm đào tạo theo hình thức giao nhiệm vụ, đặt hàng</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">Cơ sở đào tạo A</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">Cơ sở đào tạo B</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">…</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="row-bold"><td>II</td><td class="td-l">Đối tượng sinh viên sư phạm đào tạo theo nhu cầu xã hội tại các cơ sở giáo dục tại địa phương</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">Cơ sở đào tạo A</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">Cơ sở đào tạo B</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">…</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="row-italic"><td colspan="10">(*) Tổng tối đa 10 tháng/năm học</td></tr>
+</tbody></table></div>
+</div>
+<div id="p1k" class="panel">
+<div class="tw"><table id="tbl-1k"><thead>
+<tr><th rowspan="4">STT</th><th rowspan="4" class="th-l">Đơn vị thực hiện</th>
+<th colspan="7">Kết quả thực hiện Kỳ II năm học 2024-2025</th>
+<th colspan="7">Kết quả thực hiện Kỳ I năm học 2025-2026</th>
+<th colspan="2">HT tuyển dụng một lần</th>
+<th rowspan="4">Tổng KP (17=4+11+16)</th>
+<th rowspan="4">KP đã bố trí trong DT NSĐP năm … (18)</th>
+<th rowspan="4">KP còn thừa/thiếu (19=17-18)</th></tr>
+<tr><th colspan="3">Đối tượng</th><th rowspan="3">KP (4=5+6+7)</th>
+<th colspan="3">Gồm</th>
+<th colspan="3">Đối tượng</th><th rowspan="3">KP (11=12+13+14)</th>
+<th colspan="3">Gồm</th>
+<th rowspan="3">ĐT theo điểm a khoản 3 Điều 5 (15)</th>
+<th rowspan="3">KP (16)</th></tr>
+<tr><th rowspan="2">ĐT tham gia PCG MN (điểm a K4Đ5) (1)</th>
+<th rowspan="2">ĐT theo điểm a khoản 2 Điều 6 (2)</th>
+<th rowspan="2">Trong đó: theo điểm a khoản 1 Điều 6 (3)</th>
+<th rowspan="2">HT phổ cập GD (5)</th><th rowspan="2">HT ăn trưa (6)</th><th rowspan="2">HT CPHT (7)</th>
+<th rowspan="2">ĐT tham gia PCG MN (điểm a K4Đ5) (8)</th>
+<th rowspan="2">ĐT theo điểm a khoản 2 Điều 6 (9)</th>
+<th rowspan="2">Trong đó: theo điểm a khoản 1 Điều 6 (10)</th>
+<th rowspan="2">HT phổ cập GD (12)</th><th rowspan="2">HT ăn trưa (13)</th><th rowspan="2">HT CPHT (14)</th></tr>
+<tr></tr>
+
+</thead><tbody><tr class="row-bold"><td></td><td class="td-l">Tổng cộng</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr class="row-bold"><td>I.</td><td class="td-l">Khối tỉnh</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">Sở Giáo dục và Đào tạo</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">…</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="row-bold"><td>II.</td><td class="td-l">Khối Xã/Phường/Đặc khu</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>1</td><td class="td-l" style="padding-left:14px">Xã, Phường, Đặc khu A</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">…</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>2</td><td class="td-l" style="padding-left:14px">Xã, Phường, Đặc khu B</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">…</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</tbody></table></div>
+</div>
+<div id="p1l" class="panel">
+<div class="tw"><table id="tbl-1l"><thead>
+<tr><th rowspan="2">STT</th><th rowspan="2" class="th-l">Nhóm đối tượng</th>
+<th colspan="2">Năm 2025</th>
+<th rowspan="2">KP đã bố trí trong DT NSĐP năm … (3)</th>
+<th rowspan="2">KP còn thừa/thiếu (4)</th></tr>
+<tr><th>Số đối tượng thực hiện (1)</th><th>Kinh phí thực hiện (2)</th></tr>
+
+</thead><tbody><tr class="row-bold"><td></td><td class="td-l">Tổng cộng</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr class="row-bold"><td>I</td><td class="td-l">Nhóm NSNN đóng BHYT</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>1</td><td class="td-l" style="padding-left:14px">Hộ gia đình nghèo; người dân tộc thiểu số đang sinh sống tại vùng có điều kiện KT-XH khó khăn; người sinh sống tại vùng ĐBKK, xã đảo, huyện đảo; người DTTS thuộc gia đình cận nghèo đang cư trú tại xã, thôn thuộc vùng đồng bào DTTS và miền núi</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>2</td><td class="td-l" style="padding-left:14px">Đối tượng trẻ em dưới 6 tuổi</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:28px">- Kinh phí theo mệnh giá thẻ BHYT</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:28px">- Kinh phí truy lĩnh đối với các thẻ phát sinh sau theo quy định tại Luật sửa đổi, bổ sung một số điều của Luật BHYT ngày 13 tháng 6 năm 2014</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>3</td><td class="td-l" style="padding-left:14px">Đối tượng cựu chiến binh, thanh niên xung phong, dân công hỏa tuyến</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>4</td><td class="td-l" style="padding-left:14px">Đối tượng BTXH, người đang hưởng trợ cấp nuôi dưỡng hằng tháng, người đang hưởng trợ cấp tuất hằng tháng mà thuộc đối tượng hưởng TCXH</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>5</td><td class="td-l" style="padding-left:14px">Đối tượng người hiến tạng</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>6</td><td class="td-l" style="padding-left:14px">Người 75 tuổi trở lên đang hưởng TC tuất hằng tháng; người từ đủ 70 đến dưới 75 tuổi hộ cận nghèo đang hưởng TC tuất hằng tháng</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>7</td><td class="td-l" style="padding-left:14px">Người dân các xã ATK, vùng ATK cách mạng đang thường trú tại các xã ATK đã được cập nhật trong CSDLQG về dân cư, CSDL về cư trú</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>8</td><td class="td-l" style="padding-left:14px">Người đang hưởng trợ cấp nuôi dưỡng hằng tháng; người đang hưởng trợ cấp tuất hằng tháng mà thuộc đối tượng hưởng TCXH</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>9</td><td class="td-l" style="padding-left:14px">Người đang hưởng trợ cấp hưu trí xã hội hằng tháng</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>10</td><td class="td-l" style="padding-left:14px">Người lao động không đủ điều kiện hưởng lương hưu và chưa đủ tuổi hưởng TC hưu trí XH đang trong thời gian hưởng TC hằng tháng theo quy định pháp luật về BHXH</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">…</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr class="row-bold"><td>II</td><td class="td-l">Nhóm NSNN hỗ trợ mức đóng</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>1</td><td class="td-l" style="padding-left:14px">Hộ cận nghèo</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:28px">- Hộ cận nghèo được hỗ trợ 100%</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:28px">- Hộ cận nghèo được hỗ trợ 70%</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>2</td><td class="td-l" style="padding-left:14px">Học sinh, sinh viên</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>3</td><td class="td-l" style="padding-left:14px">Người thuộc hộ gia đình làm nông, lâm nghiệp có mức sống trung bình</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>4</td><td class="td-l" style="padding-left:14px">Người dân tộc thiểu số đang sinh sống tại địa bàn các xã khu vực II, khu vực III, thôn ĐBKK thuộc vùng đồng bào DTTS và miền núi giai đoạn 2016-2020 (theo Nghị định số 75/2023/NĐ-CP)</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>5</td><td class="td-l" style="padding-left:14px">Người DTTS đang sinh sống tại các xã được xác định không còn thuộc vùng có điều kiện KT-XH khó khăn, ĐBKK (tối đa 36 tháng)</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>6</td><td class="td-l" style="padding-left:14px">Người tham gia lực lượng bảo vệ an ninh, trật tự cơ sở</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>7</td><td class="td-l" style="padding-left:14px">Nhân viên y tế thôn, bản; cô đỡ thôn, bản</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>8</td><td class="td-l" style="padding-left:14px">Người hoạt động không chuyên trách ở thôn, tổ dân phố</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>9</td><td class="td-l" style="padding-left:14px">Nạn nhân theo quy định của Luật Phòng, chống mua bán người</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">…</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr class="row-italic"><td colspan="6">(*) Đề nghị có xác nhận của BHXH tỉnh/thành phố</td></tr>
+</tbody></table></div>
+</div>
+<div id="p1m" class="panel">
+<div class="tw"><table id="tbl-1m"><thead>
+<tr>
+  <th rowspan="2">STT</th>
+  <th rowspan="2" class="th-l">Loại đối tượng</th>
+  <th rowspan="2">Hệ số (1)</th>
+  <th rowspan="2">Mức chuẩn TW quy định (2)</th>
+  <th rowspan="2">Số tiền TC cơ bản hàng tháng (3=1×2)</th>
+  <th colspan="2">6 tháng đầu năm 2025</th>
+  <th colspan="2">6 tháng cuối năm 2025</th>
+  <th rowspan="2">Tổng KP thực hiện chính sách (8=5+7)</th>
+  <th rowspan="2">KP đã bố trí trong DT NSĐP năm … (9)</th>
+  <th rowspan="2">KP còn thừa/thiếu (10=9-8)</th>
+  <th rowspan="2">Ghi chú</th>
+</tr>
+<tr>
+  <th>Đối tượng (4)</th><th>Kinh phí (5)</th>
+  <th>Đối tượng (6)</th><th>Kinh phí (7)</th>
+</tr>
+</thead><tbody><tr class="row-bold"><td></td><td class="td-l">TỔNG SỐ (A+B)</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="row-bold"><td></td><td class="td-l">A. TRỢ CẤP THƯỜNG XUYÊN</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="row-bold"><td>I</td><td class="td-l">TRỢ CẤP XÃ HỘI HÀNG THÁNG</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="row-bold"><td>1</td><td class="td-l">Trẻ em dưới 16 tuổi không có nguồn nuôi dưỡng</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="td-l" style="font-size:9px">Khoản 1 Điều 5</td></tr>
+<tr><td></td><td style="padding-left:14px;text-align:left">Dưới 4 tuổi</td><td>2,5</td><td>0,5</td><td>1,25</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td></td></tr>
+<tr><td></td><td style="padding-left:14px;text-align:left">Từ đủ 4 tuổi trở lên đến dưới 16 tuổi</td><td>1,5</td><td>0,5</td><td>0,75</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td></td></tr>
+<tr><td>2</td><td class="td-l">Người từ 16 tuổi đến 22 tuổi thuộc một trong các trường hợp quy định tại khoản 1 Điều 5 NĐ 136/2013 không có nguồn nuôi dưỡng đang học phổ thông, học nghề, THCN</td><td>1,5</td><td>0,5</td><td>0,75</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="td-l" style="font-size:9px">Khoản 2 Điều 5</td></tr>
+<tr class="row-bold"><td>3</td><td class="td-l">Trẻ em bị nhiễm HIV thuộc hộ nghèo; người bị nhiễm HIV thuộc hộ nghèo không còn khả năng lao động mà không có lương hưu, TC BHXH hàng tháng, TC ưu đãi người có công hàng tháng</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="td-l" style="font-size:9px">Khoản 3 Điều 5</td></tr>
+<tr><td></td><td style="padding-left:14px;text-align:left">Dưới 4 tuổi</td><td>2,5</td><td>0,5</td><td>1,25</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td></td></tr>
+<tr><td></td><td style="padding-left:14px;text-align:left">Từ 4 đến dưới 16 tuổi</td><td>2</td><td>0,5</td><td>1,0</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td></td></tr>
+<tr><td></td><td style="padding-left:14px;text-align:left">Từ 16 tuổi trở lên</td><td>1,5</td><td>0,5</td><td>0,75</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td></td></tr>
+<tr class="row-bold"><td>4</td><td class="td-l">Người thuộc hộ nghèo, cận nghèo không có chồng/vợ hoặc vợ/chồng đã chết, mất tích theo quy định pháp luật và đang nuôi con dưới 16 tuổi hoặc đang nuôi con từ 16-22 tuổi</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="td-l" style="font-size:9px">Khoản 4 Điều 5</td></tr>
+<tr><td></td><td style="padding-left:14px;text-align:left">Đang nuôi 1 con</td><td>1</td><td>0,5</td><td>0,50</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td></td></tr>
+<tr><td></td><td style="padding-left:14px;text-align:left">Đang nuôi 2 con</td><td>2</td><td>0,5</td><td>1,00</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td></td></tr>
+<tr><td></td><td style="padding-left:14px;text-align:left">Đang nuôi 3 con</td><td>3</td><td>0,5</td><td>1,50</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">…</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="row-bold"><td>5</td><td class="td-l">Người cao tuổi</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="td-l" style="font-size:9px">Khoản 5 Điều 5</td></tr>
+<tr class="row-bold"><td>5.1</td><td class="td-l">Người cao tuổi thuộc hộ nghèo không có người có nghĩa vụ và quyền phụng dưỡng hoặc có người có nghĩa vụ và quyền phụng dưỡng nhưng người này đang hưởng TCXH hàng tháng</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="td-l" style="font-size:9px">Điểm a khoản 5 Điều 5</td></tr>
+<tr><td></td><td style="padding-left:14px;text-align:left">Từ đủ 60 tuổi đến dưới 80 tuổi</td><td>1,5</td><td>0,5</td><td>0,75</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td></td></tr>
+<tr><td></td><td style="padding-left:14px;text-align:left">Từ đủ 80 tuổi trở lên</td><td>2</td><td>0,5</td><td>1,00</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td></td></tr>
+<tr><td>5.2</td><td class="td-l">Người từ đủ 75 tuổi đến 80 tuổi thuộc hộ nghèo, hộ cận nghèo không được quy định tại mục 5.1 đang sống tại địa bàn các xã, thôn vùng đồng bào DTTS và miền núi ĐBKK</td><td>1</td><td>0,5</td><td>0,50</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td></td></tr>
+<tr><td>5.3</td><td class="td-l">Người từ đủ 80 tuổi trở lên không được quy định tại mục 5.1 mà không có lương hưu, TC BHXH hàng tháng, TCXH hàng tháng</td><td>1</td><td>0,5</td><td>0,50</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td></td></tr>
+<tr><td>5.4</td><td class="td-l">Người cao tuổi thuộc hộ nghèo không có người có nghĩa vụ và quyền phụng dưỡng, không có điều kiện sống ở cộng đồng, đủ điều kiện tiếp nhận vào cơ sở BTXH, nhà xã hội nhưng có người nhận chăm sóc tại cộng đồng</td><td>3</td><td>0,5</td><td>1,50</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td></td></tr>
+<tr class="row-bold"><td>6</td><td class="td-l">Người khuyết tật nặng, người KT đặc biệt nặng theo quy định của Luật Người khuyết tật</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="td-l" style="font-size:9px">Khoản 6 Điều 5</td></tr>
+<tr class="row-bold"><td>6.1</td><td class="td-l">Người khuyết tật đặc biệt nặng</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td style="padding-left:14px;text-align:left">Dưới 16 tuổi</td><td>2,5</td><td>0,5</td><td>1,25</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td></td></tr>
+<tr><td></td><td style="padding-left:14px;text-align:left">Từ 16 đến 60 tuổi</td><td>2</td><td>0,5</td><td>1,00</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td></td></tr>
+<tr><td></td><td style="padding-left:14px;text-align:left">Từ đủ 60 tuổi trở lên</td><td>2,5</td><td>0,5</td><td>1,25</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td></td></tr>
+<tr class="row-bold"><td>6.2</td><td class="td-l">Người khuyết tật nặng</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td style="padding-left:14px;text-align:left">Dưới 16 tuổi</td><td>2</td><td>0,5</td><td>1,00</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td></td></tr>
+<tr><td></td><td style="padding-left:14px;text-align:left">Từ 16 đến 60 tuổi</td><td>1,5</td><td>0,5</td><td>0,75</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td></td></tr>
+<tr><td></td><td style="padding-left:14px;text-align:left">Từ đủ 60 tuổi trở lên</td><td>2</td><td>0,5</td><td>1,00</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td></td></tr>
+<tr><td>7.0</td><td class="td-l">Trẻ em dưới 03 tuổi thuộc hộ nghèo, cận nghèo sống tại xã, thôn vùng đồng bào DTTS và vùng núi ĐBKK (không được quy định tại khoản 1, 3, 6)</td><td>1,5</td><td>0,5</td><td>0,75</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="td-l" style="font-size:9px">Khoản 7 Điều 5</td></tr>
+<tr class="row-bold"><td>II</td><td class="td-l">NHẬN NUÔI DƯỠNG, CHĂM SÓC TẠI CỘNG ĐỒNG</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="row-bold"><td>1</td><td class="td-l">Nhận chăm sóc, nuôi dưỡng trẻ em dưới 16 tuổi không có nguồn nuôi dưỡng là đối tượng quy định tại Khoản 1 Điều 5 Nghị định số 20/2021</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="td-l" style="font-size:9px">Khoản 1 Điều 20</td></tr>
+<tr><td>1.1</td><td style="padding-left:14px;text-align:left">Nhận chăm sóc, nuôi dưỡng trẻ em dưới 04 tuổi</td><td>2,5</td><td>0,5</td><td>1,25</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td></td></tr>
+<tr class="row-bold"><td>1.2</td><td class="td-l" style="padding-left:14px">Nhận chăm sóc, nuôi dưỡng trẻ em từ 04 tuổi trở lên đến dưới 16 tuổi</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td style="padding-left:28px;text-align:left">Nuôi 1 trẻ em dưới 16 tuổi</td><td>1,5</td><td>0,5</td><td>0,75</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td></td></tr>
+<tr><td></td><td style="padding-left:28px;text-align:left">Nuôi 2 trẻ em dưới 16 tuổi</td><td>3</td><td>0,5</td><td>1,50</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:28px">…</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>2</td><td class="td-l">Nhận nuôi người cao tuổi thuộc hộ nghèo không có người phụng dưỡng, đủ điều kiện vào cơ sở BTXH được nhận chăm sóc, nuôi dưỡng</td><td>1,5</td><td>0,5</td><td>0,75</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td></td></tr>
+<tr class="row-bold"><td>3</td><td class="td-l">Hỗ trợ nuôi dưỡng người khuyết tật nặng, đặc biệt nặng theo quy định pháp luật về người khuyết tật</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="row-bold"><td>3.1</td><td class="td-l" style="padding-left:14px">Hỗ trợ kinh phí chăm sóc, nuôi dưỡng người khuyết tật</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td style="padding-left:28px;text-align:left">Người KT đặc biệt nặng, NKT nặng đang mang thai hoặc nuôi một con dưới 36 tháng tuổi</td><td>1,5</td><td>0,5</td><td>0,75</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td></td></tr>
+<tr><td></td><td style="padding-left:28px;text-align:left">Người KT đặc biệt nặng, NKT nặng đang mang thai và nuôi con dưới 36 tháng hoặc nuôi hai con trở lên dưới 36 tháng</td><td>2</td><td>0,5</td><td>1,00</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td></td></tr>
+<tr class="row-bold"><td>3.2</td><td class="td-l" style="padding-left:14px">Hỗ trợ hộ gia đình trực tiếp chăm sóc, nuôi dưỡng người KT đặc biệt nặng</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td style="padding-left:28px;text-align:left">Trực tiếp nuôi dưỡng, chăm sóc 01 người KT đặc biệt nặng</td><td>1</td><td>0,5</td><td>0,50</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td></td></tr>
+<tr><td></td><td style="padding-left:28px;text-align:left">Trực tiếp nuôi dưỡng, chăm sóc 02 người KT đặc biệt nặng</td><td>2</td><td>0,5</td><td>1,00</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:28px">…</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="row-bold"><td></td><td class="td-l">B. HỖ TRỢ CHI PHÍ MAI TÁNG</td><td>20</td><td>0,5</td><td>10</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td></td></tr>
+</tbody></table></div>
+</div>
+<div id="p1n" class="panel">
+<div class="tw"><table id="tbl-1n"><thead>
+<tr>
+  <th rowspan="2">STT</th>
+  <th rowspan="2" class="th-l">Loại đối tượng</th>
+  <th rowspan="2">Hệ số (1)</th>
+  <th rowspan="2">Mức chuẩn TW quy định (2)</th>
+  <th rowspan="2">Số tiền TC cơ bản hàng tháng (3=1×2)</th>
+  <th colspan="2">Năm 2025 (*)</th>
+  <th rowspan="2">Tổng KP thực hiện chính sách (6)</th>
+  <th rowspan="2">KP còn thừa/thiếu (7)</th>
+  <th rowspan="2">Ghi chú</th>
+</tr>
+<tr>
+  <th>Đối tượng (4)</th><th>Kinh phí (5)</th>
+</tr>
+</thead><tbody>
+<tr class="row-bold"><td></td><td class="td-l">TỔNG SỐ (A+B)</td><td></td><td></td><td></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td></td></tr>
+<tr class="row-bold"><td>A</td><td class="td-l">TRỢ CẤP HƯU TRÍ XÃ HỘI HÀNG THÁNG</td><td></td><td></td><td></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td></td></tr>
+<tr><td>1</td><td class="td-l" style="padding-left:14px">Đối tượng từ đủ 75 tuổi trở lên</td><td>1</td><td>0,5</td><td>=1×0,5=0,5</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td></td></tr>
+<tr><td>2</td><td class="td-l" style="padding-left:14px">Đối tượng từ đủ 70 đến dưới 75 tuổi thuộc hộ nghèo, hộ cận nghèo</td><td>1</td><td>0,5</td><td>=1×0,5=0,5</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td></td></tr>
+<tr class="row-bold"><td>B</td><td class="td-l">HỖ TRỢ CHI PHÍ MAI TÁNG</td><td>20</td><td>0,5</td><td>=20×0,5=10</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td></td></tr>
+<tr class="row-italic"><td colspan="10">(*) Nghị định có hiệu lực từ 01/7/2025</td></tr>
+</tbody></table></div>
+</div>
+<div id="p1o" class="panel">
+<div class="tw"><table id="tbl-1o"><thead>
+<tr>
+  <th rowspan="2">STT</th>
+  <th rowspan="2" class="th-l">Tên huyện</th>
+  <th rowspan="2">Tổng số hộ (1=2+3)</th>
+  <th rowspan="2">Số hộ nghèo (2)</th>
+  <th rowspan="2">Số hộ nghèo theo tiêu chí thu nhập (số huyện đề nghị) (4)</th>
+  <th colspan="3">Số hộ chính sách xã hội (3=4+5)</th>
+  <th rowspan="2">Mức hỗ trợ 0,061333 trđ/tháng (6)</th>
+  <th rowspan="2">Số tháng hỗ trợ (7)</th>
+  <th rowspan="2">Mức hỗ trợ 0,064282 trđ/tháng (8)</th>
+  <th rowspan="2">Số tháng hỗ trợ (9)</th>
+  <th rowspan="2">Tổng KP thực hiện chính sách (10=11+12)</th>
+  <th colspan="2">Trong đó</th>
+  <th rowspan="2">KP đã bố trí trong DT NSĐP năm … (13)</th>
+  <th rowspan="2">KP còn thừa/thiếu (14=10-13)</th>
+</tr>
+<tr>
+  <th>Tổng cộng (3)</th>
+  <th>Hộ có TV đang hưởng TCXH hằng tháng không thuộc hộ nghèo và có lượng điện ≤50KWh ở vùng có điện lưới (4)</th>
+  <th>Hộ có TV đang hưởng TCXH theo quy định pháp luật; hộ DTTS sống ở vùng chưa có điện lưới (5)</th>
+  <th>Số hộ nghèo (11)</th>
+  <th>Số hộ CS XH (12)</th>
+</tr>
+</thead><tbody><tr><td></td><td class="td-l">Tổng cộng</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td>0,061333</td><td>4</td><td>0,064282</td><td>8</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>1</td><td class="td-l">Xã/Phường/Đặc khu A</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>2</td><td class="td-l">Xã/Phường/Đặc khu B</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l">…</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="row-italic"><td colspan="17">(*) QĐ 1279/QĐ-BTC ngày 09/5/2025: 1.984 đ/KWh; QĐ 2699/QĐ-BTC ngày 11/10/2024: 1.893 đ/KWh</td></tr>
+</tbody></table></div>
+</div>
+<div id="p1p" class="panel">
+<div class="tw"><table id="tbl-1p"><thead>
+<tr>
+  <th rowspan="2">STT</th>
+  <th rowspan="2" class="th-l">Nhóm đối tượng</th>
+  <th colspan="2">6 tháng đầu năm 2025</th>
+  <th colspan="2">6 tháng cuối năm 2025 (*)</th>
+  <th rowspan="2">KP đã bố trí trong DT NSĐP năm … (5)</th>
+  <th rowspan="2">KP còn thừa/thiếu (6=2+4-5)</th>
+</tr>
+<tr>
+  <th>Số đối tượng (1)</th><th>KP thực hiện (2)</th>
+  <th>Số đối tượng (3)</th><th>KP thực hiện (4)</th>
+</tr>
+</thead><tbody><tr class="row-bold"><td></td><td class="td-l">Tổng cộng</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>1</td><td class="td-l">Hộ nghèo (50%)</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>2</td><td class="td-l">Hộ cận nghèo (40%)</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>3</td><td class="td-l">Người dân tộc thiểu số (30%)</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>4</td><td class="td-l">Các đối tượng khác (20%)</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr class="row-italic"><td colspan="8">(*) Nghị định 159/2025/NĐ-CP có hiệu lực từ ngày 01/7/2025</td></tr>
+</tbody></table></div>
+</div>
+<div id="p1q" class="panel">
+<div class="tw"><table id="tbl-1q"><thead>
+<tr>
+  <th rowspan="2">STT</th>
+  <th rowspan="2" class="th-l">Nhóm đối tượng</th>
+  <th colspan="3">1. Thăm hỏi, tặng quà dịp Tết Nguyên đán, Tết hoặc Lễ hội truyền thống (*)</th>
+  <th colspan="3">2. Thăm hỏi, hỗ trợ người có uy tín ốm đau đi điều trị bệnh</th>
+  <th colspan="3">3. Hỗ trợ gia đình người có uy tín gặp khó khăn (thiên tai, hỏa hoạn)</th>
+  <th colspan="3">4. Thăm viếng, động viên khi người có uy tín qua đời</th>
+  <th colspan="3">5. Chế độ cung cấp thông tin</th>
+  <th rowspan="2">KP đã bố trí trong DT NSĐP năm (**) (16)</th>
+  <th rowspan="2">KP còn thừa/thiếu (17)</th>
+</tr>
+<tr>
+  <th>Số ĐT (1)</th><th>Mức (2)</th><th>KP thực hiện (*) (3=(1×2)×2)</th>
+  <th>Số ĐT (4)</th><th>Mức (5)</th><th>KP (6=4×5)</th>
+  <th>Số ĐT (7)</th><th>Mức (8)</th><th>KP (9=7×8)</th>
+  <th>Số ĐT (10)</th><th>Mức (11)</th><th>KP (12=10×11)</th>
+  <th>Số ĐT (13)</th><th>Mức (14)</th><th>KP (15=13×14)</th>
+</tr>
+</thead><tbody><tr class="row-bold"><td></td><td class="td-l">Tổng cộng</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr class="row-bold"><td>A</td><td class="td-l">Chế độ cung cấp thông tin</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">Báo..</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">…</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="row-bold"><td>B</td><td class="td-l">Hỗ trợ vật chất, động viên tinh thần</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr class="row-bold"><td>1</td><td class="td-l">Cơ quan Trung ương</td><td class="inp"><input></td><td>0,5</td><td class="inp"><input></td><td class="inp"><input></td><td>3,0</td><td class="inp"><input></td><td class="inp"><input></td><td>2</td><td class="inp"><input></td><td class="inp"><input></td><td>2</td><td class="inp"><input></td><td></td><td></td><td></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr class="row-bold"><td>2</td><td class="td-l">Cơ quan tỉnh</td><td class="inp"><input></td><td>0,5</td><td class="inp"><input></td><td class="inp"><input></td><td>1,5</td><td class="inp"><input></td><td class="inp"><input></td><td>2</td><td class="inp"><input></td><td class="inp"><input></td><td>1</td><td class="inp"><input></td><td></td><td></td><td></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr class="row-bold"><td>3</td><td class="td-l">Cơ quan huyện</td><td class="inp"><input></td><td>0,5</td><td class="inp"><input></td><td class="inp"><input></td><td>0,8</td><td class="inp"><input></td><td class="inp"><input></td><td>2</td><td class="inp"><input></td><td class="inp"><input></td><td>0,5</td><td class="inp"><input></td><td></td><td></td><td></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr class="row-bold"><td>4</td><td class="td-l">Cơ quan xã</td><td class="inp"><input></td><td>0,5</td><td class="inp"><input></td><td class="inp"><input></td><td>0,5</td><td class="inp"><input></td><td class="inp"><input></td><td>2</td><td class="inp"><input></td><td class="inp"><input></td><td></td><td class="inp"><input></td><td></td><td></td><td></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr class="row-italic"><td colspan="19">(*) Tối đa 02 lần/năm &nbsp;&nbsp; (**) Lấy bằng số liệu quyết toán năm 2021</td></tr>
+</tbody></table></div>
+</div>
+<div id="p1r" class="panel">
+<div class="tw"><table id="tbl-1r"><thead>
+<tr><th rowspan="4">STT</th><th rowspan="4" class="th-l">ĐƠN VỊ THỰC HIỆN</th>
+<th colspan="12">I. Hỗ trợ khai thác và dịch vụ khai thác hải sản</th>
+<th colspan="3">II. KP hỗ trợ nuôi trồng hải sản</th>
+
+<th rowspan="4">III. KP hỗ trợ khắc phục hậu quả đối với thuyền viên và tàu bị tai nạn/biến mất trên biển</th>
+<th rowspan="4">Tổng KP thực hiện chính sách (18)</th></tr>
+<tr><th colspan="5">1. Hỗ trợ chi phí nhiên liệu (*)</th>
+<th rowspan="3">TC KP nhiên liệu (7)</th>
+<th colspan="2">2. Bảo hiểm thân tàu</th>
+<th colspan="2">3. Bảo hiểm tai nạn thuyền viên</th>
+<th colspan="2">4. Mua máy liên lạc tầm xa</th>
+<th rowspan="3">Số ĐT HT chi phí lồng nuôi (14)</th>
+<th rowspan="3">Số ĐT HT tiền mua giống hải sản (15)</th>
+<th rowspan="3">Tổng KP nuôi trồng hải sản (16)</th>
+</tr>
+<tr><th colspan="5">Số tàu</th><th rowspan="2">Số lượng tàu (8)</th><th rowspan="2">Kinh phí (9)</th>
+<th rowspan="2">Số lượng thuyền viên (10)</th><th rowspan="2">Kinh phí (11)</th>
+<th rowspan="2">Số lượng máy (12)</th><th rowspan="2">Kinh phí (13)</th>
+</tr>
+<tr><th>90-150 CV (1)</th><th>150-250 CV (2)</th><th>250-400 CV (3)</th><th>400-700 CV (4)</th><th>Trên 700 CV (5)</th></tr>
+
+</thead><tbody><tr class="row-bold"><td></td><td class="td-l">Tổng cộng</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>1</td><td class="td-l">Xã/Phường/Đặc khu A</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">…</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>2</td><td class="td-l">Xã/Phường/Đặc khu B</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l" style="padding-left:14px">…</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="row-italic"><td colspan="19">(*) Hỗ trợ chi phí nhiên liệu tối đa 4 chuyến/tàu/năm. Mức: 90-150CV: 22 triệu; 150-250CV: 30 triệu; 250-400CV: 55 triệu; 400-700CV: 75 triệu; Trên 700CV: 100 triệu/chuyến</td></tr>
+</tbody></table></div>
+</div>
+<div id="p1s" class="panel">
+<div class="tw"><table id="tbl-1s"><thead>
+<tr><th rowspan="3">STT</th><th rowspan="3" class="th-l">Nhóm đối tượng</th>
+<th colspan="3">Diện tích (ha)</th>
+<th colspan="3">Kinh phí</th>
+<th rowspan="3">Tổng KP thực hiện chính sách (7=4+5+6)</th>
+<th rowspan="3">KP đã bố trí trong DT NSĐP năm … (8)</th>
+<th rowspan="3">KP còn thừa/thiếu (9=7-8)</th></tr>
+<tr><th rowspan="2">Đất chuyên trồng lúa (1)</th>
+<th colspan="2">Trong đó</th>
+<th rowspan="2">Đất chuyên trồng lúa (4=1×1,5trđ)</th>
+<th colspan="2">Trong đó</th></tr>
+<tr><th>Vùng QH trồng lúa có NS, CL cao (*) (2)</th><th>Đất trồng lúa còn lại (3)</th>
+<th>Vùng QH trồng lúa có NS, CL cao (5=2×1,5trđ)</th><th>Đất trồng lúa còn lại (6=3×0,75trđ)</th></tr>
+
+</thead><tbody><tr class="row-bold"><td></td><td class="td-l">Tổng cộng</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>1</td><td class="td-l">Xã/Phường/Đặc khu A</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td>2</td><td class="td-l">Xã/Phường/Đặc khu B</td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td><td class="inp"><input></td></tr>
+<tr><td></td><td class="td-l">…</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr class="row-italic"><td colspan="11">(*) Kèm theo Quyết định của UBND tỉnh về phê duyệt vùng quy hoạch trồng lúa có năng suất, chất lượng cao</td></tr>
+</tbody></table></div>
+</div>
+
+  </div>
+</div>
+</div>
+<script>
+const META={"p01": ["Biểu 01", "TỔNG HỢP KẾT QUẢ THỰC HIỆN CÁC CHÍNH SÁCH, CHẾ ĐỘ ASXH NĂM 2025"], "p1a": ["Phụ lục số 01a", "TỔNG HỢP KINH PHÍ THỰC HIỆN HỖ TRỢ CHI PHÍ HỌC TẬP VÀ CẤP BÙ HỌC PHÍ THEO NGHỊ ĐỊNH SỐ 238/2025/NĐ-CP NĂM 2025"], "p1b": ["Phụ lục số 01b", "TỔNG HỢP KINH PHÍ THỰC HIỆN CHÍNH SÁCH PHÁT TRIỂN GIÁO DỤC MẦM NON THEO NGHỊ ĐỊNH SỐ 105/2020/NĐ-CP NĂM 2025"], "p1c": ["Phụ lục số 01c", "TỔNG HỢP KINH PHÍ THỰC HIỆN CHẾ ĐỘ GIÁO VIÊN MẦM NON THEO NGHỊ ĐỊNH SỐ 105/2020/NĐ-CP NĂM 2025"], "p1d": ["Phụ lục số 01d", "TỔNG HỢP KINH PHÍ THỰC HIỆN HỖ TRỢ HỌC SINH KHUYẾT TẬT THEO THÔNG TƯ LIÊN TỊCH 42/2013/TTLT-BGDĐT-BLĐTBXH-BTC NĂM 2025"], "p1e": ["Phụ lục số 01e", "TỔNG HỢP KINH PHÍ THỰC HIỆN CHÍNH SÁCH HỖ TRỢ HỌC SINH VÀ TRƯỜNG PTDT BÁN TRÚ THEO NGHỊ ĐỊNH SỐ 66/2025/NĐ-CP NĂM 2025"], "p1f": ["Phụ lục số 01f", "TỔNG HỢP KINH PHÍ THỰC HIỆN HỖ TRỢ CHI PHÍ HỌC TẬP ĐỐI VỚI SV LÀ NGƯỜI DTTS THEO QUYẾT ĐỊNH SỐ 66/2013/QĐ-TTg NĂM 2025"], "p1g": ["Phụ lục số 01g", "TỔNG HỢP KINH PHÍ THỰC HIỆN CHÍNH SÁCH NỘI TRÚ ĐỐI VỚI HS, SV TRƯỜNG CAO ĐẲNG, TRUNG CẤP THEO QUYẾT ĐỊNH SỐ 53/2015/QĐ-TTg NĂM 2025"], "p1h": ["Phụ lục số 01h", "TỔNG HỢP KINH PHÍ THỰC HIỆN CHÍNH SÁCH HỖ TRỢ HỌC BỔNG HỌC SINH DÂN TỘC NỘI TRÚ THEO NGHỊ ĐỊNH SỐ 84/2020/NĐ-CP NĂM 2025"], "p1i": ["Phụ lục số 01i", "TỔNG HỢP KINH PHÍ THỰC HIỆN CHÍNH SÁCH HỖ TRỢ ƯU TIÊN TUYỂN SINH VÀ HỌC TẬP ĐỐI VỚI TRẺ, HS, SV DTTS RẤT ÍT NGƯỜI THEO NGHỊ ĐỊNH SỐ 57/2017/NĐ-CP NĂM 2025"], "p1j": ["Phụ lục số 01j", "TỔNG HỢP KINH PHÍ THỰC HIỆN CHÍNH SÁCH HỖ TRỢ TIỀN ĐÓNG HỌC PHÍ, CHI PHÍ SINH HOẠT ĐỐI VỚI SV SƯ PHẠM THEO NGHỊ ĐỊNH SỐ 116/2020/NĐ-CP VÀ SỐ 60/2025/NĐ-CP NĂM 2025"], "p1k": ["Phụ lục số 01k", "TỔNG HỢP KINH PHÍ THỰC HIỆN PHỔ CẬP GIÁO DỤC MẦM NON CHO TRẺ EM TỪ 3 ĐẾN 5 TUỔI THEO NGHỊ ĐỊNH SỐ 277/2025/NĐ-CP NĂM 2025"], "p1l": ["Phụ lục số 01l", "TỔNG HỢP KINH PHÍ NSNN ĐÓNG VÀ HỖ TRỢ ĐÓNG BHYT CHO CÁC ĐỐI TƯỢNG TRÊN ĐỊA BÀN NĂM 2025"], "p1m": ["Phụ lục số 01m", "TỔNG HỢP KINH PHÍ TRỢ GIÚP CÁC ĐỐI TƯỢNG BẢO TRỢ XÃ HỘI THEO NGHỊ ĐỊNH SỐ 20/2021/NĐ-CP VÀ NGHỊ ĐỊNH SỐ 76/2024/NĐ-CP NĂM 2025"], "p1n": ["Phụ lục số 01n", "TỔNG HỢP KINH PHÍ TRỢ CẤP HƯU TRÍ XÃ HỘI THEO NGHỊ ĐỊNH SỐ 176/2025/NĐ-CP NĂM 2025"], "p1o": ["Phụ lục số 01o", "TỔNG HỢP KINH PHÍ THỰC HIỆN CHÍNH SÁCH HỖ TRỢ TIỀN ĐIỆN CHO HỘ NGHÈO VÀ HỘ CHÍNH SÁCH XÃ HỘI NĂM 2025"], "p1p": ["Phụ lục số 01p", "TỔNG HỢP KINH PHÍ NSNN HỖ TRỢ ĐÓNG BHXH TỰ NGUYỆN CHO CÁC ĐỐI TƯỢNG NĂM 2025"], "p1q": ["Phụ lục số 01q", "TỔNG HỢP KINH PHÍ NSNN THỰC HIỆN CHÍNH SÁCH ĐỐI VỚI NGƯỜI CÓ UY TÍN TRONG ĐỒNG BÀO DTTS THEO QĐ 12/2018/QĐ-TTg VÀ QĐ 28/2023/QĐ-TTg NĂM 2025"], "p1r": ["Phụ lục số 01r", "TỔNG HỢP KINH PHÍ KHUYẾN KHÍCH, HỖ TRỢ NGƯ DÂN KHAI THÁC, NUÔI TRỒNG HẢI SẢN VÀ DỊCH VỤ KHAI THÁC HẢI SẢN TRÊN CÁC VÙNG BIỂN XA THEO QĐ 48/QĐ-TTg NĂM 2025"], "p1s": ["Phụ lục số 01s", "TỔNG HỢP KINH PHÍ THỰC HIỆN HỖ TRỢ ĐẤT TRỒNG LÚA THEO NGHỊ ĐỊNH SỐ 112/2024/NĐ-CP NĂM 2025"]};
+const KY={1: "Kỳ II NH 2024-2025", 2: "Kỳ II NH 2024-2025", 3: "Kỳ II NH 2024-2025", 4: "Kỳ II NH 2024-2025", 5: "Kỳ II NH 2024-2025", 6: "Hè (ngoài kỳ học)", 7: "Hè", 8: "Hè", 9: "Kỳ I NH 2025-2026", 10: "Kỳ I NH 2025-2026", 11: "Kỳ I NH 2025-2026", 12: "Kỳ I NH 2025-2026"};
+let cur='p01';
+function updateKy(){const t=parseInt(document.getElementById('st').value);document.getElementById('ky-lbl').textContent=KY[t]||'';}
+updateKy();
+document.getElementById('sn').addEventListener('change',updateKy);
+document.getElementById('st').addEventListener('change',updateKy);
+function show(id,el){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav').forEach(n=>n.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  el.classList.add('active');
+  cur=id;
+  const m=META[id];
+  document.getElementById('hdr-bm').textContent=m[0];
+  document.getElementById('hdr-ti').textContent=m[1];
+  document.getElementById('bar-ti').textContent=m[0]+' — '+m[1].substring(0,55)+'…';
+}
+function cv(inp){const v=inp.value.trim();if(!v)return'';const n=parseFloat(v.replace(/\./g,'').replace(',','.'));return isNaN(n)?v:n;}
+function exportExcel(){
+  if(typeof XLSX==='undefined'){alert('Đang tải SheetJS...');return;}
+  const m=META[cur];const t=document.getElementById('st').value;const y=document.getElementById('sn').value;
+  const dv=document.getElementById('inp-dv').value||'Ủy ban nhân dân tỉnh/thành phố: …';
+  const tblId='tbl-'+cur.replace('p','');
+  const tbl=document.getElementById(tblId);
+  if(!tbl){alert('Không tìm thấy bảng!');return;}
+  const aoa=[];
+  aoa.push([dv,'','','','','','','','','',m[0]]);
+  aoa.push([m[1]]);aoa.push(['Tháng '+t+'/'+y+' ('+KY[parseInt(t)]+')']);
+  aoa.push(['','','','','','','','','','','Đơn vị: Triệu đồng']);aoa.push([]);
+  tbl.querySelectorAll('thead tr').forEach(tr=>{const r=[];tr.querySelectorAll('th').forEach(th=>r.push(th.textContent.trim().replace(/\n/g,' ')));aoa.push(r);});
+  tbl.querySelectorAll('tbody tr').forEach(tr=>{const r=[];tr.querySelectorAll('td').forEach(td=>{const i=td.querySelector('input');r.push(i?cv(i):td.textContent.trim());});aoa.push(r);});
+  const ws=XLSX.utils.aoa_to_sheet(aoa);
+  ws['!cols']=[{wch:8},{wch:60},{wch:13},{wch:13},{wch:13},{wch:13},{wch:13},{wch:13},{wch:13},{wch:13},{wch:13},{wch:13}];
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,ws,m[0].replace('Phụ lục số ','').replace('Biểu ',''));
+  XLSX.writeFile(wb,m[0].replace('Phụ lục số ','').replace('Biểu ','')+'_T'+t+'_'+y+'.xlsx');
+}
+</script>
+</body>
+</html>
