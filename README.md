@@ -18,6 +18,15 @@ Căn cứ Công văn số 3993/BTC-NSNN ngày 01/4/2026 của Bộ Tài chính.
 | `bieu_01i_form.html` | 01i | Hỗ trợ HS/SV DTTS rất ít người (NĐ 57/2017) |
 | `bieu_01j_form.html` | 01j | Hỗ trợ tiền đóng học phí SV sư phạm (NĐ 116/2020 + NĐ 60/2025) |
 
+## Danh mục chính sách, chế độ (tree)
+
+| File | Mô tả |
+|---|---|
+| `danh_muc_chinh_sach_tree.html` | Sơ đồ cây danh mục chính sách, chế độ ASXH — tương tác (mở rộng/thu gọn, tìm kiếm), hiển thị 10 trường thông tin/tiêu chí: Mã, Cấp, Tên tiêu chí, Tiêu chí cha, Loại–Khoản, Mục–Tiểu mục, Trạng thái, Căn cứ pháp lý, Mô tả, Biểu mẫu liên kết |
+| `danh_muc_chinh_sach_data.json` | Dữ liệu nguồn (JSON) của cây danh mục — 85 node theo Sheet 01, đối chiếu mã Loại–Khoản/Mục–Tiểu mục theo Phụ lục II, III Thông tư 130/2025/TT-BTC |
+
+Nguồn dữ liệu: Sheet "01" (file tổng hợp gửi UBND tỉnh) và sheet "Mapping theo mẫu STC" (file `Danhmuc_theo_mau_stc_01_v2.xlsx`). Một số dòng "Tổng hợp"/"Điều kiện" trong Loại–Khoản, Mục–Tiểu mục không phải mã hạch toán duy nhất — khi lập chứng từ cần chọn cụ thể một Khoản và một Tiểu mục theo đối tượng thụ hưởng và phương thức chi.
+
 ## Hướng dẫn sử dụng
 
 Mỗi file HTML là một form độc lập, chạy trực tiếp trên trình duyệt (không cần server).

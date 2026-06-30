@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Danh mục chính sách, chế độ ASXH</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+  :root{
+    --ink:#1c2b2a;
+    --paper:#f6f3ec;
+    --paper-2:#efeade;
+    --line:#cdc4ac;
+    --line-soft:#e3ddca;
+    --brand:#0b5d52;
+    --brand-deep:#073f38;
+    --accent:#b5562e;
+    --accent-soft:#f1ddd0;
+    --gold:#9c7a2c;
+    --muted:#6b6356;
+    --white:#fffdf8;
+    --g1:#eef3ea; /* nhom 1 */
+    --g1-line:#5a7d4f;
+    --g2:#eaf1f1; /* nhom 2 */
+    --g2-line:#2f7a73;
+    --g3:#f3ecea; /* nhom 3 */
+    --g3-line:#9c5b3f;
+    --g4:#f1efe3; /* nhom 4 */
+    --g4-line:#8a7a2f;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    background-image:
+      linear-gradient(var(--line-soft) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
+    background-size: 28px 28px;
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    min-height:100vh;
+  }
+
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:28px 22px 60px;
+  }
+
+  /* ---------- Header ---------- */
+  .masthead{
+    border-bottom:3px solid var(--ink);
+    padding-bottom:14px;
+    margin-bottom:6px;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:16px;
+    flex-wrap:wrap;
+  }
+  .masthead .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--brand);
+    font-weight:600;
+    margin-bottom:6px;
+  }
+  .masthead h1{
+    font-family:'Source Serif 4', serif;
+    font-weight:700;
+    font-size:28px;
+    line-height:1.15;
+    margin:0;
+    color:var(--brand-deep);
+    letter-spacing:-.01em;
+  }
+  .masthead .sub{
+    font-size:13px;
+    color:var(--muted);
+    margin-top:6px;
+    max-width:560px;
+  }
+  .masthead .stamp{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    text-align:right;
+    color:var(--muted);
+    line-height:1.7;
+    border-left:1px solid var(--line);
+    padding-left:14px;
+  }
+  .masthead .stamp b{color:var(--ink); font-weight:600;}
+
+  /* ---------- Toolbar ---------- */
+  .toolbar{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    flex-wrap:wrap;
+    margin:18px 0 16px;
+  }
+  .search{
+    flex:1 1 240px;
+    position:relative;
+  }
+  .search input{
+    width:100%;
+    padding:9px 12px 9px 32px;
+    border:1.5px solid var(--ink);
+    background:var(--white);
+    font-family:'IBM Plex Sans',sans-serif;
+    font-size:13px;
+    color:var(--ink);
+    outline:none;
+    border-radius:2px;
+  }
+  .search input:focus{ border-color:var(--brand); box-shadow:0 0 0 3px rgba(11,93,82,.12);}
+  .search::before{
+    content:"⌕";
+    position:absolute; left:10px; top:50%; transform:translateY(-50%);
+    font-size:15px; color:var(--muted); font-weight:700;
+  }
+  .btn{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    font-weight:600;
+    border:1.5px solid var(--ink);
+    background:var(--white);
+    color:var(--ink);
+    padding:9px 13px;
+    cursor:pointer;
+    border-radius:2px;
+    transition:.12s;
+  }
+  .btn:hover{ background:var(--ink); color:var(--paper); }
+  .legend{
+    display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px; color:var(--muted);
+  }
+  .legend span{display:inline-flex; align-items:center; gap:5px;}
+  .dot{width:9px;height:9px;border-radius:1px;display:inline-block;}
+
+  /* ---------- Layout: tree + panel ---------- */
+  .stage{
+    display:grid;
+    grid-template-columns:1fr;
+    gap:18px;
+  }
+  @media(min-width:980px){
+    .stage{ grid-template-columns: 1.5fr 1fr; align-items:start; }
+  }
+
+  .panel-card{
+    background:var(--white);
+    border:1.5px solid var(--ink);
+    border-radius:3px;
+  }
+
+  /* ---------- Tree panel ---------- */
+  .tree-card{ padding:6px 4px 14px; }
+  .tree-card .panel-head{
+    padding:12px 16px 10px;
+    border-bottom:1px solid var(--line);
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .panel-head h2{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    margin:0;
+    color:var(--brand-deep);
+    font-weight:700;
+  }
+  .count-badge{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;
+    color:var(--muted);
+  }
+
+  .tree{
+    padding:10px 8px 6px 6px;
+    max-height:74vh;
+    overflow-y:auto;
+  }
+  .tree::-webkit-scrollbar{width:9px;}
+  .tree::-webkit-scrollbar-thumb{background:var(--line); border-radius:6px;}
+  .tree::-webkit-scrollbar-track{background:transparent;}
+
+  ul.node-list{ list-style:none; margin:0; padding-left:18px; }
+  ul.node-list.root{ padding-left:0; }
+
+  li.node{ position:relative; }
+  li.node::before{
+    content:"";
+    position:absolute;
+    left:-10px; top:0; bottom:0;
+    width:0;
+    border-left:1px dashed var(--line);
+  }
+  ul.node-list.root > li.node::before{ display:none; }
+
+  .row{
+    display:flex;
+    align-items:flex-start;
+    gap:6px;
+    padding:5px 8px 5px 4px;
+    margin:1px 0;
+    border-radius:3px;
+    cursor:pointer;
+    position:relative;
+  }
+  .row:hover{ background:var(--paper-2); }
+  .row.selected{
+    background:var(--accent-soft);
+    outline:1.5px solid var(--accent);
+  }
+
+  .twisty{
+    flex:0 0 16px;
+    width:16px; height:20px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:9px;
+    color:var(--muted);
+    transition:transform .15s;
+    user-select:none;
+    margin-top:1px;
+  }
+  .twisty.open{ transform:rotate(90deg); }
+  .twisty.leaf{ opacity:0; cursor:default; }
+
+  .code-chip{
+    flex:0 0 auto;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;
+    font-weight:600;
+    padding:1px 6px;
+    border-radius:9px;
+    line-height:16px;
+    margin-top:1px;
+    white-space:nowrap;
+    border:1px solid transparent;
+  }
+  .lvl-1 .code-chip{ background:var(--g1); color:var(--g1-line); border-color:var(--g1-line);}
+  .lvl-2 .code-chip{ background:var(--g2); color:var(--g2-line); border-color:var(--g2-line);}
+  .lvl-3 .code-chip, .lvl-4 .code-chip{ background:var(--paper-2); color:var(--muted); border-color:var(--line);}
+
+  .row .label{
+    font-size:12.5px;
+    line-height:1.45;
+    padding-top:1px;
+    color:var(--ink);
+  }
+  li.node[data-lvl="1"] > .row .label{ font-weight:700; font-size:13.5px; color:var(--brand-deep);}
+  li.node[data-lvl="2"] > .row .label{ font-weight:600; }
+  li.node[data-lvl="3"] > .row .label{ color:#3a352c; }
+  li.node[data-lvl="4"] > .row .label{ color:var(--muted); font-size:12px;}
+
+  .hit-mark{ background:#ffe49a; border-radius:2px; padding:0 1px; }
+  .hidden-by-filter{ display:none !important; }
+
+  /* group color rail per top branch */
+  li.node[data-branch="1"] > .row{ border-left:3px solid var(--g1-line); }
+  li.node[data-branch="2"] > .row{ border-left:3px solid var(--g2-line); }
+  li.node[data-branch="3"] > .row{ border-left:3px solid var(--g3-line); }
+  li.node[data-branch="4"] > .row{ border-left:3px solid var(--g4-line); }
+  li.node[data-lvl="0"] > .row{ border-left:none; }
+
+  /* ---------- Detail panel ---------- */
+  .detail-card{
+    position:sticky;
+    top:16px;
+    max-height:calc(74vh + 52px);
+    display:flex;
+    flex-direction:column;
+  }
+  .detail-head{
+    padding:14px 18px 12px;
+    border-bottom:2px solid var(--ink);
+    background:linear-gradient(180deg, var(--white), var(--paper-2));
+  }
+  .detail-head .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:var(--accent);
+    font-weight:700;
+    margin-bottom:5px;
+  }
+  .detail-head h3{
+    font-family:'Source Serif 4', serif;
+    font-size:17px;
+    line-height:1.3;
+    margin:0;
+    color:var(--brand-deep);
+    font-weight:600;
+  }
+  .breadcrumb{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;
+    color:var(--muted);
+    margin-top:8px;
+    line-height:1.6;
+    word-break:break-word;
+  }
+  .breadcrumb .sep{ color:var(--line); margin:0 3px;}
+
+  .detail-body{
+    padding:14px 18px 18px;
+    overflow-y:auto;
+  }
+  .field{
+    margin-bottom:13px;
+  }
+  .field:last-child{ margin-bottom:0; }
+  .field .k{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:9.5px;
+    letter-spacing:.09em;
+    text-transform:uppercase;
+    color:var(--gold);
+    font-weight:700;
+    margin-bottom:3px;
+    display:flex; align-items:center; gap:6px;
+  }
+  .field .k::before{
+    content:"";
+    width:5px;height:5px;
+    background:var(--gold);
+    border-radius:50%;
+    display:inline-block;
+  }
+  .field .v{
+    font-size:13px;
+    line-height:1.55;
+    color:var(--ink);
+    padding-left:11px;
+    border-left:1.5px solid var(--line-soft);
+  }
+  .field .v.mono{ font-family:'IBM Plex Mono',monospace; font-size:12px;}
+  .field .v.empty{ color:#b3aa97; font-style:italic; }
+
+  .status-pill{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    font-weight:600;
+    padding:2px 9px 2px 7px;
+    border-radius:10px;
+    background:#e3efdd;
+    color:#3f6b2b;
+    border:1px solid #9fbf8c;
+  }
+  .status-pill::before{ content:"●"; font-size:8px; }
+
+  .grid2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px 14px;
+  }
+
+  .empty-state{
+    padding:40px 22px;
+    text-align:center;
+    color:var(--muted);
+  }
+  .empty-state .glyph{
+    font-family:'Source Serif 4',serif;
+    font-size:34px;
+    color:var(--line);
+    margin-bottom:10px;
+  }
+  .empty-state p{ font-size:12.5px; line-height:1.6; max-width:240px; margin:0 auto;}
+
+  .footnote{
+    margin-top:18px;
+    padding-top:12px;
+    border-top:1px solid var(--line);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;
+    color:var(--muted);
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+
+  @media(max-width:640px){
+    .masthead h1{ font-size:22px; }
+    .masthead .stamp{ display:none; }
+    .grid2{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="masthead">
+    <div>
+      <div class="eyebrow">Sở Tài chính tỉnh Đồng Nai · Hệ thống Quản lý ASXH</div>
+      <h1>Danh mục Chính sách, Chế độ An sinh Xã hội</h1>
+      <div class="sub">Cây phân cấp chỉ tiêu báo cáo theo Biểu 01 và Phụ lục 01a–01s, kèm theo cây&nbsp;10 trường thông tin nghiệp vụ cho từng tiêu chí.</div>
+    </div>
+    <div class="stamp">
+      Căn cứ: <b>CV 3993/BTC-NSNN</b><br>
+      Ngày: <b>01/4/2026</b><br>
+      Phạm vi: <b>20 Phụ lục · 4 nhóm</b>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <div class="search">
+      <input id="searchInput" type="text" placeholder="Tìm theo mã, tên tiêu chí, biểu mẫu, căn cứ pháp lý…">
+    </div>
+    <button class="btn" id="expandAllBtn">Mở rộng tất cả</button>
+    <button class="btn" id="collapseAllBtn">Thu gọn tất cả</button>
+  </div>
+
+  <div class="legend" style="margin-bottom:14px;">
+    <span><span class="dot" style="background:var(--g1-line)"></span>1. GD-ĐT &amp; dạy nghề</span>
+    <span><span class="dot" style="background:var(--g2-line)"></span>2. Hỗ trợ BHYT</span>
+    <span><span class="dot" style="background:var(--g3-line)"></span>3. Đảm bảo xã hội</span>
+    <span><span class="dot" style="background:var(--g4-line)"></span>4. Sự nghiệp kinh tế</span>
+  </div>
+
+  <div class="stage">
+    <div class="panel-card tree-card">
+      <div class="panel-head">
+        <h2>Cây danh mục</h2>
+        <span class="count-badge" id="nodeCount">— tiêu chí</span>
+      </div>
+      <div class="tree" id="treeRoot"></div>
+    </div>
+
+    <div class="panel-card detail-card">
+      <div id="detailContent">
+        <div class="empty-state">
+          <div class="glyph">§</div>
+          <p>Chọn một tiêu chí trong cây để xem chi tiết 9 trường thông tin: Mã, Cấp, Tên tiêu chí, Tiêu chí cha, Loại–Khoản, Mục–Tiểu mục, Trạng thái, Căn cứ pháp lý, Mô tả, Biểu mẫu liên kết.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footnote">
+    <span>Nguồn: Sheet 01 — file tổng hợp gửi UBND tỉnh (giữ nguyên tên UBTP) · đối chiếu Phụ lục 01a–01s</span>
+    <span id="lastUpdated"></span>
+  </div>
+
+</div>
+
+<script>
+const DATA = {"id": "ROOT", "ma": "ASXH", "cap": 0, "ten": "DANH MỤC CHÍNH SÁCH, CHẾ ĐỘ AN SINH XÃ HỘI", "tieu_chi_cha": null, "loai_khoan": "", "muc_tieu_muc": "", "trang_thai": "active", "can_cu": "Công văn 3993/BTC-NSNN ngày 01/4/2026", "mo_ta": "Toàn bộ hệ thống chính sách, chế độ ASXH áp dụng trên địa bàn tỉnh Đồng Nai, tổng hợp theo Biểu 01 và 20 Phụ lục 01a-01s.", "bieu_mau": "Biểu 01", "children": [{"id": "N1", "ma": "1", "cap": 1, "ten": "Các chính sách thuộc sự nghiệp giáo dục - đào tạo và dạy nghề", "tieu_chi_cha": "ROOT", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề", "muc_tieu_muc": "6150 - Học bổng và hỗ trợ khác cho học sinh, sinh viên, cán bộ đi học; 6400 - Các khoản thanh toán khác cho cá nhân; 7000 - Chi phí nghiệp vụ chuyên môn của từng ngành; 7750 - Chi khác", "trang_thai": "active", "can_cu": "Tổng hợp nhóm chính sách", "mo_ta": "Nhóm chính sách giáo dục, đào tạo và dạy nghề, gồm 10 chính sách thành phần (1.1 - 1.10), chi tiết theo Phụ lục 01a-01k.", "bieu_mau": "Biểu 01", "children": [{"id": "N1.1", "ma": "1.1", "cap": 2, "ten": "Hỗ trợ chi phí học tập và miễn giảm học phí", "tieu_chi_cha": "N1", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 071 - Giáo dục mầm non; 072 - Giáo dục tiểu học; 073 - Giáo dục trung học cơ sở; 074 - Giáo dục trung học phổ thông", "muc_tieu_muc": "6150 - Học bổng và hỗ trợ khác cho học sinh, sinh viên, cán bộ đi học; 6156 - Hỗ trợ đối tượng chính sách đóng học phí; 6157 - Hỗ trợ đối tượng chính sách chi phí học tập; 7750 - Chi khác; 7766 - Cấp bù học phí cho cơ sở giáo dục đào tạo theo chế độ", "trang_thai": "active", "can_cu": "Nghị định 81/2021/NĐ-CP (27/08/2021); Nghị định 97/2023/NĐ-CP (31/12/2023)", "mo_ta": "Chính sách hỗ trợ chi phí học tập và miễn giảm học phí cho học sinh, sinh viên.", "bieu_mau": "Phụ lục 01a", "children": [{"id": "N1.1.1", "ma": "1.1-a", "cap": 3, "ten": "Cấp bù miễn, giảm học phí", "tieu_chi_cha": "N1.1", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 071 - Giáo dục mầm non; 072 - Giáo dục tiểu học; 073 - Giáo dục trung học cơ sở; 074 - Giáo dục trung học phổ thông", "muc_tieu_muc": "7750 - Chi khác; 7766 - Cấp bù học phí cho cơ sở giáo dục đào tạo theo chế độ", "trang_thai": "active", "can_cu": "NĐ 81/2021/NĐ-CP", "mo_ta": "Nhóm con: Miễn học phí; Hỗ trợ 70% học phí; Hỗ trợ 50% học phí", "bieu_mau": "Phụ lục 01a", "children": [{"id": "N1.1.1.1", "ma": "-", "cap": 4, "ten": "Miễn học phí", "tieu_chi_cha": "N1.1.1", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 071 - Giáo dục mầm non; 072 - Giáo dục tiểu học; 073 - Giáo dục trung học cơ sở; 074 - Giáo dục trung học phổ thông", "muc_tieu_muc": "7750 - Chi khác; 7766 - Cấp bù học phí cho cơ sở giáo dục đào tạo theo chế độ", "trang_thai": "active", "can_cu": "NĐ 81/2021/NĐ-CP", "mo_ta": "Đối tượng được miễn 100% học phí.", "bieu_mau": "Phụ lục 01a", "children": []}, {"id": "N1.1.1.2", "ma": "-", "cap": 4, "ten": "Hỗ trợ 70% học phí", "tieu_chi_cha": "N1.1.1", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 071 - Giáo dục mầm non; 072 - Giáo dục tiểu học; 073 - Giáo dục trung học cơ sở; 074 - Giáo dục trung học phổ thông", "muc_tieu_muc": "7750 - Chi khác; 7766 - Cấp bù học phí cho cơ sở giáo dục đào tạo theo chế độ", "trang_thai": "active", "can_cu": "NĐ 81/2021/NĐ-CP", "mo_ta": "Đối tượng được hỗ trợ 70% học phí.", "bieu_mau": "Phụ lục 01a", "children": []}, {"id": "N1.1.1.3", "ma": "-", "cap": 4, "ten": "Hỗ trợ 50% học phí", "tieu_chi_cha": "N1.1.1", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 071 - Giáo dục mầm non; 072 - Giáo dục tiểu học; 073 - Giáo dục trung học cơ sở; 074 - Giáo dục trung học phổ thông", "muc_tieu_muc": "7750 - Chi khác; 7766 - Cấp bù học phí cho cơ sở giáo dục đào tạo theo chế độ", "trang_thai": "active", "can_cu": "NĐ 81/2021/NĐ-CP", "mo_ta": "Đối tượng được hỗ trợ 50% học phí.", "bieu_mau": "Phụ lục 01a", "children": []}]}, {"id": "N1.1.2", "ma": "1.1-b", "cap": 3, "ten": "Hỗ trợ chi phí học tập", "tieu_chi_cha": "N1.1", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 071 - Giáo dục mầm non; 072 - Giáo dục tiểu học; 073 - Giáo dục trung học cơ sở; 074 - Giáo dục trung học phổ thông", "muc_tieu_muc": "6150 - Học bổng và hỗ trợ khác cho học sinh, sinh viên, cán bộ đi học; 6157 - Hỗ trợ đối tượng chính sách chi phí học tập", "trang_thai": "active", "can_cu": "NĐ 81/2021/NĐ-CP", "mo_ta": "Hỗ trợ chi phí học tập cho đối tượng chính sách.", "bieu_mau": "Phụ lục 01a", "children": []}]}, {"id": "N1.2", "ma": "1.2", "cap": 2, "ten": "Chính sách phát triển giáo dục mầm non", "tieu_chi_cha": "N1", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 071 - Giáo dục mầm non", "muc_tieu_muc": "6100 - Phụ cấp lương; 6113 - Phụ cấp trách nhiệm theo nghề, theo công việc; 6149 - Phụ cấp khác; 6400 - Các khoản thanh toán khác cho cá nhân; 6401 - Tiền ăn; 7000 - Chi phí nghiệp vụ chuyên môn của từng ngành; 7049 - Chi khác", "trang_thai": "active", "can_cu": "Nghị định 105/2020/NĐ-CP (08/09/2020)", "mo_ta": "Hỗ trợ ăn trưa, nấu ăn, giáo viên dạy lớp ghép bậc mầm non.", "bieu_mau": "Phụ lục 01b, 01c", "children": [{"id": "N1.2.1", "ma": "-", "cap": 3, "ten": "Hỗ trợ tiền ăn trưa trẻ em 3-5 tuổi", "tieu_chi_cha": "N1.2", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 071 - Giáo dục mầm non", "muc_tieu_muc": "6400 - Các khoản thanh toán khác cho cá nhân; 6401 - Tiền ăn", "trang_thai": "active", "can_cu": "NĐ 105/2020/NĐ-CP", "mo_ta": "Hỗ trợ tiền ăn trưa cho trẻ mẫu giáo 3-5 tuổi.", "bieu_mau": "Phụ lục 01b", "children": []}, {"id": "N1.2.2", "ma": "-", "cap": 3, "ten": "Hỗ trợ nấu ăn", "tieu_chi_cha": "N1.2", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 071 - Giáo dục mầm non", "muc_tieu_muc": "7000 - Chi phí nghiệp vụ chuyên môn của từng ngành; 7049 - Chi khác", "trang_thai": "active", "can_cu": "NĐ 105/2020/NĐ-CP", "mo_ta": "Hỗ trợ kinh phí nấu ăn cho trẻ mầm non bán trú.", "bieu_mau": "Phụ lục 01b", "children": []}, {"id": "N1.2.3", "ma": "-", "cap": 3, "ten": "Hỗ trợ giáo viên dạy lớp ghép", "tieu_chi_cha": "N1.2", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 071 - Giáo dục mầm non", "muc_tieu_muc": "6100 - Phụ cấp lương; 6113 - Phụ cấp trách nhiệm theo nghề, theo công việc", "trang_thai": "active", "can_cu": "NĐ 105/2020/NĐ-CP", "mo_ta": "Chế độ hỗ trợ giáo viên mầm non dạy lớp ghép (chi tiết Phụ lục 01c).", "bieu_mau": "Phụ lục 01c", "children": []}]}, {"id": "N1.3", "ma": "1.3", "cap": 2, "ten": "Học bổng, chi phí học tập cho học sinh khuyết tật", "tieu_chi_cha": "N1", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 071 - Giáo dục mầm non; 072 - Giáo dục tiểu học; 073 - Giáo dục trung học cơ sở; 074 - Giáo dục trung học phổ thông", "muc_tieu_muc": "6150 - Học bổng và hỗ trợ khác cho học sinh, sinh viên, cán bộ đi học; 6151 - Học bổng học sinh, sinh viên học trong nước (không bao gồm học sinh dân tộc nội trú); 6157 - Hỗ trợ đối tượng chính sách chi phí học tập", "trang_thai": "active", "can_cu": "Thông tư liên tịch 42/2013/TTLT-BGDĐT-BLĐTBXH-BTC (31/12/2013)", "mo_ta": "Hỗ trợ học bổng và mua phương tiện, đồ dùng học tập cho học sinh khuyết tật.", "bieu_mau": "Phụ lục 01d", "children": [{"id": "N1.3.1", "ma": "-", "cap": 3, "ten": "Hỗ trợ học bổng 80% mức lương cơ sở", "tieu_chi_cha": "N1.3", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 071 - Giáo dục mầm non; 072 - Giáo dục tiểu học; 073 - Giáo dục trung học cơ sở; 074 - Giáo dục trung học phổ thông", "muc_tieu_muc": "6150 - Học bổng và hỗ trợ khác cho học sinh, sinh viên, cán bộ đi học; 6151 - Học bổng học sinh, sinh viên học trong nước (không bao gồm học sinh dân tộc nội trú)", "trang_thai": "active", "can_cu": "TTLT 42/2013", "mo_ta": "Học bổng bằng 80% mức lương cơ sở/tháng.", "bieu_mau": "Phụ lục 01d", "children": []}, {"id": "N1.3.2", "ma": "-", "cap": 3, "ten": "Hỗ trợ mua phương tiện, đồ dùng học tập", "tieu_chi_cha": "N1.3", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 071 - Giáo dục mầm non; 072 - Giáo dục tiểu học; 073 - Giáo dục trung học cơ sở; 074 - Giáo dục trung học phổ thông", "muc_tieu_muc": "6150 - Học bổng và hỗ trợ khác cho học sinh, sinh viên, cán bộ đi học; 6157 - Hỗ trợ đối tượng chính sách chi phí học tập", "trang_thai": "active", "can_cu": "TTLT 42/2013", "mo_ta": "Mức hỗ trợ 01 triệu đồng/người/năm học.", "bieu_mau": "Phụ lục 01d", "children": []}]}, {"id": "N1.4", "ma": "1.4", "cap": 2, "ten": "Hỗ trợ học sinh PTTH vùng ĐBKK", "tieu_chi_cha": "N1", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 071 - Giáo dục mầm non; 072 - Giáo dục tiểu học; 073 - Giáo dục trung học cơ sở; 074 - Giáo dục trung học phổ thông", "muc_tieu_muc": "6150 - Học bổng và hỗ trợ khác cho học sinh, sinh viên, cán bộ đi học; 6199 - Các khoản hỗ trợ khác; 6400 - Các khoản thanh toán khác cho cá nhân; 6401 - Tiền ăn; 7000 - Chi phí nghiệp vụ chuyên môn của từng ngành; 7001 - Chi mua hàng hóa, vật tư; 7049 - Chi khác", "trang_thai": "active", "can_cu": "Nghị định 116/2016/NĐ-CP (18/07/2016); Nghị định 66/2025/NĐ-CP (12/3/2025)", "mo_ta": "Hỗ trợ học sinh bán trú, dân tộc nội trú, dự bị đại học và trẻ nhà trẻ bán trú vùng đặc biệt khó khăn.", "bieu_mau": "Phụ lục 01e", "children": [{"id": "N1.4.1", "ma": "-", "cap": 3, "ten": "Học sinh bán trú, học sinh dân tộc nội trú và học sinh dự bị đại học", "tieu_chi_cha": "N1.4", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 072 - Giáo dục tiểu học; 073 - Giáo dục trung học cơ sở; 074 - Giáo dục trung học phổ thông", "muc_tieu_muc": "6150 - Học bổng và hỗ trợ khác cho học sinh, sinh viên, cán bộ đi học; 6199 - Các khoản hỗ trợ khác; 6400 - Các khoản thanh toán khác cho cá nhân; 6401 - Tiền ăn; 7000 - Chi phí nghiệp vụ chuyên môn của từng ngành; 7001 - Chi mua hàng hóa, vật tư; 7049 - Chi khác", "trang_thai": "active", "can_cu": "NĐ 116/2016, NĐ 66/2025", "mo_ta": "Nhóm đối tượng học sinh bán trú/nội trú/dự bị đại học.", "bieu_mau": "Phụ lục 01e", "children": [{"id": "N1.4.1.1", "ma": "-", "cap": 4, "ten": "Hỗ trợ tiền ăn", "tieu_chi_cha": "N1.4.1", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 072 - Giáo dục tiểu học; 073 - Giáo dục trung học cơ sở; 074 - Giáo dục trung học phổ thông", "muc_tieu_muc": "6400 - Các khoản thanh toán khác cho cá nhân; 6401 - Tiền ăn", "trang_thai": "active", "can_cu": "NĐ 116/2016, NĐ 66/2025", "mo_ta": "", "bieu_mau": "Phụ lục 01e", "children": []}, {"id": "N1.4.1.2", "ma": "-", "cap": 4, "ten": "Hỗ trợ tiền nhà ở", "tieu_chi_cha": "N1.4.1", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 072 - Giáo dục tiểu học; 073 - Giáo dục trung học cơ sở; 074 - Giáo dục trung học phổ thông", "muc_tieu_muc": "6150 - Học bổng và hỗ trợ khác cho học sinh, sinh viên, cán bộ đi học; 6199 - Các khoản hỗ trợ khác", "trang_thai": "active", "can_cu": "NĐ 116/2016, NĐ 66/2025", "mo_ta": "", "bieu_mau": "Phụ lục 01e", "children": []}, {"id": "N1.4.1.3", "ma": "-", "cap": 4, "ten": "Hỗ trợ Trường PTDT bán trú mua sắm dụng cụ, tủ thuốc dùng chung", "tieu_chi_cha": "N1.4.1", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 072 - Giáo dục tiểu học; 073 - Giáo dục trung học cơ sở; 074 - Giáo dục trung học phổ thông", "muc_tieu_muc": "7000 - Chi phí nghiệp vụ chuyên môn của từng ngành; 7001 - Chi mua hàng hóa, vật tư", "trang_thai": "active", "can_cu": "NĐ 116/2016, NĐ 66/2025", "mo_ta": "", "bieu_mau": "Phụ lục 01e", "children": []}, {"id": "N1.4.1.4", "ma": "-", "cap": 4, "ten": "Hỗ trợ kinh phí tổ chức nấu ăn cho trường", "tieu_chi_cha": "N1.4.1", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 072 - Giáo dục tiểu học; 073 - Giáo dục trung học cơ sở; 074 - Giáo dục trung học phổ thông", "muc_tieu_muc": "7000 - Chi phí nghiệp vụ chuyên môn của từng ngành; 7049 - Chi khác", "trang_thai": "active", "can_cu": "NĐ 116/2016, NĐ 66/2025", "mo_ta": "", "bieu_mau": "Phụ lục 01e", "children": []}]}, {"id": "N1.4.2", "ma": "-", "cap": 3, "ten": "Trẻ em nhà trẻ bán trú", "tieu_chi_cha": "N1.4", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 071 - Giáo dục mầm non", "muc_tieu_muc": "6400 - Các khoản thanh toán khác cho cá nhân; 6401 - Tiền ăn; 7000 - Chi phí nghiệp vụ chuyên môn của từng ngành; 7001 - Chi mua hàng hóa, vật tư", "trang_thai": "active", "can_cu": "NĐ 116/2016, NĐ 66/2025", "mo_ta": "Nhóm đối tượng trẻ nhà trẻ bán trú.", "bieu_mau": "Phụ lục 01e", "children": [{"id": "N1.4.2.1", "ma": "-", "cap": 4, "ten": "Hỗ trợ tiền ăn", "tieu_chi_cha": "N1.4.2", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 071 - Giáo dục mầm non", "muc_tieu_muc": "6400 - Các khoản thanh toán khác cho cá nhân; 6401 - Tiền ăn", "trang_thai": "active", "can_cu": "NĐ 116/2016, NĐ 66/2025", "mo_ta": "", "bieu_mau": "Phụ lục 01e", "children": []}, {"id": "N1.4.2.2", "ma": "-", "cap": 4, "ten": "Hỗ trợ tiền mua đồ dùng cá nhân cho cơ sở giáo dục mầm non", "tieu_chi_cha": "N1.4.2", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 071 - Giáo dục mầm non", "muc_tieu_muc": "7000 - Chi phí nghiệp vụ chuyên môn của từng ngành; 7001 - Chi mua hàng hóa, vật tư", "trang_thai": "active", "can_cu": "NĐ 116/2016, NĐ 66/2025", "mo_ta": "", "bieu_mau": "Phụ lục 01e", "children": []}]}]}, {"id": "N1.5", "ma": "1.5", "cap": 2, "ten": "Hỗ trợ chi phí học tập đối với sinh viên DTTS", "tieu_chi_cha": "N1", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 081 - Giáo dục đại học; 093 - Giáo dục nghề nghiệp trình độ cao đẳng", "muc_tieu_muc": "6150 - Học bổng và hỗ trợ khác cho học sinh, sinh viên, cán bộ đi học; 6157 - Hỗ trợ đối tượng chính sách chi phí học tập", "trang_thai": "active", "can_cu": "Quyết định 66/2013/QĐ-TTg (11/11/2013)", "mo_ta": "Hỗ trợ chi phí học tập đối với sinh viên là người dân tộc thiểu số.", "bieu_mau": "Phụ lục 01f", "children": []}, {"id": "N1.6", "ma": "1.6", "cap": 2, "ten": "Hỗ trợ chính sách nội trú đối với học sinh, sinh viên cao đẳng, trung cấp", "tieu_chi_cha": "N1", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 092 - Giáo dục nghề nghiệp trình độ trung cấp; 093 - Giáo dục nghề nghiệp trình độ cao đẳng", "muc_tieu_muc": "6150 - Học bổng và hỗ trợ khác cho học sinh, sinh viên, cán bộ đi học; 6151 - Học bổng học sinh, sinh viên học trong nước (không bao gồm học sinh dân tộc nội trú); 6199 - Các khoản hỗ trợ khác", "trang_thai": "active", "can_cu": "Quyết định 53/2015/QĐ-TTg (20/10/2015)", "mo_ta": "Hỗ trợ học bổng chính sách và hỗ trợ một lần cho HSSV nội trú trường cao đẳng, trung cấp.", "bieu_mau": "Phụ lục 01g", "children": [{"id": "N1.6.1", "ma": "-", "cap": 3, "ten": "Hỗ trợ học bổng chính sách", "tieu_chi_cha": "N1.6", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 092 - Giáo dục nghề nghiệp trình độ trung cấp; 093 - Giáo dục nghề nghiệp trình độ cao đẳng", "muc_tieu_muc": "6150 - Học bổng và hỗ trợ khác cho học sinh, sinh viên, cán bộ đi học; 6151 - Học bổng học sinh, sinh viên học trong nước (không bao gồm học sinh dân tộc nội trú)", "trang_thai": "active", "can_cu": "QĐ 53/2015/QĐ-TTg", "mo_ta": "Theo mức 100%/80%/60% lương cơ sở/tháng.", "bieu_mau": "Phụ lục 01g", "children": [{"id": "N1.6.1.1", "ma": "-", "cap": 4, "ten": "100% lương cơ sở/tháng", "tieu_chi_cha": "N1.6.1", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 092 - Giáo dục nghề nghiệp trình độ trung cấp; 093 - Giáo dục nghề nghiệp trình độ cao đẳng", "muc_tieu_muc": "6150 - Học bổng và hỗ trợ khác cho học sinh, sinh viên, cán bộ đi học; 6151 - Học bổng học sinh, sinh viên học trong nước (không bao gồm học sinh dân tộc nội trú)", "trang_thai": "active", "can_cu": "QĐ 53/2015/QĐ-TTg", "mo_ta": "", "bieu_mau": "Phụ lục 01g", "children": []}, {"id": "N1.6.1.2", "ma": "-", "cap": 4, "ten": "80% lương cơ sở/tháng", "tieu_chi_cha": "N1.6.1", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 092 - Giáo dục nghề nghiệp trình độ trung cấp; 093 - Giáo dục nghề nghiệp trình độ cao đẳng", "muc_tieu_muc": "6150 - Học bổng và hỗ trợ khác cho học sinh, sinh viên, cán bộ đi học; 6151 - Học bổng học sinh, sinh viên học trong nước (không bao gồm học sinh dân tộc nội trú)", "trang_thai": "active", "can_cu": "QĐ 53/2015/QĐ-TTg", "mo_ta": "", "bieu_mau": "Phụ lục 01g", "children": []}, {"id": "N1.6.1.3", "ma": "-", "cap": 4, "ten": "60% lương cơ sở/tháng", "tieu_chi_cha": "N1.6.1", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 092 - Giáo dục nghề nghiệp trình độ trung cấp; 093 - Giáo dục nghề nghiệp trình độ cao đẳng", "muc_tieu_muc": "6150 - Học bổng và hỗ trợ khác cho học sinh, sinh viên, cán bộ đi học; 6151 - Học bổng học sinh, sinh viên học trong nước (không bao gồm học sinh dân tộc nội trú)", "trang_thai": "active", "can_cu": "QĐ 53/2015/QĐ-TTg", "mo_ta": "", "bieu_mau": "Phụ lục 01g", "children": []}]}, {"id": "N1.6.2", "ma": "-", "cap": 3, "ten": "Hỗ trợ 1 lần (đồ dùng cá nhân, tiền đi lại, Tết)", "tieu_chi_cha": "N1.6", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 092 - Giáo dục nghề nghiệp trình độ trung cấp; 093 - Giáo dục nghề nghiệp trình độ cao đẳng", "muc_tieu_muc": "6150 - Học bổng và hỗ trợ khác cho học sinh, sinh viên, cán bộ đi học; 6199 - Các khoản hỗ trợ khác", "trang_thai": "active", "can_cu": "QĐ 53/2015/QĐ-TTg", "mo_ta": "1 triệu đồng/khóa mua đồ dùng cá nhân; tiền đi lại 200 nghìn (vùng ĐBKK 300 nghìn)/năm; 150 nghìn nếu Tết ở lại.", "bieu_mau": "Phụ lục 01g", "children": []}]}, {"id": "N1.7", "ma": "1.7", "cap": 2, "ten": "Hỗ trợ học bổng học sinh dân tộc nội trú", "tieu_chi_cha": "N1", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 072 - Giáo dục tiểu học; 073 - Giáo dục trung học cơ sở; 074 - Giáo dục trung học phổ thông", "muc_tieu_muc": "6150 - Học bổng và hỗ trợ khác cho học sinh, sinh viên, cán bộ đi học; 6152 - Học sinh dân tộc nội trú", "trang_thai": "active", "can_cu": "Nghị định 84/2020/NĐ-CP (17/7/2020)", "mo_ta": "Hỗ trợ học bổng 80% mức lương cơ sở cho học sinh dân tộc nội trú.", "bieu_mau": "Phụ lục 01h", "children": []}, {"id": "N1.8", "ma": "1.8", "cap": 2, "ten": "Ưu tiên tuyển sinh và hỗ trợ học tập đối với DTTS rất ít người", "tieu_chi_cha": "N1", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 071 - Giáo dục mầm non; 072 - Giáo dục tiểu học; 073 - Giáo dục trung học cơ sở; 074 - Giáo dục trung học phổ thông; 081 - Giáo dục đại học; 093 - Giáo dục nghề nghiệp trình độ cao đẳng", "muc_tieu_muc": "6150 - Học bổng và hỗ trợ khác cho học sinh, sinh viên, cán bộ đi học; 6151 - Học bổng học sinh, sinh viên học trong nước (không bao gồm học sinh dân tộc nội trú); 6152 - Học sinh dân tộc nội trú; 6157 - Hỗ trợ đối tượng chính sách chi phí học tập; 6199 - Các khoản hỗ trợ khác", "trang_thai": "active", "can_cu": "Nghị định 57/2017/NĐ-CP (05/5/2017)", "mo_ta": "Hỗ trợ trẻ mẫu giáo, học sinh, sinh viên dân tộc thiểu số rất ít người theo các cấp học.", "bieu_mau": "Phụ lục 01i", "children": [{"id": "N1.8.1", "ma": "-", "cap": 3, "ten": "Trẻ mẫu giáo DTTS rất ít người", "tieu_chi_cha": "N1.8", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 071 - Giáo dục mầm non", "muc_tieu_muc": "6150 - Học bổng và hỗ trợ khác cho học sinh, sinh viên, cán bộ đi học; 6157 - Hỗ trợ đối tượng chính sách chi phí học tập", "trang_thai": "active", "can_cu": "NĐ 57/2017/NĐ-CP", "mo_ta": "Hỗ trợ 30% mức hỗ trợ.", "bieu_mau": "Phụ lục 01i", "children": []}, {"id": "N1.8.2", "ma": "-", "cap": 3, "ten": "Học sinh DTTS rất ít người trường tiểu học, THCS, THPT", "tieu_chi_cha": "N1.8", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 072 - Giáo dục tiểu học; 073 - Giáo dục trung học cơ sở; 074 - Giáo dục trung học phổ thông", "muc_tieu_muc": "6150 - Học bổng và hỗ trợ khác cho học sinh, sinh viên, cán bộ đi học; 6157 - Hỗ trợ đối tượng chính sách chi phí học tập", "trang_thai": "active", "can_cu": "NĐ 57/2017/NĐ-CP", "mo_ta": "Hỗ trợ 40% mức hỗ trợ.", "bieu_mau": "Phụ lục 01i", "children": []}, {"id": "N1.8.3", "ma": "-", "cap": 3, "ten": "Học sinh DTTS rất ít người trường phổ thông dân tộc bán trú", "tieu_chi_cha": "N1.8", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 072 - Giáo dục tiểu học; 073 - Giáo dục trung học cơ sở; 074 - Giáo dục trung học phổ thông", "muc_tieu_muc": "6150 - Học bổng và hỗ trợ khác cho học sinh, sinh viên, cán bộ đi học; 6157 - Hỗ trợ đối tượng chính sách chi phí học tập", "trang_thai": "active", "can_cu": "NĐ 57/2017/NĐ-CP", "mo_ta": "Hỗ trợ 60% mức hỗ trợ.", "bieu_mau": "Phụ lục 01i", "children": []}, {"id": "N1.8.4", "ma": "-", "cap": 3, "ten": "Học sinh DTTS rất ít người trường phổ thông dân tộc nội trú", "tieu_chi_cha": "N1.8", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 072 - Giáo dục tiểu học; 073 - Giáo dục trung học cơ sở; 074 - Giáo dục trung học phổ thông; 081 - Giáo dục đại học; 093 - Giáo dục nghề nghiệp trình độ cao đẳng", "muc_tieu_muc": "6150 - Học bổng và hỗ trợ khác cho học sinh, sinh viên, cán bộ đi học; 6152 - Học sinh dân tộc nội trú; 6151 - Học bổng học sinh, sinh viên học trong nước (không bao gồm học sinh dân tộc nội trú); 6157 - Hỗ trợ đối tượng chính sách chi phí học tập; 6199 - Các khoản hỗ trợ khác", "trang_thai": "active", "can_cu": "NĐ 57/2017/NĐ-CP", "mo_ta": "Hỗ trợ 100% mức hỗ trợ.", "bieu_mau": "Phụ lục 01i", "children": []}, {"id": "N1.8.5", "ma": "-", "cap": 3, "ten": "Sinh viên DTTS rất ít người tại trường, khoa dự bị, cơ sở giáo dục đại học/nghề nghiệp", "tieu_chi_cha": "N1.8", "loai_khoan": "", "muc_tieu_muc": "", "trang_thai": "active", "can_cu": "NĐ 57/2017/NĐ-CP", "mo_ta": "Hỗ trợ 100% mức hỗ trợ.", "bieu_mau": "Phụ lục 01i", "children": []}]}, {"id": "N1.9", "ma": "1.9", "cap": 2, "ten": "Hỗ trợ sinh hoạt phí và học phí cho sinh viên sư phạm", "tieu_chi_cha": "N1", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 081 - Giáo dục đại học; 093 - Giáo dục nghề nghiệp trình độ cao đẳng", "muc_tieu_muc": "6150 - Học bổng và hỗ trợ khác cho học sinh, sinh viên, cán bộ đi học; 6156 - Hỗ trợ đối tượng chính sách đóng học phí; 6199 - Các khoản hỗ trợ khác; 7750 - Chi khác; 7766 - Cấp bù học phí cho cơ sở giáo dục đào tạo theo chế độ", "trang_thai": "active", "can_cu": "Nghị định 116/2020/NĐ-CP (25/09/2020); Nghị định 60/2025/NĐ-CP (03/3/2025)", "mo_ta": "Hỗ trợ học phí và chi phí sinh hoạt cho sinh viên sư phạm.", "bieu_mau": "Phụ lục 01j", "children": [{"id": "N1.9.1", "ma": "-", "cap": 3, "ten": "Hỗ trợ học phí", "tieu_chi_cha": "N1.9", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 081 - Giáo dục đại học; 093 - Giáo dục nghề nghiệp trình độ cao đẳng", "muc_tieu_muc": "7750 - Chi khác; 7766 - Cấp bù học phí cho cơ sở giáo dục đào tạo theo chế độ", "trang_thai": "active", "can_cu": "NĐ 116/2020, NĐ 60/2025", "mo_ta": "", "bieu_mau": "Phụ lục 01j", "children": []}, {"id": "N1.9.2", "ma": "-", "cap": 3, "ten": "Hỗ trợ sinh hoạt phí", "tieu_chi_cha": "N1.9", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 081 - Giáo dục đại học; 093 - Giáo dục nghề nghiệp trình độ cao đẳng", "muc_tieu_muc": "6150 - Học bổng và hỗ trợ khác cho học sinh, sinh viên, cán bộ đi học; 6199 - Các khoản hỗ trợ khác", "trang_thai": "active", "can_cu": "NĐ 116/2020, NĐ 60/2025", "mo_ta": "", "bieu_mau": "Phụ lục 01j", "children": []}]}, {"id": "N1.10", "ma": "1.10", "cap": 2, "ten": "Kinh phí phổ cập giáo dục mầm non", "tieu_chi_cha": "N1", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 071 - Giáo dục mầm non", "muc_tieu_muc": "6150 - Học bổng và hỗ trợ khác cho học sinh, sinh viên, cán bộ đi học; 6157 - Hỗ trợ đối tượng chính sách chi phí học tập; 6400 - Các khoản thanh toán khác cho cá nhân; 6401 - Tiền ăn; 6449 - Chi khác", "trang_thai": "active", "can_cu": "Nghị định 277/2025/NĐ-CP", "mo_ta": "Hỗ trợ ăn trưa, chi phí học tập, phổ cập giáo dục và tuyển dụng một lần cho trẻ mầm non 3-5 tuổi.", "bieu_mau": "Phụ lục 01k", "children": [{"id": "N1.10.1", "ma": "-", "cap": 3, "ten": "Hỗ trợ ăn trưa", "tieu_chi_cha": "N1.10", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 071 - Giáo dục mầm non", "muc_tieu_muc": "6400 - Các khoản thanh toán khác cho cá nhân; 6401 - Tiền ăn", "trang_thai": "active", "can_cu": "NĐ 277/2025/NĐ-CP", "mo_ta": "", "bieu_mau": "Phụ lục 01k", "children": []}, {"id": "N1.10.2", "ma": "-", "cap": 3, "ten": "Hỗ trợ chi phí học tập", "tieu_chi_cha": "N1.10", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 071 - Giáo dục mầm non", "muc_tieu_muc": "6150 - Học bổng và hỗ trợ khác cho học sinh, sinh viên, cán bộ đi học; 6157 - Hỗ trợ đối tượng chính sách chi phí học tập", "trang_thai": "active", "can_cu": "NĐ 277/2025/NĐ-CP", "mo_ta": "", "bieu_mau": "Phụ lục 01k", "children": []}, {"id": "N1.10.3", "ma": "-", "cap": 3, "ten": "Hỗ trợ phổ cập giáo dục", "tieu_chi_cha": "N1.10", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 071 - Giáo dục mầm non", "muc_tieu_muc": "6400 - Các khoản thanh toán khác cho cá nhân; 6449 - Chi khác", "trang_thai": "active", "can_cu": "NĐ 277/2025/NĐ-CP", "mo_ta": "", "bieu_mau": "Phụ lục 01k", "children": []}, {"id": "N1.10.4", "ma": "-", "cap": 3, "ten": "Hỗ trợ tuyển dụng một lần", "tieu_chi_cha": "N1.10", "loai_khoan": "070 - Giáo dục - đào tạo và dạy nghề; 071 - Giáo dục mầm non", "muc_tieu_muc": "6400 - Các khoản thanh toán khác cho cá nhân; 6449 - Chi khác", "trang_thai": "active", "can_cu": "NĐ 277/2025/NĐ-CP", "mo_ta": "", "bieu_mau": "Phụ lục 01k", "children": []}]}]}, {"id": "N2", "ma": "2", "cap": 1, "ten": "Các chính sách hỗ trợ BHYT", "tieu_chi_cha": "ROOT", "loai_khoan": "130 - Y tế, dân số và gia đình", "muc_tieu_muc": "6300 - Các khoản đóng góp; 6302 - Bảo hiểm y tế; 7150 - Chi về công tác người có công với cách mạng; 7155 - Bảo hiểm y tế; 7250 - Chi lương hưu và trợ cấp bảo hiểm xã hội; 7251 - Bảo hiểm y tế; 7450 - Chi về công tác bảo đảm xã hội; 7451 - Chi đóng, hỗ trợ tiền đóng tiền bảo hiểm y tế", "trang_thai": "active", "can_cu": "Luật BHYT; Nghị định 146/2018/NĐ-CP (17/10/2018); Nghị định 75/2023/NĐ-CP (19/10/2023)", "mo_ta": "Nhóm chính sách hỗ trợ mua, đóng BHYT cho các nhóm đối tượng chính sách, gồm 18 chỉ tiêu thành phần (2.1 - 2.18), chi tiết theo Phụ lục 01l.", "bieu_mau": "Phụ lục 01l", "children": [{"id": "N2.1", "ma": "2.1", "cap": 2, "ten": "Hộ nghèo, DTTS vùng KT-XH khó khăn, ĐBKK, xã đảo, huyện đảo, cận nghèo vùng DTTS-MN", "tieu_chi_cha": "N2", "loai_khoan": "130 - Y tế, dân số và gia đình; 133 - Hỗ trợ kinh phí mua thẻ bảo hiểm y tế cho các đối tượng chính sách", "muc_tieu_muc": "7450 - Chi về công tác bảo đảm xã hội; 7451 - Chi đóng, hỗ trợ tiền đóng tiền bảo hiểm y tế", "trang_thai": "active", "can_cu": "NĐ 146/2018, NĐ 75/2023", "mo_ta": "", "bieu_mau": "Phụ lục 01l", "children": []}, {"id": "N2.2", "ma": "2.2", "cap": 2, "ten": "Đối tượng BTXH, người hưởng trợ cấp nuôi dưỡng/trợ cấp tuất hằng tháng thuộc đối tượng TCXH", "tieu_chi_cha": "N2", "loai_khoan": "130 - Y tế, dân số và gia đình; 133 - Hỗ trợ kinh phí mua thẻ bảo hiểm y tế cho các đối tượng chính sách", "muc_tieu_muc": "7450 - Chi về công tác bảo đảm xã hội; 7451 - Chi đóng, hỗ trợ tiền đóng tiền bảo hiểm y tế", "trang_thai": "active", "can_cu": "NĐ 146/2018, NĐ 75/2023", "mo_ta": "", "bieu_mau": "Phụ lục 01l", "children": []}, {"id": "N2.3", "ma": "2.3", "cap": 2, "ten": "BHYT cho trẻ em dưới 06 tuổi", "tieu_chi_cha": "N2", "loai_khoan": "130 - Y tế, dân số và gia đình; 133 - Hỗ trợ kinh phí mua thẻ bảo hiểm y tế cho các đối tượng chính sách", "muc_tieu_muc": "7450 - Chi về công tác bảo đảm xã hội; 7451 - Chi đóng, hỗ trợ tiền đóng tiền bảo hiểm y tế", "trang_thai": "active", "can_cu": "NĐ 146/2018, NĐ 75/2023", "mo_ta": "", "bieu_mau": "Phụ lục 01l", "children": []}, {"id": "N2.4", "ma": "2.4", "cap": 2, "ten": "BHYT đối với học sinh, sinh viên", "tieu_chi_cha": "N2", "loai_khoan": "130 - Y tế, dân số và gia đình; 133 - Hỗ trợ kinh phí mua thẻ bảo hiểm y tế cho các đối tượng chính sách", "muc_tieu_muc": "7450 - Chi về công tác bảo đảm xã hội; 7451 - Chi đóng, hỗ trợ tiền đóng tiền bảo hiểm y tế", "trang_thai": "active", "can_cu": "NĐ 146/2018, NĐ 75/2023", "mo_ta": "", "bieu_mau": "Phụ lục 01l", "children": []}, {"id": "N2.5", "ma": "2.5", "cap": 2, "ten": "BHYT đối với cựu chiến binh, thanh niên xung phong, dân công hỏa tuyến", "tieu_chi_cha": "N2", "loai_khoan": "130 - Y tế, dân số và gia đình; 133 - Hỗ trợ kinh phí mua thẻ bảo hiểm y tế cho các đối tượng chính sách", "muc_tieu_muc": "7150 - Chi về công tác người có công với cách mạng; 7155 - Bảo hiểm y tế", "trang_thai": "active", "can_cu": "NĐ 146/2018, NĐ 75/2023", "mo_ta": "", "bieu_mau": "Phụ lục 01l", "children": []}, {"id": "N2.6", "ma": "2.6", "cap": 2, "ten": "BHYT cho người thuộc hộ cận nghèo, hộ nông-lâm-ngư-diêm nghiệp mức sống trung bình", "tieu_chi_cha": "N2", "loai_khoan": "130 - Y tế, dân số và gia đình; 133 - Hỗ trợ kinh phí mua thẻ bảo hiểm y tế cho các đối tượng chính sách", "muc_tieu_muc": "7450 - Chi về công tác bảo đảm xã hội; 7451 - Chi đóng, hỗ trợ tiền đóng tiền bảo hiểm y tế", "trang_thai": "active", "can_cu": "NĐ 146/2018, NĐ 75/2023", "mo_ta": "", "bieu_mau": "Phụ lục 01l", "children": [{"id": "N2.6.1", "ma": "-", "cap": 3, "ten": "Cận nghèo", "tieu_chi_cha": "N2.6", "loai_khoan": "130 - Y tế, dân số và gia đình; 133 - Hỗ trợ kinh phí mua thẻ bảo hiểm y tế cho các đối tượng chính sách", "muc_tieu_muc": "7450 - Chi về công tác bảo đảm xã hội; 7451 - Chi đóng, hỗ trợ tiền đóng tiền bảo hiểm y tế", "trang_thai": "active", "can_cu": "NĐ 146/2018, NĐ 75/2023", "mo_ta": "", "bieu_mau": "Phụ lục 01l", "children": [{"id": "N2.6.1.1", "ma": "-", "cap": 4, "ten": "Cận nghèo 100%", "tieu_chi_cha": "N2.6.1", "loai_khoan": "130 - Y tế, dân số và gia đình; 133 - Hỗ trợ kinh phí mua thẻ bảo hiểm y tế cho các đối tượng chính sách", "muc_tieu_muc": "7450 - Chi về công tác bảo đảm xã hội; 7451 - Chi đóng, hỗ trợ tiền đóng tiền bảo hiểm y tế", "trang_thai": "active", "can_cu": "NĐ 146/2018, NĐ 75/2023", "mo_ta": "", "bieu_mau": "Phụ lục 01l", "children": []}, {"id": "N2.6.1.2", "ma": "-", "cap": 4, "ten": "Cận nghèo 70%", "tieu_chi_cha": "N2.6.1", "loai_khoan": "130 - Y tế, dân số và gia đình; 133 - Hỗ trợ kinh phí mua thẻ bảo hiểm y tế cho các đối tượng chính sách", "muc_tieu_muc": "7450 - Chi về công tác bảo đảm xã hội; 7451 - Chi đóng, hỗ trợ tiền đóng tiền bảo hiểm y tế", "trang_thai": "active", "can_cu": "NĐ 146/2018, NĐ 75/2023", "mo_ta": "", "bieu_mau": "Phụ lục 01l", "children": []}]}, {"id": "N2.6.2", "ma": "-", "cap": 3, "ten": "Hộ nông lâm ngư nghiệp", "tieu_chi_cha": "N2.6", "loai_khoan": "130 - Y tế, dân số và gia đình; 133 - Hỗ trợ kinh phí mua thẻ bảo hiểm y tế cho các đối tượng chính sách", "muc_tieu_muc": "7450 - Chi về công tác bảo đảm xã hội; 7451 - Chi đóng, hỗ trợ tiền đóng tiền bảo hiểm y tế", "trang_thai": "active", "can_cu": "NĐ 146/2018, NĐ 75/2023", "mo_ta": "", "bieu_mau": "Phụ lục 01l", "children": []}]}, {"id": "N2.7", "ma": "2.7", "cap": 2, "ten": "BHYT cho người hiến tạng", "tieu_chi_cha": "N2", "loai_khoan": "130 - Y tế, dân số và gia đình; 133 - Hỗ trợ kinh phí mua thẻ bảo hiểm y tế cho các đối tượng chính sách", "muc_tieu_muc": "7450 - Chi về công tác bảo đảm xã hội; 7451 - Chi đóng, hỗ trợ tiền đóng tiền bảo hiểm y tế", "trang_thai": "active", "can_cu": "NĐ 146/2018, NĐ 75/2023", "mo_ta": "", "bieu_mau": "Phụ lục 01l", "children": []}, {"id": "N2.8", "ma": "2.8", "cap": 2, "ten": "Người ≥75 tuổi hưởng trợ cấp tuất hằng tháng; 70-75 tuổi thuộc hộ cận nghèo hưởng trợ cấp tuất", "tieu_chi_cha": "N2", "loai_khoan": "130 - Y tế, dân số và gia đình; 133 - Hỗ trợ kinh phí mua thẻ bảo hiểm y tế cho các đối tượng chính sách", "muc_tieu_muc": "7250 - Chi lương hưu và trợ cấp bảo hiểm xã hội; 7251 - Bảo hiểm y tế", "trang_thai": "active", "can_cu": "NĐ 146/2018, NĐ 75/2023", "mo_ta": "", "bieu_mau": "Phụ lục 01l", "children": []}, {"id": "N2.9", "ma": "2.9", "cap": 2, "ten": "BHYT cho người dân các xã ATK, vùng ATK cách mạng", "tieu_chi_cha": "N2", "loai_khoan": "130 - Y tế, dân số và gia đình; 133 - Hỗ trợ kinh phí mua thẻ bảo hiểm y tế cho các đối tượng chính sách", "muc_tieu_muc": "7450 - Chi về công tác bảo đảm xã hội; 7451 - Chi đóng, hỗ trợ tiền đóng tiền bảo hiểm y tế", "trang_thai": "active", "can_cu": "NĐ 146/2018, NĐ 75/2023", "mo_ta": "", "bieu_mau": "Phụ lục 01l", "children": []}, {"id": "N2.10", "ma": "2.10", "cap": 2, "ten": "Người hưởng trợ cấp nuôi dưỡng/trợ cấp tuất hằng tháng thuộc đối tượng TCXH", "tieu_chi_cha": "N2", "loai_khoan": "130 - Y tế, dân số và gia đình; 133 - Hỗ trợ kinh phí mua thẻ bảo hiểm y tế cho các đối tượng chính sách", "muc_tieu_muc": "7450 - Chi về công tác bảo đảm xã hội; 7451 - Chi đóng, hỗ trợ tiền đóng tiền bảo hiểm y tế", "trang_thai": "active", "can_cu": "NĐ 146/2018, NĐ 75/2023", "mo_ta": "", "bieu_mau": "Phụ lục 01l", "children": []}, {"id": "N2.11", "ma": "2.11", "cap": 2, "ten": "Người đang hưởng trợ cấp hưu trí xã hội hằng tháng", "tieu_chi_cha": "N2", "loai_khoan": "130 - Y tế, dân số và gia đình; 133 - Hỗ trợ kinh phí mua thẻ bảo hiểm y tế cho các đối tượng chính sách", "muc_tieu_muc": "7450 - Chi về công tác bảo đảm xã hội; 7451 - Chi đóng, hỗ trợ tiền đóng tiền bảo hiểm y tế", "trang_thai": "active", "can_cu": "NĐ 146/2018, NĐ 75/2023", "mo_ta": "", "bieu_mau": "Phụ lục 01l", "children": []}, {"id": "N2.12", "ma": "2.12", "cap": 2, "ten": "Người không đủ điều kiện hưởng lương hưu, chưa đủ tuổi hưởng TCHTXH, đang hưởng TC hằng tháng", "tieu_chi_cha": "N2", "loai_khoan": "130 - Y tế, dân số và gia đình; 133 - Hỗ trợ kinh phí mua thẻ bảo hiểm y tế cho các đối tượng chính sách", "muc_tieu_muc": "7250 - Chi lương hưu và trợ cấp bảo hiểm xã hội; 7251 - Bảo hiểm y tế", "trang_thai": "active", "can_cu": "NĐ 146/2018, NĐ 75/2023", "mo_ta": "", "bieu_mau": "Phụ lục 01l", "children": []}, {"id": "N2.13", "ma": "2.13", "cap": 2, "ten": "DTTS vùng khu vực II, III, thôn ĐBKK thuộc vùng đồng bào DTTS-MN giai đoạn 2016-2020", "tieu_chi_cha": "N2", "loai_khoan": "130 - Y tế, dân số và gia đình; 133 - Hỗ trợ kinh phí mua thẻ bảo hiểm y tế cho các đối tượng chính sách", "muc_tieu_muc": "7450 - Chi về công tác bảo đảm xã hội; 7451 - Chi đóng, hỗ trợ tiền đóng tiền bảo hiểm y tế", "trang_thai": "active", "can_cu": "NĐ 146/2018, NĐ 75/2023", "mo_ta": "", "bieu_mau": "Phụ lục 01l", "children": []}, {"id": "N2.14", "ma": "2.14", "cap": 2, "ten": "DTTS tại xã ra khỏi vùng KT-XH khó khăn, ĐBKK (tối đa 36 tháng)", "tieu_chi_cha": "N2", "loai_khoan": "130 - Y tế, dân số và gia đình; 133 - Hỗ trợ kinh phí mua thẻ bảo hiểm y tế cho các đối tượng chính sách", "muc_tieu_muc": "7450 - Chi về công tác bảo đảm xã hội; 7451 - Chi đóng, hỗ trợ tiền đóng tiền bảo hiểm y tế", "trang_thai": "active", "can_cu": "NĐ 146/2018, NĐ 75/2023", "mo_ta": "", "bieu_mau": "Phụ lục 01l", "children": []}, {"id": "N2.15", "ma": "2.15", "cap": 2, "ten": "Người tham gia lực lượng bảo vệ an ninh, trật tự cơ sở", "tieu_chi_cha": "N2", "loai_khoan": "130 - Y tế, dân số và gia đình; 133 - Hỗ trợ kinh phí mua thẻ bảo hiểm y tế cho các đối tượng chính sách", "muc_tieu_muc": "6300 - Các khoản đóng góp; 6302 - Bảo hiểm y tế", "trang_thai": "active", "can_cu": "NĐ 146/2018, NĐ 75/2023", "mo_ta": "", "bieu_mau": "Phụ lục 01l", "children": []}, {"id": "N2.16", "ma": "2.16", "cap": 2, "ten": "Nhân viên y tế thôn, bản; cô đỡ thôn, bản", "tieu_chi_cha": "N2", "loai_khoan": "130 - Y tế, dân số và gia đình; 133 - Hỗ trợ kinh phí mua thẻ bảo hiểm y tế cho các đối tượng chính sách", "muc_tieu_muc": "6300 - Các khoản đóng góp; 6302 - Bảo hiểm y tế", "trang_thai": "active", "can_cu": "NĐ 146/2018, NĐ 75/2023", "mo_ta": "", "bieu_mau": "Phụ lục 01l", "children": []}, {"id": "N2.17", "ma": "2.17", "cap": 2, "ten": "Người hoạt động không chuyên trách ở thôn, tổ dân phố", "tieu_chi_cha": "N2", "loai_khoan": "130 - Y tế, dân số và gia đình; 133 - Hỗ trợ kinh phí mua thẻ bảo hiểm y tế cho các đối tượng chính sách", "muc_tieu_muc": "6300 - Các khoản đóng góp; 6302 - Bảo hiểm y tế", "trang_thai": "active", "can_cu": "NĐ 146/2018, NĐ 75/2023", "mo_ta": "", "bieu_mau": "Phụ lục 01l", "children": []}, {"id": "N2.18", "ma": "2.18", "cap": 2, "ten": "Nạn nhân theo Luật Phòng, chống mua bán người", "tieu_chi_cha": "N2", "loai_khoan": "130 - Y tế, dân số và gia đình; 133 - Hỗ trợ kinh phí mua thẻ bảo hiểm y tế cho các đối tượng chính sách", "muc_tieu_muc": "7450 - Chi về công tác bảo đảm xã hội; 7451 - Chi đóng, hỗ trợ tiền đóng tiền bảo hiểm y tế", "trang_thai": "active", "can_cu": "NĐ 146/2018, NĐ 75/2023", "mo_ta": "", "bieu_mau": "Phụ lục 01l", "children": []}]}, {"id": "N3", "ma": "3", "cap": 1, "ten": "Các chính sách thuộc sự nghiệp đảm bảo xã hội", "tieu_chi_cha": "ROOT", "loai_khoan": "370 - Bảo đảm xã hội", "muc_tieu_muc": "7100 - Chi hỗ trợ kinh tế tập thể và dân cư; 7103 - Chi trợ cấp dân cư; 7104 - Chi đón tiếp, thăm hỏi đồng bào dân tộc; 7450 - Chi về công tác bảo đảm xã hội; 7453 - Trợ cấp cho các đối tượng xã hội trong cơ sở trợ giúp xã hội, cơ sở cai nghiện; 7455 - Chi trợ cấp hàng tháng cho các đối tượng bảo trợ xã hội tại cộng đồng; 7456 - Chi trợ giúp đột xuất cho các đối tượng bảo trợ xã hội và các đối tượng khác; 7457 - Chi hỗ trợ tiền đóng cho người tham gia bảo hiểm xã hội tự nguyện theo quy định; 7499 - Chi khác", "trang_thai": "active", "can_cu": "Tổng hợp nhóm chính sách", "mo_ta": "Nhóm chính sách bảo trợ xã hội, trợ cấp hưu trí, hỗ trợ tiền điện, BHXH tự nguyện và người có uy tín DTTS, gồm 5 chính sách thành phần (3.1 - 3.5), chi tiết theo Phụ lục 01m-01q.", "bieu_mau": "Biểu 01", "children": [{"id": "N3.1", "ma": "3.1", "cap": 2, "ten": "Hỗ trợ đối tượng bảo trợ xã hội", "tieu_chi_cha": "N3", "loai_khoan": "370 - Bảo đảm xã hội; 398 - Chính sách và hoạt động phục vụ các đối tượng bảo trợ xã hội và các đối tượng khác", "muc_tieu_muc": "7450 - Chi về công tác bảo đảm xã hội; 7453 - Trợ cấp cho các đối tượng xã hội trong cơ sở trợ giúp xã hội, cơ sở cai nghiện; 7455 - Chi trợ cấp hàng tháng cho các đối tượng bảo trợ xã hội tại cộng đồng; 7456 - Chi trợ giúp đột xuất cho các đối tượng bảo trợ xã hội và các đối tượng khác; 7499 - Chi khác", "trang_thai": "active", "can_cu": "Nghị định 20/2021/NĐ-CP (15/03/2021); Nghị định 76/2024/NĐ-CP (01/7/2024)", "mo_ta": "Trợ cấp xã hội hàng tháng, nhận nuôi dưỡng chăm sóc tại cộng đồng, trợ cấp tại cơ sở trợ giúp xã hội, hỗ trợ chi phí mai táng.", "bieu_mau": "Phụ lục 01m", "children": []}, {"id": "N3.2", "ma": "3.2", "cap": 2, "ten": "Trợ cấp hưu trí xã hội", "tieu_chi_cha": "N3", "loai_khoan": "370 - Bảo đảm xã hội; 398 - Chính sách và hoạt động phục vụ các đối tượng bảo trợ xã hội và các đối tượng khác", "muc_tieu_muc": "7450 - Chi về công tác bảo đảm xã hội; 7455 - Chi trợ cấp hàng tháng cho các đối tượng bảo trợ xã hội tại cộng đồng", "trang_thai": "active", "can_cu": "Nghị định 176/2025/NĐ-CP (hiệu lực từ 01/7/2025)", "mo_ta": "Trợ cấp hưu trí xã hội hàng tháng và hỗ trợ chi phí mai táng cho người từ đủ 70-75 tuổi trở lên thuộc diện quy định.", "bieu_mau": "Phụ lục 01n", "children": []}, {"id": "N3.3", "ma": "3.3", "cap": 2, "ten": "Hỗ trợ tiền điện cho hộ nghèo, hộ chính sách xã hội", "tieu_chi_cha": "N3", "loai_khoan": "370 - Bảo đảm xã hội; 398 - Chính sách và hoạt động phục vụ các đối tượng bảo trợ xã hội và các đối tượng khác", "muc_tieu_muc": "7100 - Chi hỗ trợ kinh tế tập thể và dân cư; 7103 - Chi trợ cấp dân cư", "trang_thai": "active", "can_cu": "Quyết định 28/2014/QĐ-TTg (07/4/2014)", "mo_ta": "Hỗ trợ tiền điện cho hộ nghèo, hộ chính sách xã hội và hộ đồng bào DTTS vùng chưa có điện lưới.", "bieu_mau": "Phụ lục 01o", "children": [{"id": "N3.3.1", "ma": "-", "cap": 3, "ten": "Hộ nghèo", "tieu_chi_cha": "N3.3", "loai_khoan": "370 - Bảo đảm xã hội; 398 - Chính sách và hoạt động phục vụ các đối tượng bảo trợ xã hội và các đối tượng khác", "muc_tieu_muc": "7100 - Chi hỗ trợ kinh tế tập thể và dân cư; 7103 - Chi trợ cấp dân cư", "trang_thai": "active", "can_cu": "QĐ 28/2014/QĐ-TTg", "mo_ta": "", "bieu_mau": "Phụ lục 01o", "children": []}, {"id": "N3.3.2", "ma": "-", "cap": 3, "ten": "Hộ CSXH", "tieu_chi_cha": "N3.3", "loai_khoan": "370 - Bảo đảm xã hội; 398 - Chính sách và hoạt động phục vụ các đối tượng bảo trợ xã hội và các đối tượng khác", "muc_tieu_muc": "7100 - Chi hỗ trợ kinh tế tập thể và dân cư; 7103 - Chi trợ cấp dân cư", "trang_thai": "active", "can_cu": "QĐ 28/2014/QĐ-TTg", "mo_ta": "", "bieu_mau": "Phụ lục 01o", "children": []}, {"id": "N3.3.3", "ma": "-", "cap": 3, "ten": "Hộ đồng bào DTTS sống ở vùng chưa có điện lưới (không thuộc hộ nghèo)", "tieu_chi_cha": "N3.3", "loai_khoan": "370 - Bảo đảm xã hội; 398 - Chính sách và hoạt động phục vụ các đối tượng bảo trợ xã hội và các đối tượng khác", "muc_tieu_muc": "7100 - Chi hỗ trợ kinh tế tập thể và dân cư; 7103 - Chi trợ cấp dân cư", "trang_thai": "active", "can_cu": "QĐ 28/2014/QĐ-TTg", "mo_ta": "", "bieu_mau": "Phụ lục 01o", "children": []}]}, {"id": "N3.4", "ma": "3.4", "cap": 2, "ten": "Hỗ trợ người đóng bảo hiểm xã hội tự nguyện", "tieu_chi_cha": "N3", "loai_khoan": "370 - Bảo đảm xã hội; 398 - Chính sách và hoạt động phục vụ các đối tượng bảo trợ xã hội và các đối tượng khác", "muc_tieu_muc": "7450 - Chi về công tác bảo đảm xã hội; 7457 - Chi hỗ trợ tiền đóng cho người tham gia bảo hiểm xã hội tự nguyện theo quy định", "trang_thai": "active", "can_cu": "Nghị định 134/2015/NĐ-CP (29/12/2015); Nghị định 159/2025/NĐ-CP (hiệu lực 01/7/2025)", "mo_ta": "Hỗ trợ mức đóng BHXH tự nguyện theo nhóm đối tượng: hộ nghèo, cận nghèo, DTTS, đối tượng khác.", "bieu_mau": "Phụ lục 01p", "children": [{"id": "N3.4.1", "ma": "-", "cap": 3, "ten": "Hộ nghèo (50%)", "tieu_chi_cha": "N3.4", "loai_khoan": "370 - Bảo đảm xã hội; 398 - Chính sách và hoạt động phục vụ các đối tượng bảo trợ xã hội và các đối tượng khác", "muc_tieu_muc": "7450 - Chi về công tác bảo đảm xã hội; 7457 - Chi hỗ trợ tiền đóng cho người tham gia bảo hiểm xã hội tự nguyện theo quy định", "trang_thai": "active", "can_cu": "NĐ 134/2015/NĐ-CP", "mo_ta": "Mức hỗ trợ 50% mức đóng.", "bieu_mau": "Phụ lục 01p", "children": []}, {"id": "N3.4.2", "ma": "-", "cap": 3, "ten": "Hộ cận nghèo (40%)", "tieu_chi_cha": "N3.4", "loai_khoan": "370 - Bảo đảm xã hội; 398 - Chính sách và hoạt động phục vụ các đối tượng bảo trợ xã hội và các đối tượng khác", "muc_tieu_muc": "7450 - Chi về công tác bảo đảm xã hội; 7457 - Chi hỗ trợ tiền đóng cho người tham gia bảo hiểm xã hội tự nguyện theo quy định", "trang_thai": "active", "can_cu": "NĐ 134/2015/NĐ-CP", "mo_ta": "Mức hỗ trợ 40% mức đóng.", "bieu_mau": "Phụ lục 01p", "children": []}, {"id": "N3.4.3", "ma": "-", "cap": 3, "ten": "Người dân tộc thiểu số (30%)", "tieu_chi_cha": "N3.4", "loai_khoan": "370 - Bảo đảm xã hội; 398 - Chính sách và hoạt động phục vụ các đối tượng bảo trợ xã hội và các đối tượng khác", "muc_tieu_muc": "7450 - Chi về công tác bảo đảm xã hội; 7457 - Chi hỗ trợ tiền đóng cho người tham gia bảo hiểm xã hội tự nguyện theo quy định", "trang_thai": "active", "can_cu": "NĐ 134/2015/NĐ-CP", "mo_ta": "Mức hỗ trợ 30% mức đóng.", "bieu_mau": "Phụ lục 01p", "children": []}, {"id": "N3.4.4", "ma": "-", "cap": 3, "ten": "Các đối tượng khác (20%)", "tieu_chi_cha": "N3.4", "loai_khoan": "370 - Bảo đảm xã hội; 398 - Chính sách và hoạt động phục vụ các đối tượng bảo trợ xã hội và các đối tượng khác", "muc_tieu_muc": "7450 - Chi về công tác bảo đảm xã hội; 7457 - Chi hỗ trợ tiền đóng cho người tham gia bảo hiểm xã hội tự nguyện theo quy định", "trang_thai": "active", "can_cu": "NĐ 134/2015/NĐ-CP", "mo_ta": "Mức hỗ trợ 20% mức đóng.", "bieu_mau": "Phụ lục 01p", "children": []}]}, {"id": "N3.5", "ma": "3.5", "cap": 2, "ten": "Chính sách đối với người có uy tín trong đồng bào DTTS", "tieu_chi_cha": "N3", "loai_khoan": "370 - Bảo đảm xã hội; 398 - Chính sách và hoạt động phục vụ các đối tượng bảo trợ xã hội và các đối tượng khác", "muc_tieu_muc": "7100 - Chi hỗ trợ kinh tế tập thể và dân cư; 7104 - Chi đón tiếp, thăm hỏi đồng bào dân tộc; 7450 - Chi về công tác bảo đảm xã hội; 7456 - Chi trợ giúp đột xuất cho các đối tượng bảo trợ xã hội và các đối tượng khác; 7499 - Chi khác", "trang_thai": "active", "can_cu": "Quyết định 12/2018/QĐ-TTg; Quyết định 28/2023/QĐ-TTg", "mo_ta": "Thăm hỏi tặng quà Tết/lễ hội; thăm hỏi người ốm đau; hỗ trợ gia đình gặp khó khăn; thăm viếng khi qua đời; chế độ cung cấp thông tin.", "bieu_mau": "Phụ lục 01q", "children": []}]}, {"id": "N4", "ma": "4", "cap": 1, "ten": "Các chính sách thuộc sự nghiệp kinh tế", "tieu_chi_cha": "ROOT", "loai_khoan": "280 - Các hoạt động kinh tế", "muc_tieu_muc": "7100 - Chi hỗ trợ kinh tế tập thể và dân cư; 7103 - Chi trợ cấp dân cư; 7149 - Chi khác", "trang_thai": "active", "can_cu": "Tổng hợp nhóm chính sách", "mo_ta": "Nhóm chính sách hỗ trợ khai thác hải sản và đất trồng lúa, gồm 2 chính sách thành phần (4.1, 4.2), chi tiết theo Phụ lục 01r, 01s.", "bieu_mau": "Biểu 01", "children": [{"id": "N4.1", "ma": "4.1", "cap": 2, "ten": "Khuyến khích, hỗ trợ khai thác, nuôi trồng hải sản và dịch vụ khai thác hải sản trên vùng biển xa", "tieu_chi_cha": "N4", "loai_khoan": "280 - Các hoạt động kinh tế; 284 - Thủy sản và dịch vụ thủy sản", "muc_tieu_muc": "7100 - Chi hỗ trợ kinh tế tập thể và dân cư; 7103 - Chi trợ cấp dân cư; 7149 - Chi khác", "trang_thai": "active", "can_cu": "Quyết định 48/2010/QĐ-TTg (13/7/2010)", "mo_ta": "Hỗ trợ chi phí nhiên liệu, bảo hiểm thân tàu, bảo hiểm tai nạn thuyền viên, máy liên lạc tầm xa, nuôi trồng hải sản, khắc phục hậu quả tàu bị nạn/hư hỏng.", "bieu_mau": "Phụ lục 01r", "children": []}, {"id": "N4.2", "ma": "4.2", "cap": 2, "ten": "Hỗ trợ đất trồng lúa", "tieu_chi_cha": "N4", "loai_khoan": "280 - Các hoạt động kinh tế; 281 - Nông nghiệp và dịch vụ nông nghiệp", "muc_tieu_muc": "7100 - Chi hỗ trợ kinh tế tập thể và dân cư; 7103 - Chi trợ cấp dân cư; 7149 - Chi khác", "trang_thai": "active", "can_cu": "Nghị định 112/2024/NĐ-CP", "mo_ta": "Hỗ trợ kinh phí theo diện tích đất chuyên trồng lúa và đất trồng lúa khác (vùng quy hoạch năng suất, chất lượng cao và đất trồng lúa còn lại).", "bieu_mau": "Phụ lục 01s", "children": []}]}]};
+
+const treeRoot = document.getElementById('treeRoot');
+const detailContent = document.getElementById('detailContent');
+const searchInput = document.getElementById('searchInput');
+const nodeCountEl = document.getElementById('nodeCount');
+
+let allNodesById = {};
+let totalLeafLike = 0;
+
+function indexNodes(node, parentChain){
+  allNodesById[node.id] = { node, parentChain };
+  (node.children||[]).forEach(c=>indexNodes(c, [...parentChain, node]));
+}
+indexNodes(DATA, []);
+nodeCountEl.textContent = (Object.keys(allNodesById).length - 1) + ' tiêu chí';
+
+function topBranch(node, parentChain){
+  if(node.cap === 1) return node.ma;
+  if(parentChain.length>=1) return parentChain[0].ma === 'ASXH' ? (parentChain[1]? parentChain[1].ma : null) : null;
+  return null;
+}
+
+function branchOf(id){
+  const entry = allNodesById[id];
+  if(!entry) return null;
+  const chain = entry.parentChain;
+  if(entry.node.cap===1) return entry.node.ma;
+  // find first ancestor with cap===1
+  for(const a of chain){
+    if(a.cap===1) return a.ma;
+  }
+  return null;
+}
+
+function buildList(node, isRoot){
+  const ul = document.createElement('ul');
+  ul.className = 'node-list' + (isRoot ? ' root' : '');
+  (node.children||[]).forEach(child=>{
+    ul.appendChild(buildNode(child));
+  });
+  return ul;
+}
+
+function buildNode(node){
+  const li = document.createElement('li');
+  li.className = 'node';
+  li.dataset.id = node.id;
+  li.dataset.lvl = node.cap;
+  const br = branchOf(node.id);
+  if(br) li.dataset.branch = br;
+
+  const row = document.createElement('div');
+  row.className = 'row';
+  row.dataset.id = node.id;
+
+  const hasChildren = node.children && node.children.length>0;
+  const twisty = document.createElement('span');
+  twisty.className = 'twisty' + (hasChildren ? '' : ' leaf');
+  twisty.textContent = hasChildren ? '▶' : '·';
+  row.appendChild(twisty);
+
+  if(node.ma){
+    const chip = document.createElement('span');
+    chip.className = 'code-chip';
+    chip.textContent = node.ma;
+    row.appendChild(chip);
+  }
+
+  const label = document.createElement('span');
+  label.className = 'label';
+  label.textContent = node.ten;
+  row.appendChild(label);
+
+  li.appendChild(row);
+
+  if(hasChildren){
+    const childList = buildList(node, false);
+    childList.style.display = (node.cap <= 1) ? 'block' : 'none';
+    if(node.cap<=1) twisty.classList.add('open');
+    li.appendChild(childList);
+
+    row.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      selectNode(node.id);
+      const open = childList.style.display !== 'none';
+      childList.style.display = open ? 'none' : 'block';
+      twisty.classList.toggle('open', !open);
+    });
+  } else {
+    row.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      selectNode(node.id);
+    });
+  }
+
+  return li;
+}
+
+treeRoot.appendChild(buildList(DATA, true));
+
+function fieldRow(label, value, opts){
+  opts = opts || {};
+  const wrap = document.createElement('div');
+  wrap.className = 'field';
+  const k = document.createElement('div');
+  k.className = 'k';
+  k.textContent = label;
+  wrap.appendChild(k);
+  const v = document.createElement('div');
+  v.className = 'v' + (opts.mono ? ' mono' : '') + (!value ? ' empty' : '');
+  if(opts.html){
+    v.innerHTML = value || '(chưa có dữ liệu)';
+  } else {
+    v.textContent = value || '(chưa có dữ liệu)';
+  }
+  wrap.appendChild(v);
+  return wrap;
+}
+
+function selectNode(id){
+  document.querySelectorAll('.row.selected').forEach(r=>r.classList.remove('selected'));
+  const row = treeRoot.querySelector('.row[data-id="'+CSS.escape(id)+'"]');
+  if(row) row.classList.add('selected');
+
+  const entry = allNodesById[id];
+  if(!entry) return;
+  const node = entry.node;
+  const chain = entry.parentChain;
+
+  const parentLabel = node.tieu_chi_cha
+    ? (allNodesById[node.tieu_chi_cha] ? (allNodesById[node.tieu_chi_cha].node.ma + ' — ' + allNodesById[node.tieu_chi_cha].node.ten) : node.tieu_chi_cha)
+    : null;
+
+  detailContent.innerHTML = '';
+
+  const head = document.createElement('div');
+  head.className = 'detail-head';
+  const eyebrow = document.createElement('div');
+  eyebrow.className = 'eyebrow';
+  eyebrow.textContent = 'Cấp ' + node.cap + (node.ma ? ' · Mã ' + node.ma : '');
+  head.appendChild(eyebrow);
+  const h3 = document.createElement('h3');
+  h3.textContent = node.ten;
+  head.appendChild(h3);
+
+  if(chain.length>0){
+    const bc = document.createElement('div');
+    bc.className = 'breadcrumb';
+    bc.innerHTML = chain.map(c=>c.ten).join(' <span class="sep">›</span> ');
+    head.appendChild(bc);
+  }
+  detailContent.appendChild(head);
+
+  const body = document.createElement('div');
+  body.className = 'detail-body';
+
+  body.appendChild(fieldRow('Mã', node.ma, {mono:true}));
+  body.appendChild(fieldRow('Cấp', 'Cấp ' + node.cap + (node.cap===0? ' (gốc)' : node.cap===1? ' (nhóm chính sách)' : node.cap===2? ' (chính sách/chế độ)' : ' (chỉ tiêu chi tiết)')));
+  body.appendChild(fieldRow('Tên tiêu chí', node.ten));
+  body.appendChild(fieldRow('Tiêu chí cha', parentLabel));
+
+  const grid = document.createElement('div');
+  grid.className = 'grid2';
+  grid.appendChild(fieldRow('Loại – Khoản', node.loai_khoan, {mono:true}));
+  grid.appendChild(fieldRow('Mục – Tiểu mục', node.muc_tieu_muc, {mono:true}));
+  body.appendChild(grid);
+
+  const statusWrap = document.createElement('div');
+  statusWrap.className = 'field';
+  const sk = document.createElement('div');
+  sk.className = 'k';
+  sk.textContent = 'Trạng thái';
+  statusWrap.appendChild(sk);
+  const sv = document.createElement('div');
+  sv.className = 'v';
+  sv.style.borderLeft = 'none';
+  sv.style.paddingLeft = '0';
+  const pill = document.createElement('span');
+  pill.className = 'status-pill';
+  pill.textContent = node.trang_thai === 'active' ? 'Đang áp dụng' : (node.trang_thai || 'Chưa xác định');
+  sv.appendChild(pill);
+  statusWrap.appendChild(sv);
+  body.appendChild(statusWrap);
+
+  body.appendChild(fieldRow('Căn cứ pháp lý', node.can_cu));
+  body.appendChild(fieldRow('Mô tả', node.mo_ta));
+  body.appendChild(fieldRow('Biểu mẫu liên kết', node.bieu_mau, {mono:true}));
+
+  detailContent.appendChild(body);
+}
+
+// expand / collapse all
+document.getElementById('expandAllBtn').addEventListener('click', ()=>{
+  treeRoot.querySelectorAll('ul.node-list').forEach(ul=>ul.style.display='block');
+  treeRoot.querySelectorAll('.twisty:not(.leaf)').forEach(t=>t.classList.add('open'));
+});
+document.getElementById('collapseAllBtn').addEventListener('click', ()=>{
+  treeRoot.querySelectorAll('li.node[data-lvl="1"] ul.node-list').forEach(ul=>ul.style.display='none');
+  treeRoot.querySelectorAll('li.node[data-lvl="1"] .twisty').forEach(t=>t.classList.remove('open'));
+});
+
+// search
+function normalize(s){
+  return (s||'').toLowerCase();
+}
+searchInput.addEventListener('input', (e)=>{
+  const q = normalize(e.target.value.trim());
+  const allLis = treeRoot.querySelectorAll('li.node');
+  if(!q){
+    allLis.forEach(li=>{
+      li.classList.remove('hidden-by-filter');
+      const label = li.querySelector(':scope > .row .label');
+      if(label) label.innerHTML = label.textContent;
+    });
+    return;
+  }
+  allLis.forEach(li=>{
+    const id = li.dataset.id;
+    const node = allNodesById[id].node;
+    const hay = normalize([node.ma, node.ten, node.bieu_mau, node.can_cu, node.mo_ta].join(' '));
+    const match = hay.includes(q);
+    li.dataset.match = match ? '1' : '0';
+  });
+  allLis.forEach(li=>{
+    const id = li.dataset.id;
+    const entry = allNodesById[id];
+    const selfMatch = li.dataset.match === '1';
+    const childMatch = Array.from(li.querySelectorAll('li.node')).some(c=>c.dataset.match==='1');
+    const visible = selfMatch || childMatch;
+    li.classList.toggle('hidden-by-filter', !visible);
+    if(visible){
+      const parentUl = li.parentElement;
+      if(parentUl && parentUl.classList.contains('node-list') && !parentUl.classList.contains('root')){
+        parentUl.style.display = 'block';
+        const parentLi = parentUl.closest('li.node');
+        if(parentLi){
+          const tw = parentLi.querySelector(':scope > .row .twisty');
+          if(tw) tw.classList.add('open');
+        }
+      }
+    }
+    const label = li.querySelector(':scope > .row .label');
+    if(label){
+      if(selfMatch){
+        const re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'ig');
+        label.innerHTML = node => {};
+        label.innerHTML = (entry.node.ten).replace(re, '<span class="hit-mark">$1</span>');
+      } else {
+        label.innerHTML = entry.node.ten;
+      }
+    }
+  });
+});
+
+const now = new Date();
+document.getElementById('lastUpdated').textContent = 'Cập nhật xem: ' + now.toLocaleDateString('vi-VN');
+
+// auto-select root group on load for orientation
+selectNode('N1');
+</script>
+</body>
+</html>
